@@ -1,6 +1,9 @@
-import React from 'react';
+"use client";
+import React, { useState } from 'react';
+import EditBusinessHourModalForm from './EditBunninessHourModalForm';
 
 const AdjustBusinessHour = () => {
+  const [businessHours, setBusinessHours] = useState(false)
   // Dummy data
   const nonSubscriberHours = {
     days: 'Monday-Saturday',
@@ -19,7 +22,9 @@ const AdjustBusinessHour = () => {
         <h3 className="text-base font-semibold text-gray-800 mb-2">Non-Subscriber Hours</h3>
         <p className="text-sm text-gray-600">{nonSubscriberHours.days}</p>
         <p className="text-sm text-gray-600 mb-2">{nonSubscriberHours.time}</p>
-        <button className="text-white  flex items-center gap-1 text-center justify-center border w-full p-1 rounded-md bg-[#5dd3a6]">
+        <button onClick={()=> {
+          setBusinessHours(true)
+        }} className="text-white  flex items-center gap-1 text-center justify-center border w-full p-1 rounded-md bg-[#5dd3a6]">
            Edit
         </button>
       </div>
@@ -29,10 +34,13 @@ const AdjustBusinessHour = () => {
         <h3 className="text-base font-semibold text-gray-800 mb-2">Subscriber Hours</h3>
         <p className="text-sm text-gray-600">{subscriberHours.days}</p>
         <p className="text-sm text-gray-600 mb-2">{subscriberHours.time}</p>
-        <button className="text-white  flex items-center gap-1 text-center justify-center border w-full p-1 rounded-md bg-[#5dd3a6]">
+        <button onClick={()=> {
+          setBusinessHours(true)
+        }} className="text-white  flex items-center gap-1 text-center justify-center border w-full p-1 rounded-md bg-[#5dd3a6]">
            Edit
         </button>
       </div>
+      <EditBusinessHourModalForm open={businessHours} setOpen={setBusinessHours}/>
     </div>
   );
 };

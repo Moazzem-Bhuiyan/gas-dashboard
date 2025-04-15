@@ -4,7 +4,7 @@ import "./Sidebar.css";
 import logo from "@/assets/images/logo.png";
 import {  Menu } from "antd";
 import Sider from "antd/es/layout/Sider";
-import {  Car, CheckCheck, CircleDollarSign, HandPlatter, Home, MessageSquareMore, Plus, School, Timer } from "lucide-react";
+import {  Car, CheckCheck, CircleDollarSign, DollarSign, HandPlatter, Home, MessageSquareMore, Plus, School, Timer } from "lucide-react";
 import { Shapes } from "lucide-react";
 import { ScrollText } from "lucide-react";
 import { LogOut } from "lucide-react";
@@ -68,6 +68,11 @@ const SidebarContainer = ({ collapsed }) => {
       key: "adjust-Business-Hour",
       icon: <Timer size={21} strokeWidth={2} />,
       label: <Link href={"/admin/adjust-Business-Hour"}>Adjust Business Hour</Link>,
+    },
+    {
+      key: "pricing-adjustment",
+      icon: <DollarSign size={21} strokeWidth={2} />,
+      label: <Link href={"/admin/pricing-adjustment"}>Pricing Adjustment</Link>,
     },
 
     {
