@@ -2,14 +2,13 @@
 
 import "./Sidebar.css";
 import logo from "@/assets/images/logo.png";
-import { Divider, Menu } from "antd";
+import {  Menu } from "antd";
 import Sider from "antd/es/layout/Sider";
-import { Album, Car, CheckCheck, CircleDollarSign, DollarSign, MessageSquareMore, Plus, ShoppingCart } from "lucide-react";
+import {  Car, CheckCheck, CircleDollarSign, HandPlatter, Home, MessageSquareMore, Plus, School, Timer } from "lucide-react";
 import { Shapes } from "lucide-react";
 import { ScrollText } from "lucide-react";
 import { LogOut } from "lucide-react";
 import { SlidersVertical } from "lucide-react";
-import { Podcast } from "lucide-react";
 import { CircleUser } from "lucide-react";
 import { House } from "lucide-react";
 import Image from "next/image";
@@ -56,9 +55,19 @@ const SidebarContainer = ({ collapsed }) => {
       label: <Link href={"/admin/driver-Management"}>Driver Management</Link>,
     },
     {
-      key: "set-Price",
-      icon: <DollarSign size={21} strokeWidth={2} />,
-      label: <Link href={"/admin/set-pricing"}>Set Price</Link>,
+      key: "services",
+      icon: <HandPlatter size={21} strokeWidth={2} />,
+      label: <Link href={"/admin/services"}>Services</Link>,
+    },
+    {
+      key: "city-State-Expansion",
+      icon: <School size={21} strokeWidth={2} />,
+      label: <Link href={"/admin/city-State-Expansion"}>City/State Expansion</Link>,
+    },
+    {
+      key: "adjust-Business-Hour",
+      icon: <Timer size={21} strokeWidth={2} />,
+      label: <Link href={"/admin/adjust-Business-Hour"}>Adjust Business Hour</Link>,
     },
 
     {

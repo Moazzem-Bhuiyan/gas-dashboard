@@ -1,0 +1,120 @@
+"use client"
+import CustomConfirm from '@/components/CustomConfirm/CustomConfirm';
+import { ConfigProvider, Input, Table, Tag, Tooltip } from 'antd';
+import { Edit, Eye, Search, Trash2, UserX } from 'lucide-react';
+import React, { useState } from 'react'
+import ServiceEditModalForm from './ServiceEditModal';
+import AddServiceModalForm from './ServiceAddModal';
+    // Dummy table data
+    const data = Array.from({ length: 50 }).map((_, inx) => ({
+        key: inx + 1,
+          name: "Jump Start Car Bettery",
+          price : "$50",
+          status: "Active",
+      }));
+const ServiceListTable = () => {
+ const [searchText, setSearchText] = useState("");
+    const [detailsModalOpen, setdetailsModalOpen] = useState(false);
+    const [addServiceOpen, setaddServiceOpen] = useState(false);
+
+  // Block user handler
+  const handleBlockUser = () => {
+    message.success("User blocked successfully");
+  };
+
+    // ================== Table Columns ================
+    const columns = [
+        {
+            title: "Serial",
+            dataIndex: "key",
+            render: (value) => `#${value}`,
+        },
+        {
+            title: "Service Name",
+            dataIndex: "name",
+            render: (value, record) => (
+                <div className="flex-center-start gap-x-2">
+                    <p className="font-medium">{value}</p>
+                </div>
+            ),
+        },
+        {
+            title: "Price",
+            dataIndex: "price",
+            render: (value) => (
+                <p className="font-medium">{value}</p>
+            ),
+        },
+        {
+            title: "Status",
+            dataIndex: "status",
+            render: (value) => (
+                <Tag color={value === "Active" ? "green" : "red"}>{value}</Tag>
+            ),
+        },
+        {
+            title: "Action",
+            render: () => (
+              <div className="flex-center-start gap-x-3">
+                <Tooltip title="Edit Details">
+                  <button onClick={() => setdetailsModalOpen(true)}>
+                    <Edit color="#1B70A6" size={22} />
+                  </button>
+                </Tooltip>
+                {/* <Tooltip title="Show Details">
+                  <button>
+                    <Eye color="#1B70A6" size={22} />
+                  </button>
+                </Tooltip> */}
+    
+                <Tooltip title="Delete Service">
+                  <CustomConfirm
+                    title="Delete Service"
+                    description="Are you sure to delete this service ?"
+                    onConfirm={handleBlockUser}
+                  >
+                    <button>
+                      <Trash2  color="#F16365" size={22} />
+                    </button>
+                  </CustomConfirm>
+                </Tooltip>
+              </div>
+            ),
+          },
+    ];
+  return (
+    <div>
+       <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: "#5dd3a6",
+          colorInfo: "#5dd3a6",
+        },
+      }}
+    >
+      <div className=" flex w-1/2 ml-auto gap-x-5 mb-3">
+        <Input
+          placeholder="Search by name "
+          prefix={<Search className="mr-2 text-black" size={20} />}
+          className="h-11 !border !rounded-lg !text-base"
+          onChange={(e) => setSearchText(e.target.value)}
+        />
+        <button onClick={()=> setaddServiceOpen (true)} className="bg-black text-white rounded-lg px-4 py-2 w-[200px] text-lg font-medium">
+            Add Service
+        </button>
+      </div>
+
+      <Table
+        style={{ overflowX: "auto" }}
+        columns={columns}
+        dataSource={data}
+        scroll={{ x: "100%" }}
+      ></Table>
+    </ConfigProvider>
+    <ServiceEditModalForm open={detailsModalOpen} setOpen={setdetailsModalOpen}/>
+    <AddServiceModalForm open={addServiceOpen} setOpen={setaddServiceOpen}/>
+    </div>
+  )
+}
+
+export default ServiceListTable

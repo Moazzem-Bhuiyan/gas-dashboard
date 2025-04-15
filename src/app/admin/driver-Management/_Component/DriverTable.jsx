@@ -14,6 +14,7 @@ import CustomConfirm from "@/components/CustomConfirm/CustomConfirm";
 import { message } from "antd";
 import ProfileModal from "@/components/SharedModals/ProfileModal";
 import { Tag } from "antd";
+import DriverDetailsModal from "./DriverDetailsModal";
 
 // Dummy table Data
 const data = Array.from({ length: 50 }).map((_, inx) => ({
@@ -22,7 +23,7 @@ const data = Array.from({ length: 50 }).map((_, inx) => ({
   userImg: userImage,
   email: "justina@gmail.com",
   contact: "+1234567890",
-  date: "11 oct 24, 11.10PM",
+  earnings: "$1000",
   status: "Online",
 }));
 
@@ -67,8 +68,14 @@ export default function DriverDetailsTable() {
       dataIndex: "contact",
     },
     {
-      title: "Date",
-      dataIndex: "date",
+      title: "Earnings",
+      render: (_, record) => (
+        <div className="flex-center-start gap-x-2">
+          <Check color="#1B70A6" size={18} />
+          <p className="font-medium">{record.earnings}</p>
+        </div>
+      ),
+      dataIndex: "earnings",
     },
   {
         title: "Status",
@@ -131,7 +138,7 @@ export default function DriverDetailsTable() {
         scroll={{ x: "100%" }}
       ></Table>
 
-      <ProfileModal open={profileModalOpen} setOpen={setProfileModalOpen} />
+      <DriverDetailsModal open={profileModalOpen} setOpen={setProfileModalOpen} />
     </ConfigProvider>
   );
 }
