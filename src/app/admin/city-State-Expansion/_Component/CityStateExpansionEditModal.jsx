@@ -44,7 +44,7 @@ export default function CityStateExpansionEditModalForm({ open, setOpen }) {
               <Switch />
               </Form.Item>
                 <Form.Item>
-                    <button type="submit" className="w-full bg-black rounded-lg text-white p-2 ">Save</button>
+                    <button type="submit" className="w-full bg-[#5dd3a6] rounded-lg text-white p-2 ">Save</button>
                 </Form.Item>
 
             </Form>

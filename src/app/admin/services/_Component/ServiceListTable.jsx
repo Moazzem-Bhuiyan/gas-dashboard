@@ -99,7 +99,7 @@ const ServiceListTable = () => {
           className="h-11 !border !rounded-lg !text-base"
           onChange={(e) => setSearchText(e.target.value)}
         />
-        <button onClick={()=> setaddServiceOpen (true)} className="bg-black text-white rounded-lg px-4 py-2 w-[200px] text-lg font-medium">
+        <button onClick={()=> setaddServiceOpen (true)} className="bg-[#5dd3a6] text-white rounded-lg px-4 py-2 w-[200px] text-lg font-medium">
             Add Service
         </button>
       </div>

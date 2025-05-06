@@ -1,4 +1,7 @@
+"use client"
 import { Divider } from "antd";
+import { useState } from "react";
+import EditFuelPriceModal from "./EditFuelPriceModal";
 
 // components/FuelPrice.jsx
 const fuelData = [
@@ -20,6 +23,7 @@ const fuelData = [
   ];
   
   const FuelPrice = () => {
+    const [open,setOpen]=useState(false)
     return (
       <div className="grid grid-cols-2 gap-10 justify-center p-4">
         {fuelData.map((fuel, index) => (
@@ -31,11 +35,12 @@ const fuelData = [
             <p className="text-sm font-medium mb-1">Current: ${fuel.price.toFixed(2)}/gal</p>
             <Divider/>
             <p className="text-sm mb-3">Last Updated: {fuel.lastUpdated}</p>
-            <button className="bg-[#5dd3a6] text-white px-3 py-1 rounded-md flex items-center gap-1transition w-full text-center  justify-center">
+            <button onClick={()=>{setOpen(true)}} className="bg-[#5dd3a6] text-white px-3 py-1 rounded-md flex items-center gap-1transition w-full text-center  justify-center">
               Edit Price
             </button>
           </div>
         ))}
+        <EditFuelPriceModal open={open} setOpen={setOpen}/>
       </div>
     );
   };

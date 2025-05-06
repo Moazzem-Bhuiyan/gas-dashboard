@@ -41,7 +41,7 @@ export default function CityStateExpansionAddModalForm({ open, setOpen }) {
                     <InputNumber type="text"  placeholder="Enter Radius " className="!w-full p-2 border rounded" />
                 </Form.Item>
                 <Form.Item>
-                    <button type="submit" className="w-full bg-black rounded-lg text-white p-2 ">Save</button>
+                    <button type="submit" className="w-full bg-[#5dd3a6] rounded-lg text-white p-2 ">Save</button>
                 </Form.Item>
 
             </Form>

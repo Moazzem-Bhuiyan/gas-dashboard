@@ -39,6 +39,7 @@ const earningStats = [
 // Dummy table data
 const data = Array.from({ length: 7 }).map((_, inx) => ({
   key: inx + 1,
+  transactionId : "#357634534",
   name: "Booxos",
   userImg: userImage,
   status: "service Provider",
@@ -54,9 +55,9 @@ export default function EarningsTable() {
   // ================== Table Columns ================
   const columns = [
     {
-      title: "Serial",
-      dataIndex: "key",
-      render: (value) => `#${value}`,
+      title: "Trans. ID",
+      dataIndex: "transactionId",
+      render: (value) => `${value}`,
     },
     {
       title: "Name",
@@ -140,7 +141,7 @@ export default function EarningsTable() {
       }}
     >
       {/* Earning stats */}
-      <section className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5">
+      {/* <section className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5">
         {earningStats?.map((stat) => (
           <div
             key={stat.key}
@@ -158,7 +159,7 @@ export default function EarningsTable() {
             </p>
           </div>
         ))}
-      </section>
+      </section> */}
 
       {/* Earning table */}
       <section className="my-10">

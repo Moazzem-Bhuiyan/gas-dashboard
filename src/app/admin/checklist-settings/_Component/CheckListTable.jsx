@@ -5,6 +5,7 @@ import Image from 'next/image';
 import React, { useState } from 'react'
 import userImage from "@/assets/images/user-avatar-lg.png";
 import CheckDetailsModal from './CheckDetailModal';
+import AddCheckListQuestionModal from './AddCheckListQuestionModal';
 
 
 const data = Array.from({length:20}).map((_,inx) => ({
@@ -18,6 +19,7 @@ const data = Array.from({length:20}).map((_,inx) => ({
 const CheckListTable = () => {
      const [searchText, setSearchText] = useState("");
      const [profileModalOpen, setProfileModalOpen] = useState(false);
+     const [addquestionOpen, setAddquestionOpen] = useState(false);
      const columns = [
         {
             title: "Order ID",
@@ -84,7 +86,7 @@ const CheckListTable = () => {
           onChange={(e) => setSearchText(e.target.value)}
         />
         <div>
-            <button className="bg-[#48af99] text-white font-semibold  p-1 text-sm rounded-lg w-40 h-10 flex-center-center gap-x-2 ">
+            <button onClick={()=>{setAddquestionOpen(true)}} className="bg-[#48af99] text-white font-semibold  p-1 text-sm rounded-lg w-40 h-10 flex-center-center gap-x-2 ">
                Create Question
             </button>
         </div>
@@ -101,6 +103,8 @@ const CheckListTable = () => {
          open={profileModalOpen}
          setOpen={setProfileModalOpen}
          />
+
+         <AddCheckListQuestionModal open={addquestionOpen} setOpen={setAddquestionOpen}/>
    
       </ConfigProvider>
     </div>

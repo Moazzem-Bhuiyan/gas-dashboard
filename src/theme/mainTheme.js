@@ -91,12 +91,12 @@ export const mainTheme = {
     },
 
     Button: {
-      colorPrimary: "#000000",
-      colorPrimaryHover: "#000000",
+      colorPrimary: "#5dd3a6",
+      colorPrimaryHover: "#5dd3a6",
     },
 
     Input: {
-      colorBorder: "#a2a2a3",
+      colorBorder: "#5dd3a6",
     },
   },
 };

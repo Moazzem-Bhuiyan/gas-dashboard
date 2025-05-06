@@ -81,26 +81,14 @@ const SidebarContainer = ({ collapsed }) => {
       label: <Link href={"/admin/orders"}>Order</Link>,
     },
     {
-      key: "article",
-      icon: <CircleUser size={21} strokeWidth={2} />,
-      label: <Link href={"/admin/article"}>Article</Link>,
-    },
-    {
       key: "earnings",
       icon: <CircleDollarSign size={21} strokeWidth={2} />,
-      label: <Link href={"/admin/earnings"}>Earnings</Link>,
-    },
-
-
-    {
-      key: "category",
-      icon: <Shapes size={21} strokeWidth={2} />,
-      label: <Link href={"/admin/category"}>Category</Link>,
+      label: <Link href={"/admin/earnings"}>Transactions</Link>,
     },
     {
       key: "messages",
       icon: <MessageSquareMore size={21} strokeWidth={2} />,
-      label: <Link href={"/admin/message"}>Messages</Link>,
+      label: <Link href={"/admin/message"}>Support Messages</Link>,
     },
 
     {
@@ -108,11 +96,6 @@ const SidebarContainer = ({ collapsed }) => {
       icon: <SlidersVertical size={21} strokeWidth={2} />,
       label: "Settings",
       children: [
-        {
-          key: "Add Banner",
-          icon: <Plus size={21} strokeWidth={2} />,
-          label: <Link href="/admin/addbanner">Add Banner</Link>,
-        },
         {
           key: "privacy-policy",
           icon: <ScrollText size={21} strokeWidth={2} />,

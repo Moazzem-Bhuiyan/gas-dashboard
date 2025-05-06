@@ -36,7 +36,7 @@ export default function AddServiceModalForm({ open, setOpen }) {
               <Switch />
               </Form.Item> */}
                 <Form.Item>
-                    <button type="submit" className="w-full bg-black rounded-lg text-white p-2 ">Submit</button>
+                    <button type="submit" className="w-full bg-[#5dd3a6] rounded-lg text-white p-2 ">Submit</button>
                 </Form.Item>
 
             </Form>
