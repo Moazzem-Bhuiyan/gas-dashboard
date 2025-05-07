@@ -1,118 +1,114 @@
 "use client";
 
-import { Select } from "antd";
+import { DatePicker, Skeleton } from "antd";
+import { useState } from "react";
 import {
-  BarChart,
-  Bar,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
-  ResponsiveContainer
+  ResponsiveContainer,
+  CartesianGrid,
 } from "recharts";
-import { useState } from "react";
+import moment from "moment";
 
-// dummy data
-const data = [
-  { month: "Jan", user: 120 },
-  { month: "Feb", user: 140 },
-  { month: "Mar", user: 152 },
-  { month: "Apr", user: 122 },
-  { month: "May", user: 153 },
-  { month: "Jun", user: 164 },
-  { month: "Jul", user: 193 },
-  { month: "Aug", user: 134 },
-  { month: "Sep", user: 184 },
-  { month: "Oct", user: 126 },
-  { month: "Nov", user: 164 },
-  { month: "Dec", user: 100 },
-];
+// Dummy data for earnings
+const dummyEarningsData = {
+  2025: [
+    { month: "Jan", earning: 7000 },
+    { month: "Feb", earning: 8000 },
+    { month: "Mar", earning: 9000 },
+    { month: "Apr", earning: 9500 },
+    { month: "May", earning: 1000 },
+    { month: "Jun", earning: 1500 },
+    { month: "Jul", earning: 1100 },
+    { month: "Aug", earning: 11500 },
+    { month: "Sep", earning: 1200 },
+    { month: "Oct", earning: 12500 },
+    { month: "Nov", earning: 1000 },
+    { month: "Dec", earning: 3500 },
+  ],
+};
 
-const DriverOverview = () => {
-  const [selectedYear, setSelectedYear] = useState("2024");
+const UserOverView = () => {
+  const [selectedYear, setSelectedYear] = useState(null);
 
-  const handleChange = (value) => {
-    setSelectedYear(value);
+  const handleChange = (date, dateString) => {
+    setSelectedYear(dateString); // DatePicker returns the year in 'YYYY' format
   };
 
-  return (
-    <div className="rounded-xl p-6 w-full xl:w-full bg-white shadow-md">
-      <div className="flex lg:flex-wrap xl:flex-nowrap justify-between items-center mb-10 gap-2">
-        <h1 className="text-xl font-medium">Driver Overview</h1>
+  // Get chart data based on selected year or default to 2025 (current year)
+  const chartData = selectedYear
+    ? dummyEarningsData[selectedYear] || dummyEarningsData["2025"]
+    : dummyEarningsData["2025"];
 
-        <div className="space-x-3">
-          <Select
-            value={selectedYear}
-            style={{ width: 120 }}
+  return (
+    <div className="w-full rounded-xl bg-[#ffffff] p-6 xl:w-full">
+      <div className="text-black mb-10 flex items-center justify-between">
+        <h1 className="text-xl font-medium">Driver Overview</h1>
+        <div className="flex gap-x-4">
+          <DatePicker
+            value={selectedYear ? moment(selectedYear, "YYYY") : null}
             onChange={handleChange}
-            options={[
-              { value: "2024", label: "2024" },
-              { value: "2023", label: "2023" },
-              { value: "2022", label: "2022" },
-              { value: "2021", label: "2021" },
-            ]}
+            picker="year"
+            placeholder="Select Year"
+            style={{ width: 120 }}
           />
         </div>
       </div>
 
       <ResponsiveContainer width="100%" height={300}>
-        <BarChart
-          data={data}
-          margin={{
-            top: 0,
-            right: 0,
-            left: 0,
-            bottom: 0,
-          }}
-          barSize={20}
+        <AreaChart
+          data={chartData}
+          margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
         >
-          {/* Define Gradient */}
           <defs>
-            <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#5dd3a6" stopOpacity={1} />
-              <stop offset="100%" stopColor="#5dd3a6" stopOpacity={1} />
+            <linearGradient id="color" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="10%" stopColor="#5dd3a6" stopOpacity={0.8} />
+              <stop offset="100%" stopColor="#5dd3a6" stopOpacity={0.2} />
             </linearGradient>
           </defs>
 
           <XAxis
-            dataKey="month"
-            scale="point"
-            padding={{ left: 10, right: 10 }}
             tickMargin={10}
-            tickLine={false}
             axisLine={false}
+            tickLine={false}
+            dataKey="month"
           />
-          <YAxis axisLine={false} tickLine={false} tickMargin={20} />
+
+          <YAxis tickMargin={20} axisLine={false} tickLine={false} />
+
+          <CartesianGrid
+            opacity={0.1}
+            stroke="#080E0E"
+            strokeDasharray="3 3"
+          />
 
           <Tooltip
-            formatter={(value) => [`Monthly joined: ${value}`]}
+            formatter={(value) => [`Monthly Driver Growth: $${value}`]}
             contentStyle={{
               color: "var(--primary-green)",
               fontWeight: "500",
               borderRadius: "5px",
               border: "0",
             }}
+            itemStyle={{ color: "#1B70A6" }}
           />
 
-          <CartesianGrid
-            opacity={0.2}
-            horizontal={true}
-            vertical={false}
-            stroke="#080E0E"
-            strokeDasharray="3 3"
+          <Area
+            activeDot={{ fill: "#1B70A6" }}
+            type="monotone"
+            dataKey="earning"
+            strokeWidth={0}
+            stroke="blue"
+            fill="url(#color)"
+            fillOpacity={1}
           />
-
-          <Bar
-            barSize={30}
-            radius={5}
-            background={false}
-            dataKey="user"
-            fill="url(#colorGradient)"
-          />
-        </BarChart>
+        </AreaChart>
       </ResponsiveContainer>
     </div>
   );
 };
 
-export default DriverOverview;
+export default UserOverView;

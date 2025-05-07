@@ -1,11 +1,7 @@
 "use client";
 
 import { ConfigProvider, Table } from "antd";
-import clsx from "clsx";
-import { ArrowRightLeft } from "lucide-react";
 import userImage from "@/assets/images/user-avatar-lg.png";
-import Image from "next/image";
-import { Filter } from "lucide-react";
 import { Tooltip } from "antd";
 import { Eye } from "lucide-react";
 import { useState } from "react";
@@ -55,6 +51,7 @@ export default function EarningsTable() {
   // ================== Table Columns ================
   const columns = [
     {
+      
       title: "Trans. ID",
       dataIndex: "transactionId",
       render: (value) => `${value}`,
@@ -164,7 +161,7 @@ export default function EarningsTable() {
       {/* Earning table */}
       <section className="my-10">
         <Table
-          style={{ overflowX: "auto" }}
+          style={{ overflowX:"auto" }}
           columns={columns}
           dataSource={data}
           scroll={{ x: "100%" }}

@@ -1,11 +1,9 @@
 "use client";
-
 import "./Sidebar.css";
 import logo from "@/assets/images/logo.png";
 import {  Menu } from "antd";
 import Sider from "antd/es/layout/Sider";
-import {  Car, CheckCheck, CircleDollarSign, DollarSign, HandPlatter, Home, MessageSquareMore, Plus, School, Timer } from "lucide-react";
-import { Shapes } from "lucide-react";
+import {  Car, CheckCheck, CircleDollarSign, DollarSign, HandPlatter, MessageSquareMore,  School, Timer } from "lucide-react";
 import { ScrollText } from "lucide-react";
 import { LogOut } from "lucide-react";
 import { SlidersVertical } from "lucide-react";
@@ -123,7 +121,6 @@ const SidebarContainer = ({ collapsed }) => {
 
   // Get current path for sidebar menu item `key`
   const currentPathname = usePathname()?.replace("/admin/", "")?.split(" ")[0];
-
   return (
     <Sider
       width={320}
