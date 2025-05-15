@@ -3,133 +3,155 @@
 import { Input, Table, Tag, Button } from "antd";
 import { Tooltip } from "antd";
 import { ConfigProvider } from "antd";
-import { Search, Eye } from "lucide-react";
+import { Search, Eye, Trash2 } from "lucide-react";
 import { useState } from "react";
-import OrderDetailsModal from "@/components/SharedModals/OrderDetailsModal";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-// Dummy table data with product types and statuses
+// Data from the image
 const data = [
   {
     key: 1,
-    order_id: "#001",
-    customer_name: "John D",
-    product_name: "Canon DSLR Camera",
-    price: "$500",
-    product_type: "Physical",
-    status: "Shipped",
+    order_id: "2244",
+    customer_name: "Eleanor Pena",
+    fuel: "Premium",
+    quantity: 15,
+    address: "789 Pine Rd",
+    status: "Assigned",
+    driver: "Eleanor Pena",
+    scheduled_time: "March 22, 3:00 PM",
   },
   {
     key: 2,
-    order_id: "#001",
-    customer_name: "John D",
-    product_name: "Lightroom Preset Pack",
-    price: "$500",
-    product_type: "Digital",
-    status: "Incomplete",
+    order_id: "2244",
+    customer_name: "Eleanor Pena",
+    fuel: "Premium",
+    quantity: 15,
+    address: "789 Pine Rd",
+    status: "Pending",
+    driver: "Unassigned",
+    scheduled_time: "March 22, 3:00 PM",
   },
   {
     key: 3,
-    order_id: "#001",
-    customer_name: "John D",
-    product_name: "Canon DSLR Camera",
-    price: "$500",
-    product_type: "Physical",
-    status: "On Processing",
+    order_id: "2244",
+    customer_name: "Eleanor Pena",
+    fuel: "Premium",
+    quantity: 15,
+    address: "789 Pine Rd",
+    status: "Refund Requested",
+    driver: "Unassigned",
+    scheduled_time: "March 22, 3:00 PM",
   },
   {
     key: 4,
-    order_id: "#001",
-    customer_name: "John D",
-    product_name: "Lightroom Preset Pack",
-    price: "$500",
-    product_type: "Digital",
+    order_id: "2244",
+    customer_name: "Eleanor Pena",
+    fuel: "Premium",
+    quantity: 15,
+    address: "789 Pine Rd",
     status: "Completed",
+    driver: "Eleanor Pena",
+    scheduled_time: "March 22, 3:00 PM",
   },
   {
     key: 5,
-    order_id: "#001",
-    customer_name: "John D",
-    product_name: "Canon DSLR Camera",
-    price: "$500",
-    product_type: "Physical",
-    status: "Shipped",
+    order_id: "2244",
+    customer_name: "Eleanor Pena",
+    fuel: "Premium",
+    quantity: 15,
+    address: "789 Pine Rd",
+    status: "Completed",
+    driver: "Eleanor Pena",
+    scheduled_time: "March 22, 3:00 PM",
   },
   {
     key: 6,
-    order_id: "#001",
-    customer_name: "John D",
-    product_name: "Lightroom Preset Pack",
-    price: "$500",
-    product_type: "Digital",
-    status: "Incomplete",
+    order_id: "2244",
+    customer_name: "Eleanor Pena",
+    fuel: "Premium",
+    quantity: 15,
+    address: "789 Pine Rd",
+    status: "Pending",
+    driver: "Unassigned",
+    scheduled_time: "March 22, 3:00 PM",
   },
   {
     key: 7,
-    order_id: "#001",
-    customer_name: "John D",
-    product_name: "Lightroom Preset Pack",
-    price: "$500",
-    product_type: "Digital",
-    status: "Completed",
+    order_id: "2244",
+    customer_name: "Eleanor Pena",
+    fuel: "Premium",
+    quantity: 15,
+    address: "789 Pine Rd",
+    status: "Pending",
+    driver: "Unassigned",
+    scheduled_time: "March 22, 3:00 PM",
   },
   {
     key: 8,
-    order_id: "#001",
-    customer_name: "John D",
-    product_name: "Lightroom Preset Pack",
-    price: "$500",
-    product_type: "Digital",
-    status: "Incomplete",
+    order_id: "2244",
+    customer_name: "Eleanor Pena",
+    fuel: "Premium",
+    quantity: 15,
+    address: "789 Pine Rd",
+    status: "Refund Requested",
+    driver: "Unassigned",
+    scheduled_time: "March 22, 3:00 PM",
   },
   {
     key: 9,
-    order_id: "#001",
-    customer_name: "John D",
-    product_name: "Canon DSLR Camera",
-    price: "$500",
-    product_type: "Physical",
-    status: "Ongoing",
+    order_id: "2244",
+    customer_name: "Eleanor Pena",
+    fuel: "Premium",
+    quantity: 15,
+    address: "789 Pine Rd",
+    status: "Refund Requested",
+    driver: "Unassigned",
+    scheduled_time: "March 22, 3:00 PM",
   },
   {
     key: 10,
-    order_id: "#001",
-    customer_name: "John D",
-    product_name: "Lightroom Preset Pack",
-    price: "$500",
-    product_type: "Digital",
-    status: "Completed",
-  },
-  {
-    key: 11,
-    order_id: "#001",
-    customer_name: "John D",
-    product_name: "Canon DSLR Camera",
-    price: "$500",
-    product_type: "Physical",
-    status: "Shipped",
-  },
-  {
-    key: 12,
-    order_id: "#001",
-    customer_name: "John D",
-    product_name: "Canon DSLR Camera",
-    price: "$500",
-    product_type: "Physical",
-    status: "Delivered",
+    order_id: "2244",
+    customer_name: "Eleanor Pena",
+    fuel: "Premium",
+    quantity: 15,
+    address: "789 Pine Rd",
+    status: "Refund Requested",
+    driver: "Unassigned",
+    scheduled_time: "March 22, 3:00 PM",
   },
 ];
 
-export default function OrderTable() {
+export default function FuelOrderTable() {
   const [searchText, setSearchText] = useState("");
-  const [profileModalOpen, setProfileModalOpen] = useState(false);
+  const router = useRouter();
 
   // Filter data based on search text
   const filteredData = data.filter(
     (item) =>
       item.customer_name.toLowerCase().includes(searchText.toLowerCase()) ||
-      item.product_name.toLowerCase().includes(searchText.toLowerCase())
+      item.order_id.toLowerCase().includes(searchText.toLowerCase())
   );
+
+  // Function to handle navigation based on status
+  const handleViewDetails = (status) => {
+    switch (status) {
+      case "Completed":
+        router.push("/admin/orders/completeOrder");
+        break;
+      case "Pending":
+        router.push("/admin/orders/pendingOrder");
+        break;
+      case "Assigned":
+        router.push("/admin/orders/assignedOrder");
+        break;
+      case "Refund Requested":
+        router.push("/admin/orders/refundOrder");
+        break;
+      default:
+        break;
+    }
+  };
 
   // Table columns
   const columns = [
@@ -139,23 +161,23 @@ export default function OrderTable() {
       render: (value) => <span className="text-gray-700">{value}</span>,
     },
     {
-      title: "Customer Name",
+      title: "Customer",
       dataIndex: "customer_name",
       render: (value) => <span className="text-gray-700">{value}</span>,
     },
     {
-      title: "Product Name",
-      dataIndex: "product_name",
+      title: "Fuel",
+      dataIndex: "fuel",
       render: (value) => <span className="text-gray-700">{value}</span>,
     },
     {
-      title: "Price",
-      dataIndex: "price",
+      title: "Quantity",
+      dataIndex: "quantity",
       render: (value) => <span className="text-gray-700">{value}</span>,
     },
     {
-      title: "Product Type",
-      dataIndex: "product_type",
+      title: "Address",
+      dataIndex: "address",
       render: (value) => <span className="text-gray-700">{value}</span>,
     },
     {
@@ -164,23 +186,17 @@ export default function OrderTable() {
       render: (value) => {
         let color;
         switch (value) {
-          case "Incomplete":
+          case "Pending":
             color = "orange";
             break;
           case "Completed":
             color = "green";
             break;
-          case "On Processing":
+          case "Assigned":
             color = "blue";
             break;
-          case "Shipped":
-            color = "green";
-            break;
-          case "Ongoing":
-            color = "orange";
-            break;
-          case "Delivered":
-            color = "green";
+          case "Refund Requested":
+            color = "purple";
             break;
           default:
             color = "gray";
@@ -193,42 +209,27 @@ export default function OrderTable() {
       },
     },
     {
-      title: "Resend Link",
-      render: (_, record) => {
-        if (record.product_type === "Digital") {
-          if (record.status === "Incomplete") {
-            return (
-              <Button
-                type="primary"
-                size="small"
-                className="rounded-md"
-                onClick={() => console.log("Resend link for", record.order_id)}
-              >
-                Resend
-              </Button>
-            );
-          } else if (record.status === "Completed") {
-            return (
-              <Button
-                size="small"
-                className="rounded-md"
-                disabled
-              >
-                Resend
-              </Button>
-            );
-          }
-        }
-        return <span className="text-gray-400">—</span>;
-      },
+      title: "Driver",
+      dataIndex: "driver",
+      render: (value) => <span className="text-gray-700">{value}</span>,
+    },
+    {
+      title: "Scheduled Time",
+      dataIndex: "scheduled_time",
+      render: (value) => <span className="text-gray-700">{value}</span>,
     },
     {
       title: "Action",
-      render: () => (
+      render: (_, record) => (
         <div className="flex items-center gap-x-3">
           <Tooltip title="Show Details">
-            <button onClick={() => setProfileModalOpen(true)}>
+            <button onClick={() => handleViewDetails(record.status)}>
               <Eye color="#1B70A6" size={20} />
+            </button>
+          </Tooltip>
+          <Tooltip title="Delete">
+            <button>
+              <Trash2 color="#FF4D4F" size={20} />
             </button>
           </Tooltip>
         </div>
@@ -245,24 +246,25 @@ export default function OrderTable() {
         },
       }}
     >
-      <div className=" flex mb-4 ml-auto w-1/2 gap-x-5">
+      <div className="flex mb-4 ml-auto w-1/2 gap-x-5">
         <Input
-          placeholder="Search by name or product"
+          placeholder="Search by name or order ID"
           prefix={<Search className="mr-2 text-gray-500" size={20} />}
           className="h-11 rounded-lg border text-base"
           onChange={(e) => setSearchText(e.target.value)}
         />
         <Link href={'/admin/orderStatus'}>
-          <Button style={
-            {
+          <Button
+            style={{
               backgroundColor: "#000",
               color: "white",
               borderRadius: "8px",
               padding: "0.5rem 1rem",
               fontSize: "0.875rem",
               height: "2.5rem",
-            }
-          } className="">
+            }}
+            className=""
+          >
             Order Status
           </Button>
         </Link>
@@ -280,11 +282,6 @@ export default function OrderTable() {
         scroll={{ x: "100%" }}
         className="rounded-lg shadow-sm"
         rowClassName="hover:bg-gray-50"
-      />
-
-      <OrderDetailsModal
-        open={profileModalOpen}
-        setOpen={setProfileModalOpen}
       />
     </ConfigProvider>
   );
