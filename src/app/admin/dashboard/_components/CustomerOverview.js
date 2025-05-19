@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Select } from "antd";
+import { Select } from 'antd';
 import {
   BarChart,
   Bar,
@@ -12,27 +12,27 @@ import {
   defs,
   linearGradient,
   stop,
-} from "recharts";
-import { useState } from "react";
+} from 'recharts';
+import { useState } from 'react';
 
 // dummy data
 const data = [
-  { month: "Jan", user: 120 },
-  { month: "Feb", user: 140 },
-  { month: "Mar", user: 152 },
-  { month: "Apr", user: 122 },
-  { month: "May", user: 153 },
-  { month: "Jun", user: 164 },
-  { month: "Jul", user: 193 },
-  { month: "Aug", user: 134 },
-  { month: "Sep", user: 184 },
-  { month: "Oct", user: 126 },
-  { month: "Nov", user: 164 },
-  { month: "Dec", user: 100 },
+  { month: 'Jan', user: 120 },
+  { month: 'Feb', user: 140 },
+  { month: 'Mar', user: 152 },
+  { month: 'Apr', user: 122 },
+  { month: 'May', user: 153 },
+  { month: 'Jun', user: 164 },
+  { month: 'Jul', user: 193 },
+  { month: 'Aug', user: 134 },
+  { month: 'Sep', user: 184 },
+  { month: 'Oct', user: 126 },
+  { month: 'Nov', user: 164 },
+  { month: 'Dec', user: 100 },
 ];
 
 const CustomerOverview = () => {
-  const [selectedYear, setSelectedYear] = useState("2024");
+  const [selectedYear, setSelectedYear] = useState('2024');
 
   const handleChange = (value) => {
     setSelectedYear(value);
@@ -49,26 +49,17 @@ const CustomerOverview = () => {
             style={{ width: 120 }}
             onChange={handleChange}
             options={[
-              { value: "2024", label: "2024" },
-              { value: "2023", label: "2023" },
-              { value: "2022", label: "2022" },
-              { value: "2021", label: "2021" },
+              { value: '2024', label: '2024' },
+              { value: '2023', label: '2023' },
+              { value: '2022', label: '2022' },
+              { value: '2021', label: '2021' },
             ]}
           />
         </div>
       </div>
 
       <ResponsiveContainer width="100%" height={300}>
-        <BarChart
-          data={data}
-          margin={{
-            top: 0,
-            right: 0,
-            left: 0,
-            bottom: 0,
-          }}
-          barSize={20}
-        >
+        <BarChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }} barSize={20}>
           {/* Define Gradient */}
           <defs>
             <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
@@ -90,10 +81,10 @@ const CustomerOverview = () => {
           <Tooltip
             formatter={(value) => [`Monthly joined: ${value}`]}
             contentStyle={{
-              color: "var(--primary-green)",
-              fontWeight: "500",
-              borderRadius: "5px",
-              border: "0",
+              color: 'var(--primary-green)',
+              fontWeight: '500',
+              borderRadius: '5px',
+              border: '0',
             }}
           />
 

@@ -1,15 +1,10 @@
-"use client";
-
-
+'use client';
 
 export default function CompletedOrder() {
-
-
   return (
     <div className="p-6 max-w-full mx-auto bg-white rounded-lg shadow">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold">Order Information</h2>
-        
       </div>
       <div className="space-y-2">
         <p>Order ID: #2244</p>
@@ -50,7 +45,6 @@ export default function CompletedOrder() {
         <p>Image: [Placeholder for Proof of Delivery Image]</p>
         <p>Completion Time: March 22, 3:00 PM</p>
       </div>
-  
     </div>
   );
 }

@@ -253,21 +253,6 @@ export default function FuelOrderTable() {
           className="h-11 rounded-lg border text-base"
           onChange={(e) => setSearchText(e.target.value)}
         />
-        <Link href={'/admin/orderStatus'}>
-          <Button
-            style={{
-              backgroundColor: "#000",
-              color: "white",
-              borderRadius: "8px",
-              padding: "0.5rem 1rem",
-              fontSize: "0.875rem",
-              height: "2.5rem",
-            }}
-            className=""
-          >
-            Order Status
-          </Button>
-        </Link>
       </div>
       <div>
         <p className="text-sm text-gray-500 mb-4">

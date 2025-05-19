@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { Modal } from "antd";
-import userImage from "@/assets/images/user-avatar-lg.png";
-import Image from "next/image";
-import { Tag } from "antd";
+import { Modal } from 'antd';
+import userImage from '@/assets/images/user-avatar-lg.png';
+import Image from 'next/image';
+import { Tag } from 'antd';
 
 export default function ProfileModal({ open, setOpen }) {
   return (
@@ -45,8 +45,14 @@ export default function ProfileModal({ open, setOpen }) {
           <h5 className=" font-bold">Account Type</h5>
           <p className="font-dmSans">
             <Tag color="cyan" className="!text-sm !mt-1 !font-semibold">
-             Admin
+              Admin
             </Tag>
+          </p>
+        </div>
+        <div className="text-black">
+          <h5 className=" font-bold">Address</h5>
+          <p className="font-dmSans">
+            1234, Lorem Ipsum Street, Dolor Sit Amet, Consectetur Adipiscing Elit
           </p>
         </div>
       </div>

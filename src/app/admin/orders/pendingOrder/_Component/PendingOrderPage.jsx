@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
+import { Input } from 'antd';
+import { Search } from 'lucide-react';
 
 export default function PendingOrder() {
-
   return (
     <div className="p-6 max-w-full mx-auto bg-white rounded-lg shadow">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold">Order Information</h2>
-      
       </div>
       <div className="space-y-2">
         <p>Order ID: #2244</p>
@@ -30,25 +30,18 @@ export default function PendingOrder() {
       </div>
       <h2 className="text-lg font-semibold mt-4">Driver Information</h2>
       <div className="space-y-2">
-        <p>Driver Name: Unassigned</p>
-        <p>Status: Unassigned</p>
-        <p>Time: Unassigned</p>
+        <h1>Search Driver</h1>
+        <div className="flex items-center gap-5">
+          <div className=" w-1/2">
+            <Input
+              placeholder="Search by name or email"
+              prefix={<Search className="mr-2 text-black" size={20} />}
+              className="h-11 !border !rounded-lg !text-base"
+            />
+          </div>
+          <button className=" text-white px-4  rounded bg-[#409E7A] h-11">Assign Driver</button>
+        </div>
       </div>
-      <h2 className="text-lg font-semibold mt-4">Completion Checklist</h2>
-      <div className="space-y-2">
-        <p>Did you check the gas?</p>
-        <p>Not applicable</p>
-        <p>Did you verify any spillage?</p>
-        <p>Not applicable</p>
-        <p>Did you ensure the vehicle is in safe condition?</p>
-        <p>Not applicable</p>
-      </div>
-      <h2 className="text-lg font-semibold mt-4">Proof of Delivery</h2>
-      <div className="space-y-2">
-        <p>Image: Not available</p>
-        <p>Completion Time: Not applicable</p>
-      </div>
-
     </div>
   );
 }

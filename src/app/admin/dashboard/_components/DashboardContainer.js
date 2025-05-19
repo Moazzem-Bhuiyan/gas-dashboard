@@ -1,16 +1,14 @@
-"use client";
-import RecentUserTable from "./RecentUserTable";
-import CustomCountUp from "@/components/CustomCountUp/CustomCountUp";
-import CustomerOverview from "./CustomerOverview";
-import DriverOverview from "./DriverOverview";
-
-
+'use client';
+import RecentUserTable from './RecentUserTable';
+import CustomCountUp from '@/components/CustomCountUp/CustomCountUp';
+import CustomerOverview from './CustomerOverview';
+import DriverOverview from './DriverOverview';
 
 // Dummy Data
 const userStats = [
   {
-    key: "users",
-    title: "Total Users",
+    key: 'users',
+    title: 'Total Users',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +24,7 @@ const userStats = [
           x="0"
           y="0"
           maskUnits="userSpaceOnUse"
-          style={{ maskType: "alpha" }}
+          style={{ maskType: 'alpha' }}
         >
           <path fill="#D9D9D9" d="M0 0h58v58H0z"></path>
         </mask>
@@ -41,8 +39,8 @@ const userStats = [
     count: 518,
   },
   {
-    key: "customers",
-    title: "Total Drivers",
+    key: 'customers',
+    title: 'Total Drivers',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -58,7 +56,7 @@ const userStats = [
           x="0"
           y="0"
           maskUnits="userSpaceOnUse"
-          style={{ maskType: "alpha" }}
+          style={{ maskType: 'alpha' }}
         >
           <path fill="#D9D9D9" d="M0 0h58v58H0z"></path>
         </mask>
@@ -73,8 +71,8 @@ const userStats = [
     count: 118,
   },
   {
-    key: "service-providers",
-    title: "Total Customer",
+    key: 'service-providers',
+    title: 'Total Customer',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -90,7 +88,7 @@ const userStats = [
           x="0"
           y="0"
           maskUnits="userSpaceOnUse"
-          style={{ maskType: "alpha" }}
+          style={{ maskType: 'alpha' }}
         >
           <path fill="#D9D9D9" d="M0 0h58v58H0z"></path>
         </mask>
@@ -105,8 +103,8 @@ const userStats = [
     count: 218,
   },
   {
-    key: "earning",
-    title: "Total Earning",
+    key: 'earning',
+    title: 'Total Earning',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -122,7 +120,7 @@ const userStats = [
           x="0"
           y="0"
           maskUnits="userSpaceOnUse"
-          style={{ maskType: "alpha" }}
+          style={{ maskType: 'alpha' }}
         >
           <path fill="#D9D9D9" d="M0 0h58v58H0z"></path>
         </mask>
@@ -145,13 +143,11 @@ export default function DashboardContainer() {
       <section className="grid grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 gap-5  ">
         {userStats?.map((stat) => (
           <div key={stat.key} className="gap-x-4 bg-[#FFFFFF] p-5 rounded-2xl shadow-sm text-black">
-
             <div className=" flex justify-between gap-4">
-
               <div>
                 <p className="font-dmSans text-lg font-medium">{stat.title}</p>
                 <h5 className="text-3xl font-semibold text-black mt-0.5">
-                  {stat.key !== "earning" ? (
+                  {stat.key !== 'earning' ? (
                     <CustomCountUp end={stat.count} />
                   ) : (
                     <span>
@@ -168,14 +164,13 @@ export default function DashboardContainer() {
       {/* Charts */}
       <section className="flex-center-between xl:flex-row flex-col gap-10">
         <CustomerOverview />
-        <DriverOverview/>
+        <DriverOverview />
       </section>
-      
+
       {/* Recent Users Table */}
       <>
-      <RecentUserTable />
+        <RecentUserTable />
       </>
-
     </div>
   );
 }
