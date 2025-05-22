@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import Image from "next/image";
+import Image from 'next/image';
 
-import { useRef, useState } from "react";
-import { X, CirclePlus, Images, SendHorizontal, SmilePlus } from "lucide-react";
-import EmojiPicker from "emoji-picker-react";
-import { Input } from "antd";
-import userImage from "@/assets/images/user-avatar-lg.png";
+import { useRef, useState } from 'react';
+import { X, CirclePlus, Images, SendHorizontal, SmilePlus } from 'lucide-react';
+import EmojiPicker from 'emoji-picker-react';
+import { Input } from 'antd';
+import userImage from '@/assets/images/user-avatar-lg.png';
 
 export default function ChatContainer() {
   const chatBoxRef = useRef(null);
@@ -35,19 +35,14 @@ export default function ChatContainer() {
               className="border-primary-black/20 aspect-square h-16 w-16 rounded-full border p-1"
             />
             <div>
-              <h3 className="text-primary-black text-xl font-bold">Booxos</h3>
-              <p className="text-muted-foreground text-sm font-medium">
-                Online
-              </p>
+              <h3 className="text-primary-black text-xl font-bold">Moazzem Hossen Bhuiyan</h3>
+              <p className="text-muted-foreground text-sm font-medium">Online</p>
             </div>
           </div>
         </div>
 
         {/* Chat Messages */}
-        <div
-          className="hide-scroll max-h-[65vh] min-h-[65vh] overflow-auto py-10"
-          ref={chatBoxRef}
-        >
+        <div className="hide-scroll max-h-[65vh] min-h-[65vh] overflow-auto py-10" ref={chatBoxRef}>
           {/* Placeholder for messages */}
           <div className="flex-center min-h-[65vh] w-full gap-x-2 text-2xl font-bold">
             <CirclePlus />
@@ -96,7 +91,7 @@ export default function ChatContainer() {
                   paddingLeft: 30,
                   paddingRight: 30,
                   borderRadius: 20,
-                  border: "1px solid",
+                  border: '1px solid',
                 }}
               />
               <button
@@ -120,9 +115,7 @@ export default function ChatContainer() {
                 className="hidden"
                 onChange={(e) => {
                   const files = [...e.target.files];
-                  const previews = files.map((file) =>
-                    URL.createObjectURL(file),
-                  );
+                  const previews = files.map((file) => URL.createObjectURL(file));
                   setImgPreviews(previews);
                 }}
               />
@@ -139,10 +132,7 @@ export default function ChatContainer() {
                 <SmilePlus size={20} />
               </button>
               {showEmojiPicker && (
-                <div
-                  ref={emojiPickerRef}
-                  className="absolute bottom-16 right-0"
-                >
+                <div ref={emojiPickerRef} className="absolute bottom-16 right-0">
                   <EmojiPicker />
                 </div>
               )}

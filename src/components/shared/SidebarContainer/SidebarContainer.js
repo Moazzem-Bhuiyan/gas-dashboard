@@ -81,11 +81,16 @@ const SidebarContainer = ({ collapsed }) => {
       icon: <DollarSign size={21} strokeWidth={2} />,
       label: <Link href={'/admin/pricing-adjustment'}>Pricing Adjustment</Link>,
     },
+    {
+      key: 'manage-subscription',
+      icon: <DollarSign size={21} strokeWidth={2} />,
+      label: <Link href={'/admin/manage-subscription'}>Manage-Subscription</Link>,
+    },
 
     {
       key: 'orders',
       icon: <CircleUser size={21} strokeWidth={2} />,
-      label: <Link href={'/admin/orders'}>Order</Link>,
+      label: <Link href={'/admin/orders'}>Order Management </Link>,
     },
     {
       key: 'earnings',

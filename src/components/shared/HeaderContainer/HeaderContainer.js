@@ -1,32 +1,32 @@
-"use client";
+'use client';
 
-import { Button } from "antd";
-import { Bell } from "lucide-react";
-import { Menu } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import userAvatar from "@/assets/images/user-avatar-lg.png";
-import { usePathname } from "next/navigation";
-import { Layout } from "antd";
-import { AlignJustify } from "lucide-react";
-import { Badge } from "antd";
-import { Search } from "lucide-react";
+import { Button } from 'antd';
+import { Bell } from 'lucide-react';
+import { Menu } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import userAvatar from '@/assets/images/user-avatar-lg.png';
+import { usePathname } from 'next/navigation';
+import { Layout } from 'antd';
+import { AlignJustify } from 'lucide-react';
+import { Badge } from 'antd';
+import { Search } from 'lucide-react';
 const { Header } = Layout;
 
 export default function HeaderContainer({ collapsed, setCollapsed }) {
   const pathname = usePathname();
-  const navbarTitle = pathname.split("/admin")[1];
+  const navbarTitle = pathname.split('/admin')[1];
 
   return (
     <Header
       style={{
-        backgroundColor: "#FFFFFF",
-        height: "80px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
+        backgroundColor: '#FFFFFF',
+        height: '80px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
         paddingInline: 0,
-        paddingRight: "40px",
+        paddingRight: '40px',
       }}
     >
       {/* Collapse Icon */}
@@ -38,8 +38,8 @@ export default function HeaderContainer({ collapsed, setCollapsed }) {
         />
         <h1 className="capitalize text-xl font-semibold font-dmSans -mt-3">
           {navbarTitle.length > 1
-            ? navbarTitle.replaceAll("/", " ").replaceAll("-", " ")
-            : "dashboard"}
+            ? navbarTitle.replaceAll('/', ' ').replaceAll('-', ' ')
+            : 'dashboard'}
         </h1>
       </div>
 
@@ -58,7 +58,7 @@ export default function HeaderContainer({ collapsed, setCollapsed }) {
 
         {/* User */}
         <Link
-          href={"/admin/profile"}
+          href={'/admin/profile'}
           className="flex items-center gap-x-2 text-black hover:text-primary-blue group"
         >
           <Image
@@ -68,7 +68,7 @@ export default function HeaderContainer({ collapsed, setCollapsed }) {
             height={52}
             className="rounded-full border-2 p-0.5 border-primary-green group-hover:border"
           />
-          <h4 className="text-lg font-semibold">Moazzem  </h4>
+          <h4 className="text-lg font-semibold">Moazzem </h4>
         </Link>
       </div>
     </Header>

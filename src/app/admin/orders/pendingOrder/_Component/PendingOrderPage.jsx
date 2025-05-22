@@ -1,9 +1,11 @@
 'use client';
 
-import { Input } from 'antd';
+import { Button, Form, Input, Select } from 'antd';
 import { Search } from 'lucide-react';
 
 export default function PendingOrder() {
+  const [form] = Form.useForm();
+  const handleSubmit = async (values) => {};
   return (
     <div className="p-6 max-w-full mx-auto bg-white rounded-lg shadow">
       <div className="flex justify-between items-center mb-4">
@@ -33,13 +35,51 @@ export default function PendingOrder() {
         <h1>Search Driver</h1>
         <div className="flex items-center gap-5">
           <div className=" w-1/2">
-            <Input
-              placeholder="Search by name or email"
-              prefix={<Search className="mr-2 text-black" size={20} />}
-              className="h-11 !border !rounded-lg !text-base"
-            />
+            <Form
+              form={form}
+              onFinish={handleSubmit}
+              layout="vertical"
+              style={{ marginTop: '40px' }}
+            >
+              <div className="flex gap-12 justify-between items-center">
+                <div className="flex-1">
+                  {/* ==============  Driver Name ============== */}
+                  <Form.Item
+                    label="Driver Name"
+                    name="driverName"
+                    rules={[{ required: true, message: 'Please enter Driver Name' }]}
+                  >
+                    <Select
+                      showSearch
+                      style={{ width: '100%' }}
+                      placeholder="Search to Select"
+                      optionFilterProp="label"
+                      filterOption={false}
+                      // options={data?.data?.map((therapist) => ({
+                      //   value: therapist._id,
+                      //   label: therapist?.name,
+                      // }))}
+                    />
+                  </Form.Item>
+                </div>
+                <div className="flex gap-5">
+                  <Button
+                    htmlType="submit"
+                    size="large"
+                    block
+                    style={{ backgroundColor: '#5dd3a6', color: 'white' }}
+                    className="!px-10  rounded !h-11"
+                  >
+                    Assign
+                  </Button>
+                  <button className=" text-white w-full px-10  rounded-lg bg-[#e03f3f] h-11">
+                    Cancle
+                  </button>
+                </div>
+              </div>
+            </Form>
           </div>
-          <button className=" text-white px-4  rounded bg-[#409E7A] h-11">Assign Driver</button>
+          <div className="flex gap-5"></div>
         </div>
       </div>
     </div>

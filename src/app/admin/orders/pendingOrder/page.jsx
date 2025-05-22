@@ -1,12 +1,12 @@
-import React from 'react'
-import PendingOrder from './_Component/PendingOrderPage'
+import React from 'react';
+import PendingOrder from './_Component/PendingOrderPage';
 
 const page = () => {
   return (
     <div>
-      <PendingOrder/>
+      <PendingOrder />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;
