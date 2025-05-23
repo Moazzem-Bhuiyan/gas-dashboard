@@ -1,13 +1,12 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { forgotPassSchema, loginSchema } from "@/schema/authSchema";
-import FormWrapper from "@/components/Form/FormWrapper";
-import UInput from "@/components/Form/UInput";
-import { Button } from "antd";
-import { LogoSvg } from "@/assets/logos/LogoSvg";
-import { ArrowLeft } from "lucide-react";
+import Link from 'next/link';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { forgotPassSchema } from '@/schema/authSchema';
+import FormWrapper from '@/components/Form/FormWrapper';
+import UInput from '@/components/Form/UInput';
+import { Button } from 'antd';
+import { ArrowLeft } from 'lucide-react';
 
 export default function ForgotPassForm() {
   const onSubmit = (data) => {
@@ -40,11 +39,7 @@ export default function ForgotPassForm() {
           className="!h-10"
         />
 
-        <Button
-          type="primary"
-          size="large"
-          className="w-full !font-semibold !h-10"
-        >
+        <Button type="primary" size="large" className="w-full !font-semibold !h-10">
           Submit
         </Button>
       </FormWrapper>

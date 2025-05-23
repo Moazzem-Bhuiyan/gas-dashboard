@@ -1,48 +1,84 @@
 'use client';
 
-import { Avatar, ConfigProvider } from 'antd';
+import { ConfigProvider } from 'antd';
 import { Table } from 'antd';
-import { UserX } from 'lucide-react';
+
 import { Eye } from 'lucide-react';
 
 import Image from 'next/image';
-import userImage from '@/assets/images/user-avatar.png';
+
 import { Tooltip } from 'antd';
 import { Tag } from 'antd';
 import { useState } from 'react';
 import ProfileModal from '@/components/SharedModals/ProfileModal';
-
-// Dummy Data
-const data = Array.from({ length: 4 }).map((_, inx) => ({
-  key: inx + 1,
-  name: 'George Smith',
-  userImg: userImage,
-  email: 'gas@gmail.com',
-  contact: '+1234567890',
-  date: '11 oct 24, 11:10 PM',
-  accountType: 'Driver',
-}));
+import { useGetAllusersQuery } from '@/redux/api/userApi';
+import moment from 'moment';
 
 const RecentUserTable = () => {
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [searchText, setSearchText] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [userData, setUserData] = useState();
+  // User role
+  const role = '';
+  // User data with query parameterss
+  const { data, isError, isLoading } = useGetAllusersQuery({
+    limit: 5,
+    page: currentPage,
+    searchText,
+    role,
+  });
+
+  // Table Data transformation
+  const tabledata =
+    data?.data?.data?.map((item, inx) => ({
+      key: inx + 1 + (currentPage - 1) * 10,
+      name: item?.fullname,
+      userImg: item?.image,
+      email: item?.email,
+      contact: item?.phoneNumber || 'Not provided',
+      date: moment(item?.createdAt).format('DD-MM-YYYY'),
+      accountType: item?.role,
+      address: item?.address || 'Not provided',
+    })) || [];
 
   // =============== Table columns ===============
   const columns = [
     {
       title: 'Name',
       dataIndex: 'name',
-      render: (value, record) => (
-        <div className="flex-center-start gap-x-2">
-          <Image
-            src={record.userImg}
-            alt="User avatar"
-            width={52}
-            height={52}
-            className="rounded-full aspect-square "
-          />
-          <p className="font-medium">{value}</p>
-        </div>
-      ),
+      render: (value, record) => {
+        // Helper function to validate URL
+        const isValidUrl = (url) => {
+          if (!url) return false;
+          return url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/');
+        };
+
+        // Get the first letter of the name (uppercase)
+        const firstLetter = value ? value.charAt(0).toUpperCase() : '';
+
+        // Determine if the image is valid
+        const hasValidImage = isValidUrl(record?.userImg);
+
+        return (
+          <div className="flex-center-start gap-x-2">
+            {hasValidImage ? (
+              <Image
+                src={record?.userImg}
+                alt="User avatar"
+                width={40}
+                height={40}
+                className="rounded-full w-10 h-auto aspect-square"
+              />
+            ) : (
+              <div className="flex items-center justify-center rounded-full w-10 h-10 bg-[#75d1c2] text-white text-lg font-medium">
+                {firstLetter}
+              </div>
+            )}
+            <p className="font-medium">{value}</p>
+          </div>
+        );
+      },
     },
     {
       title: 'Email',
@@ -65,25 +101,23 @@ const RecentUserTable = () => {
     {
       title: 'Account Type',
       dataIndex: 'accountType',
-      render: (value) => (
-        <Tag color="blue" className="rounded-full">
-          {value}
-        </Tag>
-      ),
+      render: (value) => <Tag color={value === 'driver' ? '#32CD32' : '#F16365'}>{value}</Tag>,
     },
     { title: 'Date', dataIndex: 'date' },
     {
       title: 'Action',
       dataIndex: 'action',
-      render: () => (
+      render: (_, record) => (
         <div className="flex-center-start gap-x-2">
           <Eye
             size={18}
             strokeWidth={2}
             className="text-blue-500 cursor-pointer"
-            onClick={() => setShowProfileModal(true)}
+            onClick={() => {
+              setUserData(record);
+              setShowProfileModal(true);
+            }}
           />
-          <UserX size={18} strokeWidth={2} className="text-red-500 cursor-pointer" />
         </div>
       ),
     },
@@ -99,14 +133,14 @@ const RecentUserTable = () => {
         <Table
           style={{ overflowX: 'auto', width: '100%' }}
           columns={columns}
-          dataSource={data}
+          dataSource={tabledata}
           scroll={{ x: '100%' }}
           pagination={false}
         ></Table>
       </div>
 
       {/* Profile Modal */}
-      <ProfileModal open={showProfileModal} setOpen={setShowProfileModal} />
+      <ProfileModal open={showProfileModal} setOpen={setShowProfileModal} userData={userData} />
     </ConfigProvider>
   );
 };

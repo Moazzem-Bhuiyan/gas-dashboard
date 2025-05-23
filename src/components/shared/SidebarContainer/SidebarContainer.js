@@ -7,11 +7,15 @@ import {
   Car,
   CheckCheck,
   CircleDollarSign,
+  Cog,
   DollarSign,
   HandPlatter,
+  MailPlus,
   MessageSquareMore,
   School,
+  ShoppingCart,
   Timer,
+  WalletMinimal,
 } from 'lucide-react';
 import { ScrollText } from 'lucide-react';
 import { LogOut } from 'lucide-react';
@@ -83,13 +87,18 @@ const SidebarContainer = ({ collapsed }) => {
     },
     {
       key: 'manage-subscription',
-      icon: <DollarSign size={21} strokeWidth={2} />,
+      icon: <WalletMinimal size={21} strokeWidth={2} />,
       label: <Link href={'/admin/manage-subscription'}>Manage-Subscription</Link>,
+    },
+    {
+      key: 'manage-cupon',
+      icon: <Cog size={21} strokeWidth={2} />,
+      label: <Link href={'/admin/setCuponCode'}>Set Cupon Code</Link>,
     },
 
     {
       key: 'orders',
-      icon: <CircleUser size={21} strokeWidth={2} />,
+      icon: <ShoppingCart size={21} strokeWidth={2} />,
       label: <Link href={'/admin/orders'}>Order Management </Link>,
     },
     {
@@ -101,6 +110,11 @@ const SidebarContainer = ({ collapsed }) => {
       key: 'messages',
       icon: <MessageSquareMore size={21} strokeWidth={2} />,
       label: <Link href={'/admin/message'}>Support Messages</Link>,
+    },
+    {
+      key: 'sendEmail',
+      icon: <MailPlus size={21} strokeWidth={2} />,
+      label: <Link href={'/admin/sendEmail'}>Send Email</Link>,
     },
 
     {
@@ -149,7 +163,7 @@ const SidebarContainer = ({ collapsed }) => {
         maxHeight: '100vh',
         overflow: 'auto',
       }}
-      className="scroll-hide"
+      className="scroll-hide h-screen sticky top-0 z-50"
     >
       <div className="mb-6 flex flex-col justify-center items-center gap-y-5">
         <Link href={'/'}>

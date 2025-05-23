@@ -27,7 +27,7 @@ export default function AdminLayout({ children }) {
   }, [isClient, screenSizeLessThan1300, sidebarCollapsed]);
 
   return (
-    <Layout style={{ height: '100vh', overflow: 'auto' }}>
+    <Layout style={{ height: '100vh', overflow: 'hidden' }}>
       <SidebarContainer collapsed={sidebarCollapsed}></SidebarContainer>
 
       <Layout>

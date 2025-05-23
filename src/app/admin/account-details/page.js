@@ -1,10 +1,10 @@
-import { Tabs } from "antd";
-import AccDetailsTable from "./_components/AccDetailsTable";
-import DriverAccDetailsTable from "./_components/DriverAccDetailsTable";
+import { Tabs } from 'antd';
+import AccDetailsTable from './_components/AccDetailsTable';
+import DriverAccDetailsTable from './_components/DriverAccDetailsTable';
 
 export const metadata = {
-  title: "Account Details",
-  description: "User account details page",
+  title: 'Account Details',
+  description: 'User account details page',
 };
 
 export default function AccountDetailsPage() {

@@ -1,12 +1,12 @@
-import { ConfigProvider } from "antd";
-import { Spin } from "antd";
+import { ConfigProvider } from 'antd';
+import { Spin } from 'antd';
 
 export default function loading() {
   return (
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: "#1b71a7",
+          colorPrimary: '#1b71a7',
         },
       }}
     >
