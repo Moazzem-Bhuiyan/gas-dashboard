@@ -1,12 +1,12 @@
-import React from 'react'
-import DriverDetailsTable from './_Component/DriverTable'
+import React from 'react';
+import DriverDetailsTable from './_Component/DriverTable';
 
 const page = () => {
   return (
     <div>
-      <DriverDetailsTable/>
+      <DriverDetailsTable />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

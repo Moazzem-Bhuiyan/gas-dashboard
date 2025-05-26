@@ -67,15 +67,15 @@ export default function DriverDetailsTable() {
       ),
       dataIndex: 'earnings',
     },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      render: (value) => (
-        <Tag color="green" className="!rounded-full !px-4 !py-1 !text-sm">
-          {value}
-        </Tag>
-      ),
-    },
+    // {
+    //   title: 'Status',
+    //   dataIndex: 'status',
+    //   render: (value) => (
+    //     <Tag color="green" className="!rounded-full !px-4 !py-1 !text-sm">
+    //       {value}
+    //     </Tag>
+    //   ),
+    // },
     {
       title: 'Action',
       render: (_, record) => (
@@ -86,7 +86,7 @@ export default function DriverDetailsTable() {
             </button>
           </Tooltip>
 
-          <Tooltip title="Block User">
+          {/* <Tooltip title="Block User">
             <CustomConfirm
               title="Block User"
               description="Are you sure to block this user?"
@@ -96,7 +96,7 @@ export default function DriverDetailsTable() {
                 <UserX color="#F16365" size={22} />
               </button>
             </CustomConfirm>
-          </Tooltip>
+          </Tooltip> */}
         </div>
       ),
     },

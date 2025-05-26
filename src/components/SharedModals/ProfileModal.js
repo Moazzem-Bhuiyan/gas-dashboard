@@ -32,11 +32,11 @@ export default function ProfileModal({ open, setOpen, userData }) {
       <div className="flex flex-col items-center gap-4 rounded-lg bg-primary-blue py-4">
         {hasValidImage ? (
           <Image
-            src={record?.userImg}
+            src={userData?.userImg}
             alt="User avatar"
             width={40}
             height={40}
-            className="rounded-full w-10 h-auto aspect-square"
+            className="rounded-full w-40 h-auto aspect-square"
           />
         ) : (
           <div className="flex items-center justify-center rounded-full w-[100px] h-[100px] bg-[#9bddbe] text-white text-xl font-medium">
