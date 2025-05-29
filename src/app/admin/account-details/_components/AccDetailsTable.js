@@ -42,7 +42,7 @@ export default function AccDetailsTable() {
   const tabledata =
     data?.data?.data?.map((item, inx) => ({
       key: inx + 1 + (currentPage - 1) * 10,
-      name: item?.fullname,
+      name: item?.fullname || 'Not provided',
       userImg: item?.image,
       email: item?.email,
       contact: item?.phoneNumber || 'Not provided',
@@ -171,7 +171,7 @@ export default function AccDetailsTable() {
         scroll={{ x: '100%' }}
         loading={isLoading}
         pagination={{
-          pageSize: 5,
+          pageSize: 10,
           current: currentPage,
           total: data?.data?.total,
           onChange: (page) => setCurrentPage(page),
