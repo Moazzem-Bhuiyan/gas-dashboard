@@ -1,12 +1,12 @@
-import React from 'react'
-import CityStateExpansionTable from './_Component/CityStateExpansionTable'
+import React from 'react';
+import CityStateExpansionTable from './_Component/CityStateExpansionTable';
 
 const page = () => {
   return (
     <div>
-      <CityStateExpansionTable/>
+      <CityStateExpansionTable />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

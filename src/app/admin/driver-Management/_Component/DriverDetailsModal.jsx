@@ -3,10 +3,10 @@
 import { Modal } from 'antd';
 import clsx from 'clsx';
 
-export default function DriverDetailsModal({ open, setOpen }) {
+export default function DriverDetailsModal({ open, setOpen, selectedDriver }) {
   const earnings = [
-    { title: 'Total Earnings', amount: '$1000' },
-    { title: 'Today Earnings', amount: '$50' },
+    { title: 'Total Earnings', amount: selectedDriver?.earnings },
+    { title: 'Today Earnings', amount: selectedDriver?.todayEarnings },
   ];
   return (
     <Modal
@@ -35,24 +35,38 @@ export default function DriverDetailsModal({ open, setOpen }) {
                 )}
               >
                 <h1 className="font-bold text-2xl">{earning.title}</h1>
-                <h1 className=" font-bold text-xl mt-3">{earning.amount}</h1>
+                <h1 className="text-xl mt-3">{earning.amount}</h1>
               </div>
             ))}
           </div>
           {/* basic info */}
-          <h1 className=" items-center text-xl font-bold mt-10">Basic Info</h1>
-          <p className="font-medium text-lg mt-3">Driver Id : 1234567890</p>
-          <p className="font-medium text-lg mt-3">Driver Name : Justina Ojayluv</p>
-          <p className="font-medium text-lg mt-3">Email : amd@gmail.com</p>
-          <p className="font-medium text-lg mt-3">Contact : +234 813 123 4567</p>
-          <p className="font-medium text-lg mt-3">
-            Address : 1234, Lorem Ipsum Street, Dolor Sit Amet, Consectetur Adipiscing Elit{' '}
+          <h1 className="items-center text-xl font-bold mt-10">Basic Info</h1>
+          <p className="text-lg mt-3">
+            <span className="font-bold">Driver Id :</span> 1234567890
           </p>
-          <h1 className=" items-center text-xl font-bold mt-10">Performance</h1>
-          <p className="font-medium text-lg mt-3">Deliveries Completed : 100</p>
-          <p className="font-medium text-lg mt-3">Active Orders : 5 Currently</p>
+          <p className="text-lg mt-3">
+            <span className="font-bold">Driver Name :</span> {selectedDriver?.name}
+          </p>
+          <p className="text-lg mt-3">
+            <span className="font-bold">Email :</span> {selectedDriver?.email}
+          </p>
+          <p className="text-lg mt-3">
+            <span className="font-bold">Contact :</span> {selectedDriver?.contact}
+          </p>
+          <p className="text-lg mt-3">
+            <span className="font-bold">Address :</span> {selectedDriver?.address || 'Not Provided'}
+          </p>
+          <h1 className="items-center text-xl font-bold mt-10">Performance</h1>
+          <p className="text-lg mt-3">
+            <span className="font-bold">Deliveries Completed :</span> 100
+          </p>
+          <p className="text-lg mt-3">
+            <span className="font-bold">Active Orders :</span> 5 Currently
+          </p>
           <h2 className="items-center text-xl font-bold mt-10">Payment Information</h2>
-          <p className="font-medium text-lg mt-3">Bank Acc : 1234567890</p>
+          <p className="text-lg mt-3">
+            <span className="font-bold">Bank Acc :</span> 1234567890
+          </p>
         </div>
       </div>
     </Modal>

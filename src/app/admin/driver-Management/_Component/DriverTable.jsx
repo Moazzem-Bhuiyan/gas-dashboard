@@ -6,35 +6,34 @@ import { ConfigProvider } from 'antd';
 import { Check, Search } from 'lucide-react';
 import userImage from '@/assets/images/user-avatar-lg.png';
 import { Eye } from 'lucide-react';
-import { UserX } from 'lucide-react';
 import { useState } from 'react';
-import { Filter } from 'lucide-react';
 import Image from 'next/image';
-import CustomConfirm from '@/components/CustomConfirm/CustomConfirm';
 import { message } from 'antd';
-import ProfileModal from '@/components/SharedModals/ProfileModal';
-import { Tag } from 'antd';
 import DriverDetailsModal from './DriverDetailsModal';
-
-// Dummy table Data
-const data = Array.from({ length: 50 }).map((_, inx) => ({
-  key: inx + 1,
-  name: 'David Smith',
-  userImg: userImage,
-  email: 'justina@gmail.com',
-  contact: '+1234567890',
-  earnings: '$1000',
-  status: 'Online',
-}));
+import { useGetDriverDataQuery } from '@/redux/api/driversApi';
 
 export default function DriverDetailsTable() {
   const [searchText, setSearchText] = useState('');
   const [profileModalOpen, setProfileModalOpen] = useState(false);
+  const [currentPage, setcurrentPage] = useState(1);
+  const [selectedDriver, setSelectedDriver] = useState(null);
 
-  // Block user handler
-  const handleBlockUser = () => {
-    message.success('User blocked successfully');
-  };
+  // ===================Get drivers data from api=======================//
+
+  const { data: driverData, isLoading } = useGetDriverDataQuery();
+
+  // Dummy table Data
+  const data = driverData?.data.map((item, inx) => ({
+    key: inx + 1,
+    name: item?.userId?.fullname,
+    userImg: item?.userId?.image,
+    email: item?.userId?.email,
+    contact: item?.userId?.phoneNumber || 'Not Provided',
+    earnings: item?.totalEarnings,
+    status: item?.userId?.status,
+    address: item?.userId?.address || 'Not Provided',
+    todayEarnings: item?.todayEarnings || 0,
+  }));
 
   // ================== Table Columns ================
   const columns = [
@@ -42,18 +41,38 @@ export default function DriverDetailsTable() {
     {
       title: 'Name',
       dataIndex: 'name',
-      render: (value, record) => (
-        <div className="flex-center-start gap-x-2">
-          <Image
-            src={record.userImg}
-            alt="User avatar"
-            width={1200}
-            height={1200}
-            className="rounded-full w-10 h-auto aspect-square"
-          />
-          <p className="font-medium">{value}</p>
-        </div>
-      ),
+      render: (value, record) => {
+        // Helper function to validate URL
+        const isValidUrl = (url) => {
+          if (!url) return false;
+          return url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/');
+        };
+
+        // Get the first letter of the name (uppercase)
+        const firstLetter = value ? value.charAt(0).toUpperCase() : '';
+
+        // Determine if the image is valid
+        const hasValidImage = isValidUrl(record?.userImg);
+
+        return (
+          <div className="flex-center-start gap-x-2">
+            {hasValidImage ? (
+              <Image
+                src={record?.userImg}
+                alt="User avatar"
+                width={40}
+                height={40}
+                className="rounded-full w-10 h-auto aspect-square"
+              />
+            ) : (
+              <div className="flex items-center justify-center rounded-full w-10 h-10 bg-[#9bddbe] text-white text-lg font-medium">
+                {firstLetter}
+              </div>
+            )}
+            <p className="font-medium">{value}</p>
+          </div>
+        );
+      },
     },
     { title: 'Email', dataIndex: 'email' },
     { title: 'Contact', dataIndex: 'contact' },
@@ -81,22 +100,15 @@ export default function DriverDetailsTable() {
       render: (_, record) => (
         <div className="flex-center-start gap-x-3">
           <Tooltip title="Show Details">
-            <button onClick={() => setProfileModalOpen(true)}>
+            <button
+              onClick={() => {
+                setProfileModalOpen(true);
+                setSelectedDriver(record);
+              }}
+            >
               <Eye color="#1B70A6" size={22} />
             </button>
           </Tooltip>
-
-          {/* <Tooltip title="Block User">
-            <CustomConfirm
-              title="Block User"
-              description="Are you sure to block this user?"
-              onConfirm={handleBlockUser}
-            >
-              <button>
-                <UserX color="#F16365" size={22} />
-              </button>
-            </CustomConfirm>
-          </Tooltip> */}
         </div>
       ),
     },
@@ -118,9 +130,14 @@ export default function DriverDetailsTable() {
         columns={columns}
         dataSource={data}
         scroll={{ x: '100%' }}
+        loading={isLoading}
       ></Table>
 
-      <DriverDetailsModal open={profileModalOpen} setOpen={setProfileModalOpen} />
+      <DriverDetailsModal
+        open={profileModalOpen}
+        setOpen={setProfileModalOpen}
+        selectedDriver={selectedDriver}
+      />
     </ConfigProvider>
   );
 }

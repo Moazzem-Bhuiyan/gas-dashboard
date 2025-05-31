@@ -4,14 +4,11 @@ import { Input, Table } from 'antd';
 import { Tooltip } from 'antd';
 import { ConfigProvider } from 'antd';
 import { Search } from 'lucide-react';
-import userImage from '@/assets/images/user-avatar-lg.png';
 import { Eye } from 'lucide-react';
 import { UserX } from 'lucide-react';
 import { useState } from 'react';
-import { Filter } from 'lucide-react';
 import Image from 'next/image';
 import CustomConfirm from '@/components/CustomConfirm/CustomConfirm';
-import { message } from 'antd';
 import ProfileModal from '@/components/SharedModals/ProfileModal';
 import { Tag } from 'antd';
 import { useBlockUnblockUserMutation, useGetAllusersQuery } from '@/redux/api/userApi';
@@ -27,7 +24,7 @@ export default function AccDetailsTable() {
   const role = 'user';
 
   // User data with query parameterss
-  const { data, isError, isLoading } = useGetAllusersQuery({
+  const { data, isLoading } = useGetAllusersQuery({
     limit: 5,
     page: currentPage,
     searchText,
