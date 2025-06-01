@@ -2,10 +2,13 @@ import { baseApi } from './baseApi';
 
 const dashBoardApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getDashboardData: builder.query({
-      query: ({ currentYear }) => ({ url: `/meta?earning_year=${currentYear}`, method: 'GET' }),
+    getDashboardUserData: builder.query({
+      query: () => ({ url: `/payments/dashboard-data?role=user`, method: 'GET' }),
+    }),
+    getDashboardDriverData: builder.query({
+      query: () => ({ url: `/payments/dashboard-data?role=driver`, method: 'GET' }),
     }),
   }),
 });
 
-export const { useGetDashboardDataQuery } = dashBoardApi;
+export const { useGetDashboardUserDataQuery, useGetDashboardDriverDataQuery } = dashBoardApi;

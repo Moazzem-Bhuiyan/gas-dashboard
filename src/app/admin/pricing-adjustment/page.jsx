@@ -5,10 +5,9 @@ import DeliveryFeeAndMendetoryTrip from './_Component/DeliveryFeeAndMendetoryTri
 const { TabPane } = Tabs;
 const page = () => {
   return (
-    <div>
+    <div className="space-y-20 min-h-[1100px]">
       <Tabs>
         <Tabs.TabPane tab="Fuel Price" key="1">
-          {/* <FuelPrice /> */}
           <FuelPrice />
         </Tabs.TabPane>
         <Tabs.TabPane tab="Delivery and Mendatory trip" key="2">

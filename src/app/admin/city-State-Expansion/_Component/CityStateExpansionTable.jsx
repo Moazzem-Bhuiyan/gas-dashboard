@@ -5,16 +5,29 @@ import { Edit, Eye, Search, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
 import CityStateExpansionEditModalForm from './CityStateExpansionEditModal';
 import CityStateExpansionAddModalForm from './CityStateExpansionAddModal';
-import { useGetCityExpensionQuery } from '@/redux/api/cityexpensionApi';
+import {
+  useDeleteCityExpensionMutation,
+  useGetCityExpensionQuery,
+} from '@/redux/api/cityexpensionApi';
+import { toast } from 'sonner';
 
 const CityStateExpansionTable = () => {
   const [searchText, setSearchText] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const [detailsModalOpen, setdetailsModalOpen] = useState(false);
   const [addServiceOpen, setaddServiceOpen] = useState(false);
   const [selectedCity, setSelectedCity] = useState(null);
 
   // get cityEcpansion API handler
-  const { data: cityExpansionData, isLoading } = useGetCityExpensionQuery({});
+  const { data: cityExpansionData, isLoading } = useGetCityExpensionQuery({
+    limit: 10,
+    page: currentPage,
+    searchText: searchText,
+  });
+
+  // Delete cityExpansion api handler
+
+  const [deleteCityExpansionData, { isLoading: isDeleting }] = useDeleteCityExpensionMutation();
 
   // Dummy table data
   const data = cityExpansionData?.data?.data?.map((item, inx) => ({
@@ -24,11 +37,19 @@ const CityStateExpansionTable = () => {
     radius: item?.radius,
     coveredzipcode: item?.coveredZipCodes.map((item) => item).join(', '),
     status: item?.status,
+    _id: item?._id,
   }));
 
   // Block user handler
-  const handleBlockUser = () => {
-    message.success('User blocked successfully');
+  const handleBlockUser = (id) => {
+    try {
+      const res = deleteCityExpansionData(id).unwrap();
+      if (res?.success) {
+        toast.success('City deleted successfully');
+      }
+    } catch (error) {
+      toast.error(error?.data?.message || 'Failed to delete city');
+    }
   };
 
   // ================== Table Columns ================
@@ -74,8 +95,9 @@ const CityStateExpansionTable = () => {
           <Tooltip title="Delete Service">
             <CustomConfirm
               title="Delete Service"
-              description="Are you sure to delete this service ?"
-              onConfirm={handleBlockUser}
+              description="Are you sure to delete this city ?"
+              onConfirm={() => handleBlockUser(record._id)}
+              loading={isDeleting}
             >
               <button>
                 <Trash2 color="#F16365" size={22} />
@@ -116,6 +138,14 @@ const CityStateExpansionTable = () => {
           columns={columns}
           dataSource={data}
           scroll={{ x: '100%' }}
+          loading={isLoading}
+          pagination={{
+            current: currentPage,
+            pageSize: 10,
+            total: cityExpansionData?.data?.meta?.total,
+            onChange: (page) => setCurrentPage(page),
+            showTotal: (total) => `Total ${total} items`,
+          }}
         ></Table>
       </ConfigProvider>
       <CityStateExpansionEditModalForm

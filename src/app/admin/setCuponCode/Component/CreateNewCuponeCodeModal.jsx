@@ -1,61 +1,75 @@
 'use client';
 
-import { Modal, Form, Select, Input, DatePicker, Button, message } from 'antd';
+import { useCreateNewCuponMutation } from '@/redux/api/cuponCodeApi';
+import { useGetAllserviceQuery } from '@/redux/api/serviceApi';
+import { Modal, Form, Select, Input, DatePicker, Button } from 'antd';
+import { debounce } from 'lodash';
 import moment from 'moment';
-import { useEffect } from 'react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 const { Option } = Select;
 
 export default function CreateNewCuponModal({ open, setOpen }) {
-  const [form] = Form.useForm(); // Create a form instance
+  const [form] = Form.useForm();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchText, setSearchText] = useState('');
 
-  // Initialize form with default values
-  useEffect(() => {
-    if (open) {
-      form.setFieldsValue({
-        applicableServices: 'Select',
-        couponName: 'SUMMER20',
-        expirationDate: moment('2025-03-31'), // Default date as per screenshot
-        couponCode: 'BUY1',
-        discount: 10,
-      });
-    }
-  }, [open, form]);
+  console.log(setCurrentPage);
+
+  //=============================== get all services api handler for applicable services dropdown ============================
+  const { data: serviceData, isLoading } = useGetAllserviceQuery({
+    limit: 10,
+    page: currentPage,
+    searchText: searchText,
+  });
+
+  const service = serviceData?.data?.data;
+
+  // Debounced search handler to reduce API calls
+  const handleSearch = debounce((value) => {
+    setSearchText(value);
+  }, 500);
+
+  // create new coupon api handler
+  const [create, { isLoading: isCreating }] = useCreateNewCuponMutation();
 
   // Handle form submission
-  const onFinish = (values) => {
-    const formattedValues = {
-      ...values,
-      expirationDate: values.expirationDate.format('MMMM D, YYYY'), // Format date
-    };
-    console.log('Form submitted:', formattedValues);
-    // Add API call here to save the coupon
-    message.success('Coupon created successfully');
-    setOpen(false);
-    form.resetFields(); // Reset form after submission
-  };
-
-  // Handle form submission failure
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-    message.error('Please fill all required fields correctly');
+  const onFinish = async (values) => {
+    try {
+      const res = await create(values).unwrap();
+      if (res?.success) {
+        toast.success('Coupon created successfully');
+        setOpen(false);
+        form.resetFields();
+      }
+    } catch (error) {
+      toast.error(error?.data?.message || 'Failed to create coupon');
+    }
   };
 
   return (
     <Modal centered open={open} onCancel={() => setOpen(false)} footer={null} width={700}>
       <div className="p-6">
         <h2 className="text-lg font-semibold mb-4">Create New Coupon</h2>
-        <Form form={form} layout="vertical" onFinish={onFinish} onFinishFailed={onFinishFailed}>
+        <Form form={form} layout="vertical" onFinish={onFinish}>
           <Form.Item
             label="Applicable Services"
-            name="applicableServices"
+            name="applicableOn"
             rules={[{ required: true, message: 'Please select applicable services' }]}
           >
-            <Select>
-              <Option value="Select">Select</Option>
-              <Option value="ALL SERVICES">ALL SERVICES</Option>
-              {/* Add more options as needed */}
-            </Select>
+            <Select
+              showSearch
+              style={{ width: '100%' }}
+              placeholder="Search to Select"
+              optionFilterProp="label"
+              onSearch={handleSearch}
+              filterOption={false}
+              options={service?.map((service) => ({
+                value: service?.serviceName,
+                label: service?.serviceName,
+              }))}
+            ></Select>
           </Form.Item>
 
           <Form.Item
@@ -68,7 +82,7 @@ export default function CreateNewCuponModal({ open, setOpen }) {
 
           <Form.Item
             label="Expiration Date"
-            name="expirationDate"
+            name="expiryDate"
             rules={[{ required: true, message: 'Please select an expiration date' }]}
           >
             <DatePicker
@@ -95,7 +109,7 @@ export default function CreateNewCuponModal({ open, setOpen }) {
                 type: 'number',
                 min: 0,
                 max: 100,
-                transform: (value) => Number(value), // Convert to number for validation
+                transform: (value) => Number(value),
                 message: 'Discount must be between 0 and 100%',
               },
             ]}
@@ -105,11 +119,13 @@ export default function CreateNewCuponModal({ open, setOpen }) {
 
           <Form.Item>
             <Button
+              loading={isCreating}
+              disabled={isCreating}
               type="primary"
               htmlType="submit"
               className="w-full mt-4 bg-teal-500 hover:bg-teal-600 border-none"
             >
-              SAVE
+              Submit
             </Button>
           </Form.Item>
         </Form>

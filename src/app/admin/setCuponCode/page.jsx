@@ -10,7 +10,7 @@ export const metadata = {
 
 const page = () => {
   return (
-    <div>
+    <div className=" space-y-20  min-h-[1100px]">
       <CouponCodeContainer />
     </div>
   );

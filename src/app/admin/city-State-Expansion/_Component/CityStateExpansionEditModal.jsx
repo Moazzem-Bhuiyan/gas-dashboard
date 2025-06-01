@@ -1,53 +1,79 @@
 'use client';
 
+import { useUpdateCityExpensionMutation } from '@/redux/api/cityexpensionApi';
 import { Form, Input, InputNumber, Modal, Switch } from 'antd';
 import { useEffect } from 'react';
+import { toast } from 'sonner';
 
 export default function CityStateExpansionEditModalForm({ open, setOpen, selectedCity }) {
   const [form] = Form.useForm();
+  const [updatecity, { isLoading }] = useUpdateCityExpensionMutation();
+  const id = selectedCity?._id;
 
   useEffect(() => {
     if (selectedCity && open) {
-      // Convert array to comma-separated string for display
+      // Convert coveredZipCodes to comma-separated string for display
       const coveredZipCodes = Array.isArray(selectedCity.coveredzipcode)
-        ? selectedCity.coveredzipcode.join(', ')
-        : selectedCity.coveredzipcode?.replace(/^\$/, '') || '';
+        ? selectedCity.coveredzipcode.join(',')
+        : typeof selectedCity.coveredzipcode === 'string'
+          ? selectedCity.coveredzipcode.replace(/^\$/, '')
+          : '';
+
+      // Set status as boolean for Switch component
+      const status =
+        selectedCity.status === true ||
+        selectedCity.status === 'true' ||
+        selectedCity.status === 'active';
 
       form.setFieldsValue({
         cityName: selectedCity.name?.replace(/^\$/, '') || '',
         centralZipCode: selectedCity.centralzipcode?.replace(/^\$/, '') || '',
         radius: selectedCity.radius?.replace(/^\$/, '') || '',
         coveredZipCodes: coveredZipCodes,
-        status: selectedCity.status === 'active' || selectedCity.status === 'blocked',
+        status: status,
       });
     }
   }, [selectedCity, open, form]);
 
-  const onsubmit = (values) => {
-    // Convert comma-separated string back to array
-    const updatedValues = {
-      ...values,
-      coveredZipCodes: values.coveredZipCodes
-        ? values.coveredZipCodes.split(',').map((zip) => zip.trim())
-        : [],
-    };
-    console.log(updatedValues);
+  if (!selectedCity) {
+    return null;
+  }
+
+  const onsubmit = async (values) => {
+    try {
+      const updatedValues = {
+        ...values,
+        coveredZipCodes: values.coveredZipCodes
+          ? values.coveredZipCodes.split(',').map((zip) => zip.trim())
+          : [],
+        status: values.status ? 'active' : 'inactive',
+      };
+      // Call the API
+      const res = await updatecity({ data: updatedValues, id }).unwrap();
+      if (res?.success) {
+        toast.success('City updated successfully');
+        setOpen(false);
+        form.resetFields();
+      }
+    } catch (error) {
+      toast.error(error?.data?.message || 'Failed to update city');
+    }
   };
 
   return (
     <Modal
       centered
       open={open}
-      setOpen={setOpen}
       footer={null}
       onCancel={() => {
         setOpen(false);
+        form.resetFields();
       }}
       width={600}
       className="rounded-lg"
     >
       <div>
-        <h1 className="text-center items-center text-xl font-bold">
+        <h1 className="text-center text-xl font-bold">
           City/State Expansion with Distance Regulation
         </h1>
 
@@ -79,11 +105,29 @@ export default function CityStateExpansionEditModalForm({ open, setOpen, selecte
           <Form.Item
             label="Covered Zip Codes"
             name="coveredZipCodes"
-            rules={[{ required: true, message: 'Please input the covered Zip Codes!' }]}
+            rules={[
+              { required: true, message: 'Please input the covered Zip Codes!' },
+              {
+                validator: (_, value) => {
+                  if (!value) return Promise.resolve();
+                  const zipCodes = Array.isArray(value)
+                    ? value
+                    : value.split(',').map((zip) => zip.trim());
+                  const isValid = zipCodes.every((zip) => /^\d{5}$/.test(zip));
+                  if (isValid) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error('Please enter valid 5-digit zip codes (e.g., 90001,90002,90003)')
+                  );
+                },
+              },
+            ]}
+            getValueFromEvent={(e) => e.target.value.split(',').map((zip) => zip.trim())}
+            normalize={(value) => (Array.isArray(value) ? value.join(',') : value)}
           >
             <Input
-              type="text"
-              placeholder="Enter Covered Zip Codes (e.g., 12345, 67890)"
+              placeholder="Enter Covered Zip Codes (e.g., 90001,90002,90003,90004)"
               className="w-full p-2 border rounded"
             />
           </Form.Item>
@@ -94,7 +138,7 @@ export default function CityStateExpansionEditModalForm({ open, setOpen, selecte
             rules={[{ required: true, message: 'Please input the Radius!' }]}
           >
             <InputNumber
-              type="text"
+              type="number"
               placeholder="Enter Radius"
               className="!w-full p-2 border rounded"
             />
@@ -110,8 +154,12 @@ export default function CityStateExpansionEditModalForm({ open, setOpen, selecte
           </Form.Item>
 
           <Form.Item>
-            <button type="submit" className="w-full bg-[#5dd3a6] rounded-lg text-white p-2">
-              Save
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-[#5dd3a6] rounded-lg text-white p-2"
+            >
+              {isLoading ? 'Saving...' : 'Save'}
             </button>
           </Form.Item>
         </Form>

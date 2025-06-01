@@ -1,0 +1,68 @@
+import { baseApi } from './baseApi';
+
+const PriceAdjustmentApi = baseApi.injectEndpoints({
+  endpoints: (builder) => ({
+    createFuelPrice: builder.mutation({
+      query: (data) => ({
+        url: '/fuelInfo/create',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['priceAdjustment'],
+    }),
+
+    getFuelPriceList: builder.query({
+      query: () => ({
+        url: `/fuelInfo`,
+        method: 'GET',
+      }),
+      providesTags: ['priceAdjustment'],
+    }),
+
+    updateFuelPrice: builder.mutation({
+      query: ({ data, id }) => ({
+        url: `/fuelInfo/update/${id}`,
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: ['priceAdjustment'],
+    }),
+
+    // ===========================Delivery and Mendatory trip=================
+
+    createDeliveryAndMendetoryTrip: builder.mutation({
+      query: (data) => ({
+        url: '/deleveryAndtips/create',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['priceAdjustment'],
+    }),
+
+    getDeliveryAndMendetoryTrip: builder.query({
+      query: () => ({
+        url: `/deleveryAndtips`,
+        method: 'GET',
+      }),
+      providesTags: ['priceAdjustment'],
+    }),
+
+    updateDeliveryAndMendetoryTrip: builder.mutation({
+      query: ({ data, id }) => ({
+        url: `/deleveryAndtips/update/${id}`,
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: ['priceAdjustment'],
+    }),
+  }),
+});
+
+export const {
+  useGetFuelPriceListQuery,
+  useGetDeliveryAndMendetoryTripQuery,
+  useCreateFuelPriceMutation,
+  useUpdateFuelPriceMutation,
+  useCreateDeliveryAndMendetoryTripMutation,
+  useUpdateDeliveryAndMendetoryTripMutation,
+} = PriceAdjustmentApi;

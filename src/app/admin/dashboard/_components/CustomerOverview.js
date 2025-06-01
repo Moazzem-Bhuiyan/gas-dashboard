@@ -1,38 +1,17 @@
 'use client';
 
 import { Select } from 'antd';
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  defs,
-  linearGradient,
-  stop,
-} from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useState } from 'react';
 
-// dummy data
-const data = [
-  { month: 'Jan', user: 120 },
-  { month: 'Feb', user: 140 },
-  { month: 'Mar', user: 152 },
-  { month: 'Apr', user: 122 },
-  { month: 'May', user: 153 },
-  { month: 'Jun', user: 164 },
-  { month: 'Jul', user: 193 },
-  { month: 'Aug', user: 134 },
-  { month: 'Sep', user: 184 },
-  { month: 'Oct', user: 126 },
-  { month: 'Nov', user: 164 },
-  { month: 'Dec', user: 100 },
-];
-
-const CustomerOverview = () => {
+const CustomerOverview = ({ userData }) => {
   const [selectedYear, setSelectedYear] = useState('2024');
+
+  // map data for chart
+  const data = userData?.data?.monthlyUsers?.map((item) => ({
+    month: item.month,
+    user: item.total,
+  }));
 
   const handleChange = (value) => {
     setSelectedYear(value);

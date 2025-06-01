@@ -1,12 +1,12 @@
-import React from 'react'
-import AdjustBusinessHour from './_Component/AdjustBusinessHour'
+import React from 'react';
+import AdjustBusinessHour from './_Component/AdjustBusinessHour';
 
 const page = () => {
   return (
     <div>
-      <AdjustBusinessHour/>
+      <AdjustBusinessHour />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

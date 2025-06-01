@@ -13,7 +13,7 @@ const ServiceListTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [addServiceOpen, setAddServiceOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState(null); // Initialize as null
+  const [selectedService, setSelectedService] = useState(null);
 
   // Get all service API handler
   const { data: serviceData, isLoading } = useGetAllserviceQuery({
@@ -80,8 +80,8 @@ const ServiceListTable = () => {
           <Tooltip title="Edit Details">
             <button
               onClick={() => {
-                setSelectedService(record); // Set the selected service
-                setDetailsModalOpen(true); // Open the modal
+                setSelectedService(record);
+                setDetailsModalOpen(true);
               }}
             >
               <Edit color="#1B70A6" size={22} />

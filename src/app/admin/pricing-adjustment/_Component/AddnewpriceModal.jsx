@@ -1,23 +1,34 @@
 'use client';
 
 import { RiCloseLargeLine } from 'react-icons/ri';
-import { Form, Button, Modal, Divider, InputNumber, Select } from 'antd';
+import { Form, Button, Modal, Divider, InputNumber, Select, Input } from 'antd';
+import { useCreateFuelPriceMutation } from '@/redux/api/priceAdjustmentApi';
+import { toast } from 'sonner';
 
 const { Option } = Select;
 
 const AddNewFuelPriceModal = ({ open, setOpen }) => {
   const [form] = Form.useForm();
 
-  // Sample zipcode data (you can replace this with your actual zipcode data)
-  const zipCodes = [
-    { value: '10001', label: '10001' },
-    { value: '10002', label: '10002' },
-    { value: '10003', label: '10003' },
-    // Add more zipcodes as needed
-  ];
+  // add new fuel price api handler
 
-  const handleSubmit = (values) => {
-    console.log('Form values:', values);
+  const [add, { isLoading }] = useCreateFuelPriceMutation();
+
+  const handleSubmit = async (values) => {
+    const updatedValues = {
+      ...values,
+      zipCode: values.zipCode ? values.zipCode.split(',').map((zip) => zip.trim()) : [],
+    };
+    try {
+      const res = await add(updatedValues).unwrap();
+      if (res?.status === 'success') {
+        toast.success('Price added successfully');
+        setOpen(false);
+        form.resetFields();
+      }
+    } catch (error) {
+      toast.error(error?.data?.message || 'Failed to add price');
+    }
   };
 
   return (
@@ -45,35 +56,55 @@ const AddNewFuelPriceModal = ({ open, setOpen }) => {
           style={{ maxWidth: '800px', margin: '0 auto', padding: '0 16px' }}
         >
           <Form.Item
-            label="Zipcode/City"
-            name="zipcode"
-            rules={[{ required: true, message: 'Please select a zipcode' }]}
+            label=" Name"
+            name="fuelName"
+            rules={[{ required: true, message: 'Please enter a name' }]}
           >
-            <Select
-              className="h-12 !w-full"
-              placeholder="Select a zipcode"
-              showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().includes(input.toLowerCase())
-              }
-            >
-              {zipCodes.map((zip) => (
-                <Option key={zip.value} value={zip.value}>
-                  {zip.label}
-                </Option>
-              ))}
-            </Select>
+            <Input className="h-10 !w-full" placeholder="Enter Fuel Name" />
           </Form.Item>
           <Form.Item
-            label="Current Price You can Edit this Price"
-            name="currentPrice"
+            label="Covered Zip Codes"
+            name="zipCode"
+            rules={[
+              { required: true, message: 'Please input the covered Zip Codes!' },
+              {
+                validator: (_, value) => {
+                  if (!value) return Promise.resolve();
+                  const zipCodes = Array.isArray(value)
+                    ? value
+                    : value.split(',').map((zip) => zip.trim());
+                  const isValid = zipCodes.every((zip) => /^\d{5}$/.test(zip));
+                  if (isValid) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error('Please enter valid 5-digit zip codes (e.g., 90001,90002,90003)')
+                  );
+                },
+              },
+            ]}
+            getValueFromEvent={(e) => e.target.value.split(',').map((zip) => zip.trim())}
+            normalize={(value) => (Array.isArray(value) ? value.join(',') : value)}
+          >
+            <Input
+              placeholder="Enter Covered Zip Codes (e.g., 90001,90002,90003,90004)"
+              className="w-full p-2 border rounded h-10"
+            />
+          </Form.Item>
+          <Form.Item
+            label=" Price"
+            name="fuelPrice"
             rules={[{ required: true, message: 'Please enter price' }]}
           >
-            <InputNumber className="h-12 !w-full" placeholder="Enter New price" />
+            <InputNumber className="h-10 !w-full" placeholder="Enter New price" />
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit" style={{ width: '100%', height: '40px' }}>
+            <Button
+              loading={isLoading}
+              type="primary"
+              htmlType="submit"
+              style={{ width: '100%', height: '40px' }}
+            >
               Submit
             </Button>
           </Form.Item>

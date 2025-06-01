@@ -1,52 +1,31 @@
 'use client';
 
 import { RiCloseLargeLine } from 'react-icons/ri';
-import { Form, Button, Modal, Divider, InputNumber, Input } from 'antd';
-import { useEffect } from 'react';
-import { useUpdateFuelPriceMutation } from '@/redux/api/priceAdjustmentApi';
+import { Form, Button, Modal, Divider, InputNumber, Select, Input } from 'antd';
+import { useCreateDeliveryAndMendetoryTripMutation } from '@/redux/api/priceAdjustmentApi';
 import { toast } from 'sonner';
 
-const EditFuelPriceModal = ({ open, setOpen, editId }) => {
+const AddNewDeliveryTripPriceModal = ({ open, setOpen }) => {
   const [form] = Form.useForm();
 
-  useEffect(() => {
-    if (editId && open) {
-      // Convert coveredZipCodes to comma-separated string for display
-      const coveredZipCodes = Array.isArray(editId.zipCode)
-        ? editId.zipCode.join(',')
-        : typeof editId.zipCode === 'string'
-          ? editId.zipCode.replace(/^\$/, '')
-          : '';
+  // add new fuel price api handler
 
-      form.setFieldsValue({
-        fuelName: editId.type?.replace(/^\$/, '') || '',
-        fuelPrice: editId.price || 0,
-        zipCode: coveredZipCodes,
-      });
-    }
-  }, [editId, open, form]);
-
-  const id = editId?.id;
-
-  // update new fuel price api handler
-
-  const [update, { isLoading }] = useUpdateFuelPriceMutation();
+  const [add, { isLoading }] = useCreateDeliveryAndMendetoryTripMutation();
 
   const handleSubmit = async (values) => {
     const updatedValues = {
       ...values,
       zipCode: values.zipCode ? values.zipCode.split(',').map((zip) => zip.trim()) : [],
     };
-
     try {
-      const res = await update({ data: updatedValues, id }).unwrap();
-      if (res?.status === 'success') {
-        toast.success('Price updated successfully');
+      const res = await add(updatedValues).unwrap();
+      if (res?.success) {
+        toast.success('Price added successfully');
         setOpen(false);
         form.resetFields();
       }
     } catch (error) {
-      toast.error(error?.data?.message || 'Failed to update price');
+      toast.error(error?.data?.message || 'Failed to add price');
     }
   };
 
@@ -65,7 +44,9 @@ const EditFuelPriceModal = ({ open, setOpen, editId }) => {
       >
         <RiCloseLargeLine size={18} color="black" className="absolute left-1/3 top-1/3" />
       </div>
-      <h1 className="text-2xl font-semibold text-center">Edit Fuel Price Details</h1>
+      <h1 className="text-2xl font-semibold text-center">
+        Add New Price for Delivery and Mendatory trip
+      </h1>
       <Divider />
       <div>
         <Form
@@ -76,7 +57,7 @@ const EditFuelPriceModal = ({ open, setOpen, editId }) => {
         >
           <Form.Item
             label=" Name"
-            name="fuelName"
+            name="name"
             rules={[{ required: true, message: 'Please enter a name' }]}
           >
             <Input className="h-10 !w-full" placeholder="Enter Fuel Name" />
@@ -112,14 +93,14 @@ const EditFuelPriceModal = ({ open, setOpen, editId }) => {
           </Form.Item>
           <Form.Item
             label=" Price"
-            name="fuelPrice"
+            name="price"
             rules={[{ required: true, message: 'Please enter price' }]}
           >
             <InputNumber className="h-10 !w-full" placeholder="Enter New price" />
           </Form.Item>
           <Form.Item>
             <Button
-              // loading={isLoading}
+              loading={isLoading}
               type="primary"
               htmlType="submit"
               style={{ width: '100%', height: '40px' }}
@@ -133,4 +114,4 @@ const EditFuelPriceModal = ({ open, setOpen, editId }) => {
   );
 };
 
-export default EditFuelPriceModal;
+export default AddNewDeliveryTripPriceModal;
