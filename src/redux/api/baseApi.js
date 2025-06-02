@@ -61,6 +61,7 @@ export const baseApi = createApi({
     'BussinessHour',
     'priceAdjustment',
     'cuponCode',
+    'content',
   ],
   baseQuery: baseQueryWithRefreshToken,
   endpoints: () => ({}),

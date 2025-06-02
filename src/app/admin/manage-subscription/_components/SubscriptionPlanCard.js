@@ -1,7 +1,7 @@
-import CustomConfirm from "@/components/CustomConfirm/CustomConfirm";
-import { Badge, Button } from "antd";
-import { Trash2 } from "lucide-react";
-import { Edit } from "lucide-react";
+import CustomConfirm from '@/components/CustomConfirm/CustomConfirm';
+import { Badge, Button } from 'antd';
+import { Trash2 } from 'lucide-react';
+import { Edit } from 'lucide-react';
 
 export default function SubscriptionPlanCard({ data, setShowEditPlanModal }) {
   // Most popular card
@@ -18,10 +18,8 @@ export default function SubscriptionPlanCard({ data, setShowEditPlanModal }) {
             </div>
 
             <h1 className="text-5xl font-semibold">
-              ${data?.price}{" "}
-              <span className="text-xl font-medium text-white/80">
-                /{data?.duration}
-              </span>
+              ${data?.price}{' '}
+              <span className="text-xl font-medium text-white/80">/{data?.duration}</span>
             </h1>
 
             <p className="font-medium text-white/75">{data?.type}</p>
@@ -35,7 +33,7 @@ export default function SubscriptionPlanCard({ data, setShowEditPlanModal }) {
         <div className="space-x-4 flex-center">
           <CustomConfirm
             title="Delete Plan"
-            description={"Are you sure you want to delete this plan?"}
+            description={'Are you sure you want to delete this plan?'}
             onConfirm={() => {}}
           >
             <Button
@@ -67,9 +65,7 @@ export default function SubscriptionPlanCard({ data, setShowEditPlanModal }) {
           <h4 className="text-2xl font-semibold">{data?.title} Plan</h4>
           <h1 className="text-5xl font-semibold">
             ${data?.price}
-            <span className="text-xl font-medium text-black/50">
-              /{data?.duration}
-            </span>
+            <span className="text-xl font-medium text-black/50">/{data?.duration}</span>
           </h1>
           <p className="font-medium text-black/75">{data?.type}</p>
         </div>
@@ -83,7 +79,7 @@ export default function SubscriptionPlanCard({ data, setShowEditPlanModal }) {
       <div className="space-x-4 flex-center">
         <CustomConfirm
           title="Delete Plan"
-          description={"Are you sure you want to delete this plan?"}
+          description={'Are you sure you want to delete this plan?'}
           onConfirm={() => {}}
         >
           <Button

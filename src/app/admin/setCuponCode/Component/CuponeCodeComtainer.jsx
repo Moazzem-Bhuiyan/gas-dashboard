@@ -42,7 +42,7 @@ const CouponCodeContainer = () => {
     name: item?.couponName,
     code: item?.couponCode,
     expirationDate: moment(item?.expiryDate).format('MMMM D, YYYY'),
-    applicableServices: item?.applicableOn,
+    applicableServices: item?.service?.serviceName,
     discount: item?.discount,
   }));
 

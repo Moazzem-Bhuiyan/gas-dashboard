@@ -55,7 +55,7 @@ export default function CreateNewCuponModal({ open, setOpen }) {
         <Form form={form} layout="vertical" onFinish={onFinish}>
           <Form.Item
             label="Applicable Services"
-            name="applicableOn"
+            name="service"
             rules={[{ required: true, message: 'Please select applicable services' }]}
           >
             <Select
@@ -66,7 +66,7 @@ export default function CreateNewCuponModal({ open, setOpen }) {
               onSearch={handleSearch}
               filterOption={false}
               options={service?.map((service) => ({
-                value: service?.serviceName,
+                value: service?._id,
                 label: service?.serviceName,
               }))}
             ></Select>

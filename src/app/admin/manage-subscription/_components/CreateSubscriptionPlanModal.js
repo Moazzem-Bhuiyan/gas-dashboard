@@ -1,15 +1,14 @@
-"use client";
+'use client';
 
-import FormWrapper from "@/components/Form/FormWrapper";
-import UInput from "@/components/Form/UInput";
-import UTextArea from "@/components/Form/UTextArea";
-import { Button, Modal } from "antd";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { createSubscriptionSchema } from "@/schema/subscriptionSchema";
+import { Button, Modal } from 'antd';
+import React from 'react';
+import { Form, Input, InputNumber, Select } from 'antd';
 
 export default function CreateSubscriptionPlanModal({ open, setOpen }) {
-  const onSubmit = (data) => {
-    console.log(data);
+  const [form] = Form.useForm();
+
+  const onFinish = (values) => {
+    console.log('Form Values:', values);
   };
 
   return (
@@ -23,42 +22,110 @@ export default function CreateSubscriptionPlanModal({ open, setOpen }) {
         setOpen(false);
       }}
     >
-      <FormWrapper
-        onSubmit={onSubmit}
-        resolver={zodResolver(createSubscriptionSchema)}
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={onFinish}
+        initialValues={{
+          monthlyPrice: 999,
+          freeDeliveryLimit: 1,
+          coverVehicleLimit: 1,
+          discount: 'No',
+          scheduledDelivery: 'No',
+          fuelPriceTracking: 'No',
+          emergencyFuelService: 'No',
+          freeSubscription: 'No',
+          exclusivePromotions: 'No',
+        }}
       >
-        <UInput
-          name="name"
-          label="Name"
-          placeholder="Enter subscription plan name"
-        />
-        <UInput
-          name="duration"
-          label="Duration"
-          placeholder="Monthly/Yearly/Quarterly or 6 months/12 months"
-        />
-        <UTextArea
-          minRows={5}
-          name="description"
-          label="Description"
-          placeholder="Enter description"
-        />
-        <UInput
-          type="number"
-          name="price"
-          label="Price"
-          placeholder="Enter price"
-        />
-
-        <Button
-          htmlType="submit"
-          type="primary"
-          size="large"
-          className="w-full"
+        {/* Title */}
+        <Form.Item
+          label="Title"
+          name="title"
+          rules={[{ required: true, message: 'Please enter a title' }]}
         >
-          Save
-        </Button>
-      </FormWrapper>
+          <Input placeholder="Enter" />
+        </Form.Item>
+
+        {/* Monthly Price */}
+        <Form.Item label="Monthly Price" name="monthlyPrice">
+          <InputNumber min={0} style={{ width: '100%' }} />
+        </Form.Item>
+
+        {/* Free Delivery Limit */}
+        <Form.Item label="Free Delivery Limit" name="freeDeliveryLimit">
+          <InputNumber min={0} style={{ width: '100%' }} />
+        </Form.Item>
+
+        {/* Cover Vehicle Limit */}
+        <Form.Item label="Cover Vehicle Limit" name="coverVehicleLimit">
+          <InputNumber min={0} style={{ width: '100%' }} />
+        </Form.Item>
+
+        {/* 50% off delivery fees after waived trips */}
+        <Form.Item label="50% off delivery fees after waived trips" name="discount">
+          <Select>
+            <Option value="Yes">Yes</Option>
+            <Option value="No">No</Option>
+          </Select>
+        </Form.Item>
+
+        {/* Scheduled Delivery */}
+        <Form.Item label="Scheduled Delivery" name="scheduledDelivery">
+          <Select>
+            <Option value="Yes">Yes</Option>
+            <Option value="No">No</Option>
+          </Select>
+        </Form.Item>
+
+        {/* Fuel Price Tracking Alerts */}
+        <Form.Item label="Fuel Price tracking alerts" name="fuelPriceTracking">
+          <Select>
+            <Option value="Yes">Yes</Option>
+            <Option value="No">No</Option>
+          </Select>
+        </Form.Item>
+
+        {/* No Extra Charge for Emergency Fuel Service */}
+        <Form.Item
+          label="No Extra charge for Emergency fuel service Limit"
+          name="emergencyFuelService"
+        >
+          <Select>
+            <Option value="Yes">Yes</Option>
+            <Option value="No">No</Option>
+          </Select>
+        </Form.Item>
+
+        {/* Free Subscription for One Additional Family Member */}
+        <Form.Item
+          label="Free subscription for one additional family member or household vehicle"
+          name="freeSubscription"
+        >
+          <Select>
+            <Option value="Yes">Yes</Option>
+            <Option value="No">No</Option>
+          </Select>
+        </Form.Item>
+
+        {/* Exclusive Promotions and Early Access */}
+        <Form.Item
+          label="Exclusive promotions and early access to new features"
+          name="exclusivePromotions"
+        >
+          <Select>
+            <Option value="Yes">Yes</Option>
+            <Option value="No">No</Option>
+          </Select>
+        </Form.Item>
+
+        {/* Submit Button */}
+        <Form.Item>
+          <Button type="primary" htmlType="submit" block>
+            Save
+          </Button>
+        </Form.Item>
+      </Form>
     </Modal>
   );
 }

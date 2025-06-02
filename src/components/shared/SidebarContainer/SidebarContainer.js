@@ -132,11 +132,11 @@ const SidebarContainer = ({ collapsed }) => {
           icon: <ScrollText size={21} strokeWidth={2} />,
           label: <Link href="/admin/terms-conditions">Terms & Conditions</Link>,
         },
-        {
-          key: 'about-us',
-          icon: <ScrollText size={21} strokeWidth={2} />,
-          label: <Link href="/admin/about-us">About Us</Link>,
-        },
+        // {
+        //   key: 'about-us',
+        //   icon: <ScrollText size={21} strokeWidth={2} />,
+        //   label: <Link href="/admin/about-us">About Us</Link>,
+        // },
       ],
     },
 
