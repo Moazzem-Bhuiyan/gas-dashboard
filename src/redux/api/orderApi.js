@@ -3,8 +3,8 @@ import { baseApi } from './baseApi';
 const OrderApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllOrders: builder.query({
-      query: ({ limit, page, searchText }) => ({
-        url: `/orders?limit=${limit}&page=${page}&searchTerm=${searchText}`,
+      query: ({ limit, page, searchText, orderType }) => ({
+        url: `/orders?limit=${limit}&page=${page}&searchTerm=${searchText}&orderType=${orderType}`,
         method: 'GET',
       }),
     }),

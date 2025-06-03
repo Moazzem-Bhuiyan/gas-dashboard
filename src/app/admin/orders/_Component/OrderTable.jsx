@@ -6,131 +6,34 @@ import { ConfigProvider } from 'antd';
 import { Search, Eye, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useGetAllOrdersQuery } from '@/redux/api/orderApi';
 
-// Data from the image
-const data = [
-  {
-    key: 1,
-    order_id: '2244',
-    customer_name: 'Eleanor Pena',
-    fuel: 'Premium',
-    quantity: 15,
-    address: '789 Pine Rd',
-    status: 'Assigned',
-    driver: 'Eleanor Pena',
-    scheduled_time: 'March 22, 3:00 PM',
-  },
-  {
-    key: 2,
-    order_id: '2244',
-    customer_name: 'Eleanor Pena',
-    fuel: 'Premium',
-    quantity: 15,
-    address: '789 Pine Rd',
-    status: 'Pending',
-    driver: 'Unassigned',
-    scheduled_time: 'March 22, 3:00 PM',
-  },
-  {
-    key: 3,
-    order_id: '2244',
-    customer_name: 'Eleanor Pena',
-    fuel: 'Premium',
-    quantity: 15,
-    address: '789 Pine Rd',
-    status: 'Refund Requested',
-    driver: 'Unassigned',
-    scheduled_time: 'March 22, 3:00 PM',
-  },
-  {
-    key: 4,
-    order_id: '2244',
-    customer_name: 'Eleanor Pena',
-    fuel: 'Premium',
-    quantity: 15,
-    address: '789 Pine Rd',
-    status: 'Completed',
-    driver: 'Eleanor Pena',
-    scheduled_time: 'March 22, 3:00 PM',
-  },
-  {
-    key: 5,
-    order_id: '2244',
-    customer_name: 'Eleanor Pena',
-    fuel: 'Premium',
-    quantity: 15,
-    address: '789 Pine Rd',
-    status: 'Completed',
-    driver: 'Eleanor Pena',
-    scheduled_time: 'March 22, 3:00 PM',
-  },
-  {
-    key: 6,
-    order_id: '2244',
-    customer_name: 'Eleanor Pena',
-    fuel: 'Premium',
-    quantity: 15,
-    address: '789 Pine Rd',
-    status: 'Pending',
-    driver: 'Unassigned',
-    scheduled_time: 'March 22, 3:00 PM',
-  },
-  {
-    key: 7,
-    order_id: '2244',
-    customer_name: 'Eleanor Pena',
-    fuel: 'Premium',
-    quantity: 15,
-    address: '789 Pine Rd',
-    status: 'Pending',
-    driver: 'Unassigned',
-    scheduled_time: 'March 22, 3:00 PM',
-  },
-  {
-    key: 8,
-    order_id: '2244',
-    customer_name: 'Eleanor Pena',
-    fuel: 'Premium',
-    quantity: 15,
-    address: '789 Pine Rd',
-    status: 'Refund Requested',
-    driver: 'Unassigned',
-    scheduled_time: 'March 22, 3:00 PM',
-  },
-  {
-    key: 9,
-    order_id: '2244',
-    customer_name: 'Eleanor Pena',
-    fuel: 'Premium',
-    quantity: 15,
-    address: '789 Pine Rd',
-    status: 'Refund Requested',
-    driver: 'Unassigned',
-    scheduled_time: 'March 22, 3:00 PM',
-  },
-  {
-    key: 10,
-    order_id: '2244',
-    customer_name: 'Eleanor Pena',
-    fuel: 'Premium',
-    quantity: 15,
-    address: '789 Pine Rd',
-    status: 'Refund Requested',
-    driver: 'Unassigned',
-    scheduled_time: 'March 22, 3:00 PM',
-  },
-];
-
-export default function FuelOrderTable() {
+export default function FuelOrderTable({ orderType }) {
   const [searchText, setSearchText] = useState('');
   const router = useRouter();
 
-  // Filter data based on search text
-  const filteredData = data.filter(
-    (item) =>
-      item.customer_name.toLowerCase().includes(searchText.toLowerCase()) ||
-      item.order_id.toLowerCase().includes(searchText.toLowerCase())
-  );
+  // get all orders from the API
+  const { data: orders, isLoading } = useGetAllOrdersQuery({
+    limit: 10,
+    page: 1,
+    searchText: searchText,
+    orderType,
+  });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  // map the orders to the table data
+  const tableData = orders?.data?.data?.map((order, inx) => ({
+    order_id: inx + 1,
+    status: order.orderStatus,
+    location: order.location,
+    quantity: order.amount,
+    price: order.price,
+    customer_name: order?.userId?.fullname,
+    fuel: order.fuelType,
+  }));
 
   // Function to handle navigation based on status
   const handleViewDetails = (status) => {
@@ -254,13 +157,13 @@ export default function FuelOrderTable() {
         />
       </div>
       <div>
-        <p className="text-sm text-gray-500 mb-4">Total Orders: {filteredData.length}</p>
+        <p className="text-sm text-gray-500 mb-4">Total Orders: {orders.length}</p>
       </div>
 
       <Table
         style={{ overflowX: 'auto' }}
         columns={columns}
-        dataSource={filteredData}
+        dataSource={tableData}
         scroll={{ x: '100%' }}
         className="rounded-lg shadow-sm"
         rowClassName="hover:bg-gray-50"
