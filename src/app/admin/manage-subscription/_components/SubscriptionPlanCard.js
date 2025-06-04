@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 
 export default function SubscriptionPlanCard({ data }) {
   const [showEditPlanModal, setShowEditPlanModal] = useState(false);
+   const [deletePakage, { isLoading }] = useDeleteSubCriptionMutation();
 
   // Define the features to display (only those that are true)
   const featuresToShow = [
@@ -98,8 +99,6 @@ export default function SubscriptionPlanCard({ data }) {
   }
 
   // pakage delete handaller-------------
-
-  const [deletePakage, { isLoading }] = useDeleteSubCriptionMutation();
 
   const handleDelete = async (id) => {
     try {

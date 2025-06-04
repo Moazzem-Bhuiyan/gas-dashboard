@@ -104,7 +104,7 @@ export default function EarningsTable() {
           placeholder="Search "
           prefix={<Search className="mr-2 text-black" size={20} />}
           className="h-11 !border !rounded-lg !text-base"
-          onChange={(e) => setSearchText(e.target.value)}
+          // onChange={(e) => setSearchText(e.target.value)}
         />
       </div>
 

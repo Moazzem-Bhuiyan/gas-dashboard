@@ -1,18 +1,16 @@
-"use client";
+'use client';
 
-import { Button } from "antd";
-import { Eye } from "lucide-react";
-import { useState } from "react";
-import OrderDetailsModal from "@/components/SharedModals/OrderDetailsModal";
+import { Button } from 'antd';
+import { Eye } from 'lucide-react';
+import { useState } from 'react';
+import OrderDetailsModal from '@/components/SharedModals/OrderDetailsModal';
 
 export default function RefundRequestedOrder() {
- 
-
   return (
     <div className="p-6 max-w-full mx-auto bg-white rounded-lg shadow">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold">Order Information</h2>
-        <Button type="primary" onClick={() => setProfileModalOpen(true)}>
+        <Button type="primary">
           <Eye size={16} className="mr-2" /> View Details
         </Button>
       </div>
@@ -55,7 +53,6 @@ export default function RefundRequestedOrder() {
         <p>Image: Not available</p>
         <p>Completion Time: Not applicable</p>
       </div>
-     
     </div>
   );
 }
