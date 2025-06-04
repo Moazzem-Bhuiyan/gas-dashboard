@@ -8,6 +8,15 @@ const OrderApi = baseApi.injectEndpoints({
         method: 'GET',
       }),
     }),
+    // get single order
+
+    getSingleOrders: builder.query({
+      query: ({ id }) => ({
+        url: `/orders/${id}`,
+        method: 'GET',
+      }),
+    }),
+
     updateOrderStatus: builder.mutation({
       query: ({ orderId, status }) => ({
         url: `/orders/${orderId}`,
@@ -18,4 +27,5 @@ const OrderApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetAllOrdersQuery, useUpdateOrderStatusMutation } = OrderApi;
+export const { useGetAllOrdersQuery, useUpdateOrderStatusMutation, useGetSingleOrdersQuery } =
+  OrderApi;

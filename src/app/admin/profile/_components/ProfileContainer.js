@@ -1,20 +1,28 @@
-import Image from "next/image";
-import adminImg from "@/assets/images/user-avatar-lg.png";
-import { ImagePlus } from "lucide-react";
+'use client';
+import Image from 'next/image';
+import adminImg from '@/assets/images/user-avatar-lg.png';
+import { ImagePlus } from 'lucide-react';
 
-import { Tabs } from "antd";
-import { ConfigProvider } from "antd";
-import ChangePassForm from "./ChangePassForm";
-import EditProfileForm from "./EditProfileForm";
+import { Tabs } from 'antd';
+import { ConfigProvider } from 'antd';
+import ChangePassForm from './ChangePassForm';
+import EditProfileForm from './EditProfileForm';
+import { useGetAdminProfileQuery } from '@/redux/api/adminProfileApi';
 
 const { TabPane } = Tabs;
 
 export default function ProfileContainer() {
+  // get admin data
+
+  const { data, isLoading } = useGetAdminProfileQuery();
+
+  console.log(data);
+
   return (
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: "#1b71a7",
+          colorPrimary: '#1b71a7',
         },
       }}
     >
@@ -38,9 +46,7 @@ export default function ProfileContainer() {
 
           <div>
             <h3 className="text-3xl font-semibold">BOOXOS</h3>
-            <p className="font-medium text-primary-blue mt-1 text-lg">
-              Administrator
-            </p>
+            <p className="font-medium text-primary-blue mt-1 text-lg">Administrator</p>
           </div>
         </section>
 

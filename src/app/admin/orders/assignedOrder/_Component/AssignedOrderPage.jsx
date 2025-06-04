@@ -1,42 +1,54 @@
-"use client";
+'use client';
 
-
+import { useGetSingleOrdersQuery } from '@/redux/api/orderApi';
+import moment from 'moment';
+import { useSearchParams } from 'next/navigation';
 
 export default function AssignedOrder() {
- 
+  const searchParams = useSearchParams();
+  const id = searchParams.get('order_id');
 
+  // get single order info
+
+  const { data, isLoading } = useGetSingleOrdersQuery({ id });
+
+  const order = data?.data;
+  const coustomer = data?.data?.userId;
+
+  if (isLoading) return <div>Loading...</div>;
   return (
     <div className="p-6 max-w-full mx-auto bg-white rounded-lg shadow">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold">Order Information</h2>
-        
       </div>
       <div className="space-y-2">
         <p>Order ID: #2244</p>
-        <p>Order Date: March 22, 2025, 04:16 PM +06</p>
-        <p>Scheduled Time: March 22, 3:00 PM</p>
-        <p>Status: Assigned</p>
+        <p>Order Date:{moment(order?.createdAt).format('MMMM Do YYYY')}</p>
+        {/* <p>Scheduled Time: March 22, 3:00 PM</p> */}
+        <p>Status: {order?.orderStatus}</p>
       </div>
       <h2 className="text-lg font-semibold mt-4">Customer Details</h2>
       <div className="space-y-2">
-        <p>Customer Name: Eleanor Pena</p>
-        <p>Phone: +1-555-123-4567</p>
-        <p>Email: elanor.pena@example.com</p>
-        <p>Address: 789 Pine Rd</p>
+        <p>Customer Name: {coustomer?.fullname}</p>
+        <p>Phone:{coustomer?.phoneNumber || 'Not Provided'}</p>
+        <p>Email: {coustomer?.email}</p>
+        <p>Address: {coustomer?.address || 'Not Provided'}</p>
       </div>
       <h2 className="text-lg font-semibold mt-4">Fuel Details</h2>
       <div className="space-y-2">
-        <p>Fuel Type: Premium</p>
-        <p>Quantity: 15 gallons</p>
-        <p>Price: $50.00</p>
+        <p>Fuel Type: {order?.fuelType}</p>
+        <p>Quantity: {order?.amount} gallons</p>
+        <p>Total Price: ${order?.finalAmountOfPayment}</p>
       </div>
       <h2 className="text-lg font-semibold mt-4">Driver Information</h2>
       <div className="space-y-2">
-        <p>Driver Name: Eleanor Pena</p>
-        <p>Status: Assigned</p>
-        <p>Time: 3:00 PM</p>
+        <p>Driver Name: {order?.driverId?.fullname}</p>
+        {/* <p>Status: Assigned</p>
+        <p>Time: 3:00 PM</p> */}
+        <p>Driver Phone: {order?.driverId?.phoneNumber || 'Not Provided'}</p>
+        <p>Driver Email: {order?.driverId?.email || 'Not Provided'}</p>
       </div>
-      <h2 className="text-lg font-semibold mt-4">Completion Checklist</h2>
+      {/* <h2 className="text-lg font-semibold mt-4">Completion Checklist</h2>
       <div className="space-y-2">
         <p>Did you check the gas?</p>
         <p>Not applicable</p>
@@ -49,8 +61,7 @@ export default function AssignedOrder() {
       <div className="space-y-2">
         <p>Image: Not available</p>
         <p>Completion Time: Not applicable</p>
-      </div>
-   
+      </div> */}
     </div>
   );
 }

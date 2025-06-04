@@ -26,35 +26,38 @@ export default function FuelOrderTable({ orderType }) {
 
   // map the orders to the table data
   const tableData = orders?.data?.data?.map((order, inx) => ({
-    order_id: inx + 1,
+    order_id: order?._id,
     status: order.orderStatus,
     location: order.location,
     quantity: order.amount,
     price: order.price,
     customer_name: order?.userId?.fullname,
     fuel: order.fuelType,
+    driver: order?.driverId?.fullname || 'Unassigned',
   }));
 
   // Function to handle navigation based on status
-  const handleViewDetails = (status) => {
+  const handleViewDetails = (status, order_id) => {
     switch (status) {
-      case 'Completed':
-        router.push('/admin/orders/completeOrder');
+      case 'Delivered':
+        router.push(`/admin/orders/completeOrder?order_id=${order_id}`);
+        break;
+      case 'Unassigned':
+        router.push(`/admin/orders/pendingOrder?order_id=${order_id}`);
         break;
       case 'Pending':
-        router.push('/admin/orders/pendingOrder');
+        router.push(`/admin/orders/assignedOrder?order_id=${order_id}`);
         break;
-      case 'Assigned':
-        router.push('/admin/orders/assignedOrder');
+      case 'InProgress':
+        router.push(`/admin/orders/assignedOrder?order_id=${order_id}`);
         break;
       case 'Refund Requested':
-        router.push('/admin/orders/refundOrder');
+        router.push(`/admin/orders/refundOrder?order_id=${order_id}`);
         break;
       default:
         break;
     }
   };
-
   // Table columns
   const columns = [
     {
@@ -91,11 +94,14 @@ export default function FuelOrderTable({ orderType }) {
           case 'Pending':
             color = 'orange';
             break;
-          case 'Completed':
-            color = 'green';
+          case 'Unassigned':
+            color = 'red';
             break;
-          case 'Assigned':
+          case 'InProgress':
             color = 'blue';
+            break;
+          case 'Delivered':
+            color = 'green';
             break;
           case 'Refund Requested':
             color = 'purple';
@@ -113,7 +119,13 @@ export default function FuelOrderTable({ orderType }) {
     {
       title: 'Driver',
       dataIndex: 'driver',
-      render: (value) => <span className="text-gray-700">{value}</span>,
+      render: (value) => (
+        <span
+          className={value === 'Unassigned' ? 'text-red-500 border rounded p-1' : 'text-gray-700'}
+        >
+          {value}
+        </span>
+      ),
     },
     {
       title: 'Scheduled Time',
@@ -125,7 +137,7 @@ export default function FuelOrderTable({ orderType }) {
       render: (_, record) => (
         <div className="flex items-center gap-x-3">
           <Tooltip title="Show Details">
-            <button onClick={() => handleViewDetails(record.status)}>
+            <button onClick={() => handleViewDetails(record.status, record.order_id)}>
               <Eye color="#1B70A6" size={20} />
             </button>
           </Tooltip>

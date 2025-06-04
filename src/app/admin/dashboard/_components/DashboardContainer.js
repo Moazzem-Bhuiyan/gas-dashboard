@@ -144,7 +144,7 @@ export default function DashboardContainer() {
           </g>
         </svg>
       ),
-      count: 1500,
+      count: userData?.data?.totalIncome,
     },
   ];
 
