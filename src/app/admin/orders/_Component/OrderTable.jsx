@@ -32,6 +32,7 @@ export default function FuelOrderTable({ orderType }) {
     quantity: order.amount,
     price: order.price,
     customer_name: order?.userId?.fullname,
+    driver: order.driverId?.fullname,
     fuel: order.fuelType,
   }));
 
@@ -80,7 +81,7 @@ export default function FuelOrderTable({ orderType }) {
     {
       title: 'Address',
       dataIndex: 'address',
-      render: (value) => <span className="text-gray-700">{value}</span>,
+      render: (value) => <span className="text-gray-700">{value || 'N/A'}</span>,
     },
     {
       title: 'Status',
@@ -113,12 +114,12 @@ export default function FuelOrderTable({ orderType }) {
     {
       title: 'Driver',
       dataIndex: 'driver',
-      render: (value) => <span className="text-gray-700">{value}</span>,
+      render: (value) => <span className="text-gray-700">{value || 'N/A'}</span>,
     },
     {
       title: 'Scheduled Time',
       dataIndex: 'scheduled_time',
-      render: (value) => <span className="text-gray-700">{value}</span>,
+      render: (value) => <span className="text-gray-700">{value || 'N/A'}</span>,
     },
     {
       title: 'Action',
