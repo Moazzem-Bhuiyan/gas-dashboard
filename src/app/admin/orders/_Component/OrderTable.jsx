@@ -120,7 +120,13 @@ export default function FuelOrderTable({ orderType }) {
     {
       title: 'Driver',
       dataIndex: 'driver',
-      render: (value) => <span className="text-gray-700">{value}</span>,
+      render: (value) => (
+        <span
+          className={value === 'Unassigned' ? 'text-red-500 border rounded p-1' : 'text-gray-700'}
+        >
+          {value}
+        </span>
+      ),
     },
     {
       title: 'Scheduled Time',
