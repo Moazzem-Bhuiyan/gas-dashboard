@@ -1,12 +1,12 @@
-import React from 'react'
-import AssignedOrder from './_Component/AssignedOrderPage'
+import React from 'react';
+import AssignedOrder from './_Component/AssignedOrderPage';
 
 const page = () => {
   return (
     <div>
-      <AssignedOrder/>
+      <AssignedOrder />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

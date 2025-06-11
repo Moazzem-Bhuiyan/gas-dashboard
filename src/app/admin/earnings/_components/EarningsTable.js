@@ -7,30 +7,27 @@ import { Eye, Search } from 'lucide-react';
 import { useState } from 'react';
 import { Tag } from 'antd';
 import EarningModal from './EarningModal';
-
-// Dummy data
-const earningStats = [
-  { key: 'today', title: "Today's Earning", amount: 500 },
-  { key: 'monthly', title: 'This Month', amount: 2000 },
-  { key: 'yearly', title: 'This Year', amount: 15000 },
-  { key: 'total', title: 'Total Earnings', amount: 350000 },
-];
-
-// Dummy table data
-const data = Array.from({ length: 7 }).map((_, inx) => ({
-  key: inx + 1,
-  transactionId: '#357634534',
-  name: 'Booxos',
-  userImg: userImage,
-  status: 'service Provider',
-  contact: '+1234567890',
-  date: '11 oct 24, 11.10PM',
-  amount: 22,
-  accNumber: '1234567890',
-}));
+import { useGetTransectionDataQuery } from '@/redux/api/transactionApi';
+import moment from 'moment';
 
 export default function EarningsTable() {
   const [showEarningModal, setShowEarningModal] = useState(false);
+
+  // get earning data from api
+
+  const { data: earningData, isLoading } = useGetTransectionDataQuery();
+
+  if (isLoading) return <div>Loading...</div>;
+
+  // Dummy table data
+  const data = earningData?.data?.map((item, inx) => ({
+    key: inx + 1,
+    transactionId: item?.tranId,
+    name: item?.user?.fullname,
+    amount: item?.amount,
+    // accNumber: '1234567890',
+    date: moment(item?.createdAt).format('YYYY-MM-DD'),
+  }));
 
   // ================== Table Columns ================
   const columns = [
@@ -54,36 +51,8 @@ export default function EarningsTable() {
         </Tag>
       ),
     },
-    { title: 'ACC Number', dataIndex: 'accNumber' },
-    { title: 'Join Date', dataIndex: 'date' },
-
-    // {
-    //   title: "Pricing Plan",
-    //   dataIndex: "pricingPlan",
-
-    //   filters: [
-    //     {
-    //       text: "Monthly",
-    //       value: "monthly",
-    //     },
-    //     {
-    //       text: "Quarterly",
-    //       value: "quarterly",
-    //     },
-    //     {
-    //       text: "Yearly",
-    //       value: "yearly",
-    //     },
-    //   ],
-    //   filterIcon: () => (
-    //     <Filter
-    //       size={18}
-    //       color="#fff"
-    //       className="flex justify-start items-start"
-    //     />
-    //   ),
-    //   onFilter: (value, record) => record.pricingPlan.indexOf(value) === 0,
-    // },
+    // { title: 'ACC Number', dataIndex: 'accNumber' },
+    { title: 'Trans. Date', dataIndex: 'date' },
 
     {
       title: 'Action',

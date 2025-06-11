@@ -11,7 +11,8 @@ import {
 export default function DashboardContainer() {
   //========================== get customer data fom api handeler -================================
 
-  const { data: userData } = useGetDashboardUserDataQuery();
+  const { data: userData, isLoading } = useGetDashboardUserDataQuery();
+
   const { data: driverData } = useGetDashboardDriverDataQuery();
 
   // Dummy Data
@@ -142,7 +143,7 @@ export default function DashboardContainer() {
           </g>
         </svg>
       ),
-      count: 1500,
+      count: userData?.data?.totalIncome,
     },
   ];
 
