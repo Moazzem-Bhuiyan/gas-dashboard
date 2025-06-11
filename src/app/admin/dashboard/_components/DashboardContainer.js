@@ -7,13 +7,11 @@ import {
   useGetDashboardDriverDataQuery,
   useGetDashboardUserDataQuery,
 } from '@/redux/api/dashboardApi';
-import { use } from 'react';
 
 export default function DashboardContainer() {
   //========================== get customer data fom api handeler -================================
 
-  const { data: userData, isLoading } = useGetDashboardUserDataQuery();
-
+  const { data: userData } = useGetDashboardUserDataQuery();
   const { data: driverData } = useGetDashboardDriverDataQuery();
 
   // Dummy Data

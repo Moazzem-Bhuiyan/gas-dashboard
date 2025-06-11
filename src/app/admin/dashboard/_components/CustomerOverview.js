@@ -23,7 +23,7 @@ const CustomerOverview = ({ userData }) => {
         <h1 className="text-xl font-medium">Customer Overview</h1>
 
         <div className="space-x-3">
-          <Select
+          {/* <Select
             value={selectedYear}
             style={{ width: 120 }}
             onChange={handleChange}
@@ -33,7 +33,7 @@ const CustomerOverview = ({ userData }) => {
               { value: '2022', label: '2022' },
               { value: '2021', label: '2021' },
             ]}
-          />
+          /> */}
         </div>
       </div>
 

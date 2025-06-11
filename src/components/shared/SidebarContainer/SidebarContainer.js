@@ -1,4 +1,5 @@
 'use client';
+import { logout } from '@/redux/features/authSlice';
 import './Sidebar.css';
 import logo from '@/assets/images/logo.png';
 import { Menu } from 'antd';
@@ -25,20 +26,22 @@ import { House } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { toast } from 'sonner';
 
 const SidebarContainer = ({ collapsed }) => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const router = useRouter();
 
   // Logout handler
   const onClick = (e) => {
-    // if (e.key === "logout") {
-    //   dispatch(logout());
-    //   router.refresh();
-    //   router.push("/login");
+    if (e.key === 'logout') {
+      dispatch(logout());
+      router.refresh();
+      router.push('/login');
 
-    //   Success_model({ title: "Logout successful" });
-    // }
+      toast.success('Logout successful');
+    }
 
     console.log('logout success');
   };
