@@ -7,7 +7,7 @@ const adminProfileApi = baseApi.injectEndpoints({
         url: `/users/my-profile`,
         method: 'GET',
       }),
-      providesTags: ['adminProfile'],
+      providesTags: ['auth'],
     }),
   }),
 });

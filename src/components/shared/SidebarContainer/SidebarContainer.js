@@ -109,11 +109,11 @@ const SidebarContainer = ({ collapsed }) => {
       icon: <CircleDollarSign size={21} strokeWidth={2} />,
       label: <Link href={'/admin/earnings'}>Transactions</Link>,
     },
-    {
-      key: 'messages',
-      icon: <MessageSquareMore size={21} strokeWidth={2} />,
-      label: <Link href={'/admin/message'}>Support Messages</Link>,
-    },
+    // {
+    //   key: 'messages',
+    //   icon: <MessageSquareMore size={21} strokeWidth={2} />,
+    //   label: <Link href={'/admin/message'}>Support Messages</Link>,
+    // },
     {
       key: 'sendEmail',
       icon: <MailPlus size={21} strokeWidth={2} />,

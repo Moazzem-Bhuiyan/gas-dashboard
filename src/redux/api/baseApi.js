@@ -63,7 +63,7 @@ export const baseApi = createApi({
     'cuponCode',
     'content',
     'pakage',
-    'adminProfile,',
+    'auth',
   ],
   baseQuery: baseQueryWithRefreshToken,
   endpoints: () => ({}),

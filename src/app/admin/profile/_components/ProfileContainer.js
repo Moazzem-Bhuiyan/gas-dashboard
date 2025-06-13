@@ -1,24 +1,35 @@
 'use client';
 import Image from 'next/image';
-import adminImg from '@/assets/images/user-avatar-lg.png';
 import { ImagePlus } from 'lucide-react';
-
 import { Tabs } from 'antd';
 import { ConfigProvider } from 'antd';
 import ChangePassForm from './ChangePassForm';
 import EditProfileForm from './EditProfileForm';
+import { useState, useRef } from 'react';
 import { useGetAdminProfileQuery } from '@/redux/api/adminProfileApi';
 
 const { TabPane } = Tabs;
 
 export default function ProfileContainer() {
-  // get admin data
+  const { data, isError, isLoading, isSuccess } = useGetAdminProfileQuery();
+  const user = data?.data;
 
-  const { data, isLoading } = useGetAdminProfileQuery();
+  // State to store the uploaded image
+  const [selectedImage, setSelectedImage] = useState(null);
+  const fileInputRef = useRef(null);
 
-  // console.log(data);
+  // Handle image upload
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedImage(file);
+    }
+  };
 
-  if (isLoading) return <div>Loading...</div>;
+  // Trigger file input click
+  const triggerFileInput = () => {
+    fileInputRef.current.click();
+  };
 
   return (
     <ConfigProvider
@@ -33,22 +44,35 @@ export default function ProfileContainer() {
         <section className="flex-center gap-x-3">
           <div className="relative w-max">
             <Image
-              src={adminImg}
+              src={selectedImage ? URL.createObjectURL(selectedImage) : user?.image || ''}
               alt="Admin avatar"
               width={1200}
               height={1200}
-              className="w-[160px] h-auto aspect-square rounded-full border-2 border-primary-green p-1"
+              className="w-[160px] h-auto aspect-square rounded-full border-2 border-primary-pink p-1"
+            />
+
+            {/* Hidden file input */}
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              onChange={handleImageUpload}
+              className="hidden"
             />
 
             {/* Edit button */}
-            <button className="bg-[#2C50ED] p-2 aspect-square rounded-full flex-center text-white/95 absolute bottom-2 right-2">
+            <button
+              onClick={triggerFileInput}
+              className="bg-[#2C50ED] p-2 aspect-square rounded-full flex-center text-white/95 absolute bottom-2 right-2"
+            >
               <ImagePlus size={20} />
             </button>
           </div>
 
           <div>
-            <h3 className="text-3xl font-semibold">BOOXOS</h3>
+            <h3 className="text-3xl font-semibold">{user?.fullname || 'N/A'}</h3>
             <p className="font-medium text-primary-blue mt-1 text-lg">Administrator</p>
+            {/* <p>Selected Image: {selectedImage ? selectedImage.name : 'None'}</p> */}
           </div>
         </section>
 
@@ -56,7 +80,7 @@ export default function ProfileContainer() {
         <section className="my-16">
           <Tabs defaultActiveKey="editProfile" centered>
             <TabPane tab="Edit Profile" key="editProfile">
-              <EditProfileForm />
+              <EditProfileForm user={user} selectedImage={selectedImage} />
             </TabPane>
 
             <TabPane tab="Change Password" key="changePassword">

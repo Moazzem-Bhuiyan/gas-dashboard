@@ -1,15 +1,21 @@
 'use client';
 
 import { useGetAllValidDriversQuery } from '@/redux/api/driversApi';
-import { useGetSingleOrdersQuery } from '@/redux/api/orderApi';
+import { useGetSingleOrdersQuery, useUpdateOrderStatusMutation } from '@/redux/api/orderApi';
 import { Button, Form, Select } from 'antd';
 import moment from 'moment';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { toast } from 'sonner';
 
 export default function PendingOrder() {
   const [form] = Form.useForm();
   const searchParams = useSearchParams();
   const id = searchParams.get('order_id');
+
+  const router = useRouter();
+
+  // assign driver to order
+  const [updateContent] = useUpdateOrderStatusMutation();
 
   // get single order info
 
@@ -17,18 +23,34 @@ export default function PendingOrder() {
 
   // get drivers from api
 
-  const { data: driverData, isLoading: isDriverLoading } = useGetAllValidDriversQuery({
-    limit: 10,
-  });
-
-  console.log('Driver Data:', driverData);
+  const { data: driverData, isLoading: isDriverLoading } = useGetAllValidDriversQuery();
 
   const order = data?.data;
   const coustomer = data?.data?.userId;
 
   if (isLoading) return <div>Loading...</div>;
 
-  const handleSubmit = async (values) => {};
+  const handleSubmit = async (values) => {
+    if (!values?.driverId) {
+      toast.error('Please select a driver');
+      return;
+    }
+    try {
+      const res = await updateContent({
+        orderId: id,
+        driverid: values?.driverId,
+        status: 'Pending',
+      }).unwrap();
+      if (res.success) {
+        toast.success('Order assigned successfully');
+        form.resetFields();
+        router.back();
+        router.refresh();
+      }
+    } catch (error) {
+      toast.error(error?.data?.message);
+    }
+  };
   return (
     <div className="p-6 max-w-full mx-auto bg-white rounded-lg shadow">
       <div className="flex justify-between items-center mb-4">
@@ -69,7 +91,7 @@ export default function PendingOrder() {
                   {/* ==============  Driver Name ============== */}
                   <Form.Item
                     label="Driver Name"
-                    name="driverName"
+                    name="driverId"
                     rules={[{ required: true, message: 'Please enter Driver Name' }]}
                   >
                     <Select
@@ -78,10 +100,10 @@ export default function PendingOrder() {
                       placeholder="Search to Select"
                       optionFilterProp="label"
                       filterOption={false}
-                      // options={data?.data?.map((therapist) => ({
-                      //   value: therapist._id,
-                      //   label: therapist?.name,
-                      // }))}
+                      options={driverData?.data?.data?.map((therapist) => ({
+                        value: therapist._id,
+                        label: therapist?.fullname,
+                      }))}
                     />
                   </Form.Item>
                 </div>
@@ -92,6 +114,8 @@ export default function PendingOrder() {
                     block
                     style={{ backgroundColor: '#5dd3a6', color: 'white' }}
                     className="!px-10  rounded !h-11"
+                    loading={isDriverLoading}
+                    disabled={isDriverLoading}
                   >
                     Assign
                   </Button>

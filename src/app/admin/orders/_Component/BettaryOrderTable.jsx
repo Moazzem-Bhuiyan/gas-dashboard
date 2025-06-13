@@ -132,11 +132,11 @@ export default function BettaryOrderTable({ orderType }) {
               <Eye color="#1B70A6" size={20} />
             </button>
           </Tooltip>
-          <Tooltip title="Delete">
+          {/* <Tooltip title="Delete">
             <button>
               <Trash2 color="#FF4D4F" size={20} />
             </button>
-          </Tooltip>
+          </Tooltip> */}
         </div>
       ),
     },
