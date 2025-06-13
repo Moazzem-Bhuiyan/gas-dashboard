@@ -11,7 +11,8 @@ import { useGetAdminProfileQuery } from '@/redux/api/adminProfileApi';
 const { TabPane } = Tabs;
 
 export default function ProfileContainer() {
-  const { data, isError, isLoading, isSuccess } = useGetAdminProfileQuery();
+  const { data } = useGetAdminProfileQuery();
+
   const user = data?.data;
 
   // State to store the uploaded image

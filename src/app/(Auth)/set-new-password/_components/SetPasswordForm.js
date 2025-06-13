@@ -1,18 +1,35 @@
-"use client";
+'use client';
 
-import { LogoSvg } from "@/assets/logos/LogoSvg";
-import FormWrapper from "@/components/Form/FormWrapper";
-import UInput from "@/components/Form/UInput";
-import { resetPassSchema } from "@/schema/authSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "antd";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import React from "react";
+import FormWrapper from '@/components/Form/FormWrapper';
+import UInput from '@/components/Form/UInput';
+import { useResetPasswordMutation } from '@/redux/api/authApi';
+import { resetPassSchema } from '@/schema/authSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from 'antd';
+import { ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import React from 'react';
+import { toast } from 'sonner';
 
 export default function SetPasswordForm() {
-  const onSubmit = (data) => {
-    console.log(data);
+  const router = useRouter();
+
+  // reset api endpoint
+
+  const [resetPassword, { isLoading }] = useResetPasswordMutation();
+
+  const onSubmit = async (data) => {
+    try {
+      const res = await resetPassword(data).unwrap();
+      if (res?.success) {
+        toast.success(res?.message || 'Password reset successfully');
+        localStorage.removeItem('forgetPasswordToken');
+        router.push('/login');
+      }
+    } catch (error) {
+      toast.error(error?.data?.message || 'Something went wrong');
+    }
   };
 
   return (
@@ -25,7 +42,7 @@ export default function SetPasswordForm() {
       </Link>
 
       <section className="mb-8 space-y-2">
-        <h4 className="text-3xl font-semibold">Set New Password</h4>
+        <h4 className="text-3xl font-semibold text-[#A57EA5]">Set New Password</h4>
         <p className="text-dark-gray">Enter your new password login</p>
       </section>
 
@@ -52,6 +69,9 @@ export default function SetPasswordForm() {
           type="primary"
           size="large"
           className="w-full !font-semibold !h-10"
+          htmlType="submit"
+          loading={isLoading}
+          disabled={isLoading}
         >
           Submit
         </Button>

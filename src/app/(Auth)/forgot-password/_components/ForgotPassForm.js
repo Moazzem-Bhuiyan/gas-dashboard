@@ -1,16 +1,36 @@
 'use client';
-
 import Link from 'next/link';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { forgotPassSchema } from '@/schema/authSchema';
 import FormWrapper from '@/components/Form/FormWrapper';
 import UInput from '@/components/Form/UInput';
 import { Button } from 'antd';
 import { ArrowLeft } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+
+import { toast } from 'sonner';
+import { useForgetPasswordMutation } from '@/redux/api/authApi';
 
 export default function ForgotPassForm() {
-  const onSubmit = (data) => {
-    console.log(data);
+  const router = useRouter();
+
+  const [forgetPassword, { isLoading }] = useForgetPasswordMutation();
+
+  const onSubmit = async (data) => {
+    try {
+      const res = await forgetPassword(data).unwrap();
+      if (res?.success) {
+        toast.success(res?.message);
+
+        localStorage.setItem('forgetPasswordToken', res?.data?.token);
+
+        router.push('/otp-verification');
+      }
+    } catch (error) {
+      if (error?.data?.message) {
+        toast.error(error?.data?.message);
+      } else {
+        toast.error('Something went wrong');
+      }
+    }
   };
 
   return (
@@ -23,13 +43,13 @@ export default function ForgotPassForm() {
       </Link>
 
       <section className="mb-8 space-y-2">
-        <h4 className="text-3xl font-semibold">Forgot Password</h4>
+        <h4 className="text-3xl font-semibold text-[#A57EA5]">Forgot Password</h4>
         <p className="text-dark-gray">
           Enter your email and we&apos;ll send you an otp for verification
         </p>
       </section>
 
-      <FormWrapper onSubmit={onSubmit} resolver={zodResolver(forgotPassSchema)}>
+      <FormWrapper onSubmit={onSubmit}>
         <UInput
           name="email"
           type="email"
@@ -39,7 +59,14 @@ export default function ForgotPassForm() {
           className="!h-10"
         />
 
-        <Button type="primary" size="large" className="w-full !font-semibold !h-10">
+        <Button
+          type="primary"
+          htmlType="submit"
+          size="large"
+          className="w-full !font-semibold !h-10"
+          loading={isLoading}
+          disabled={isLoading}
+        >
           Submit
         </Button>
       </FormWrapper>
