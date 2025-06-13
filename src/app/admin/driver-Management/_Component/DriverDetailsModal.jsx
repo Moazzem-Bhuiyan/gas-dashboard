@@ -1,12 +1,28 @@
 'use client';
 
+import { useGetSingleDriverDataQuery } from '@/redux/api/driversApi';
 import { Modal } from 'antd';
 import clsx from 'clsx';
 
 export default function DriverDetailsModal({ open, setOpen, selectedDriver }) {
+  if (!selectedDriver) return null;
+  // Earnings data to be displayed in the modal
+
+  const userId = selectedDriver?._id || 'N/A';
+  if (!userId) return null;
+
+  // get earnings data from selectedDriver api
+
+  const { data, isLoading } = useGetSingleDriverDataQuery({
+    id: userId,
+    skip: !open && !selectedDriver,
+  });
+
+  console.log('Selected Driver Data:', data);
+
   const earnings = [
-    { title: 'Total Earnings', amount: selectedDriver?.earnings },
-    { title: 'Today Earnings', amount: selectedDriver?.todayEarnings },
+    { title: 'Total Earnings', amount: data?.data?.totalEarnings || 0 },
+    { title: 'Today Earnings', amount: data?.data?.todayEarnings || 0 },
   ];
   return (
     <Modal
@@ -25,25 +41,37 @@ export default function DriverDetailsModal({ open, setOpen, selectedDriver }) {
 
         <div>
           <h1>Earning Details</h1>
-          <div className="grid grid-cols-1 gap-7 px-12 py-8 md:grid-cols-2 ">
-            {earnings.map((earning, index) => (
-              <div
-                key={index}
-                className={clsx(
-                  'border-2 p-8 rounded-lg bg-[#00AEEF] text-white ',
-                  earning.title === 'Total Earnings' ? 'bg-[#00AEEF]' : 'bg-[#409E7A]'
-                )}
-              >
-                <h1 className="font-bold text-2xl">{earning.title}</h1>
-                <h1 className="text-xl mt-3">{earning.amount}</h1>
+
+          {/* =============Earnings============ */}
+
+          {isLoading ? (
+            <>
+              <div className="flex justify-center items-center h-32">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500"></div>
               </div>
-            ))}
-          </div>
-          {/* basic info */}
+            </>
+          ) : (
+            <div className="grid grid-cols-1 gap-7 px-12 py-8 md:grid-cols-2 ">
+              {earnings.map((earning, index) => (
+                <div
+                  key={index}
+                  className={clsx(
+                    'border-2 p-8 rounded-lg bg-[#00AEEF] text-white ',
+                    earning.title === 'Total Earnings' ? 'bg-[#00AEEF]' : 'bg-[#409E7A]'
+                  )}
+                >
+                  <h1 className="font-bold text-2xl">{earning.title}</h1>
+                  <h1 className="text-xl mt-3">{earning.amount}</h1>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/*=============== basic info================ */}
           <h1 className="items-center text-xl font-bold mt-10">Basic Info</h1>
-          <p className="text-lg mt-3">
+          {/* <p className="text-lg mt-3">
             <span className="font-bold">Driver Id :</span> 1234567890
-          </p>
+          </p> */}
           <p className="text-lg mt-3">
             <span className="font-bold">Driver Name :</span> {selectedDriver?.name}
           </p>
@@ -56,17 +84,17 @@ export default function DriverDetailsModal({ open, setOpen, selectedDriver }) {
           <p className="text-lg mt-3">
             <span className="font-bold">Address :</span> {selectedDriver?.address || 'Not Provided'}
           </p>
-          <h1 className="items-center text-xl font-bold mt-10">Performance</h1>
-          <p className="text-lg mt-3">
+          {/* <h1 className="items-center text-xl font-bold mt-10">Performance</h1> */}
+          {/* <p className="text-lg mt-3">
             <span className="font-bold">Deliveries Completed :</span> 100
-          </p>
+          </p> */}
           <p className="text-lg mt-3">
-            <span className="font-bold">Active Orders :</span> 5 Currently
+            {/* <span className="font-bold">Active Orders :</span> 5 Currently */}
           </p>
-          <h2 className="items-center text-xl font-bold mt-10">Payment Information</h2>
+          {/* <h2 className="items-center text-xl font-bold mt-10">Payment Information</h2>
           <p className="text-lg mt-3">
             <span className="font-bold">Bank Acc :</span> 1234567890
-          </p>
+          </p> */}
         </div>
       </div>
     </Modal>

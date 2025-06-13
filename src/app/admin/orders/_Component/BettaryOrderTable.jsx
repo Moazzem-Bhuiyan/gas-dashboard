@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useGetAllOrdersQuery } from '@/redux/api/orderApi';
 
-export default function FuelOrderTable({ orderType }) {
+export default function BettaryOrderTable({ orderType }) {
   const [searchText, setSearchText] = useState('');
   const router = useRouter();
 
@@ -69,16 +69,6 @@ export default function FuelOrderTable({ orderType }) {
     {
       title: 'Customer',
       dataIndex: 'customer_name',
-      render: (value) => <span className="text-gray-700">{value}</span>,
-    },
-    {
-      title: 'Fuel',
-      dataIndex: 'fuel',
-      render: (value) => <span className="text-gray-700">{value}</span>,
-    },
-    {
-      title: 'Quantity',
-      dataIndex: 'quantity',
       render: (value) => <span className="text-gray-700">{value}</span>,
     },
     {

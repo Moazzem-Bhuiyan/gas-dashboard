@@ -25,7 +25,7 @@ export default function DriverAccDetailsTable() {
 
   // User data with query parameterss
   const { data, isError, isLoading } = useGetAllusersQuery({
-    limit: 5,
+    limit: 10,
     page: currentPage,
     searchText,
     role,

@@ -4,35 +4,41 @@ import { Input, Table } from 'antd';
 import { Tooltip } from 'antd';
 import { ConfigProvider } from 'antd';
 import { Check, Search } from 'lucide-react';
-import userImage from '@/assets/images/user-avatar-lg.png';
 import { Eye } from 'lucide-react';
 import { useState } from 'react';
 import Image from 'next/image';
-import { message } from 'antd';
 import DriverDetailsModal from './DriverDetailsModal';
-import { useGetDriverDataQuery } from '@/redux/api/driversApi';
+import { useGetAllusersQuery } from '@/redux/api/userApi';
+import _ from 'lodash';
 
 export default function DriverDetailsTable() {
   const [searchText, setSearchText] = useState('');
   const [profileModalOpen, setProfileModalOpen] = useState(false);
-  const [currentPage, setcurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedDriver, setSelectedDriver] = useState(null);
 
   // ===================Get drivers data from api=======================//
-
-  const { data: driverData, isLoading } = useGetDriverDataQuery();
+  const role = 'driver';
+  // User data with query parameterss
+  const { data: driverData, isLoading } = useGetAllusersQuery({
+    limit: 10,
+    page: currentPage,
+    searchText,
+    role,
+  });
 
   // Dummy table Data
-  const data = driverData?.data.map((item, inx) => ({
+  const data = driverData?.data?.data?.map((item, inx) => ({
     key: inx + 1,
-    name: item?.userId?.fullname,
-    userImg: item?.userId?.image,
-    email: item?.userId?.email,
-    contact: item?.userId?.phoneNumber || 'Not Provided',
-    earnings: item?.totalEarnings,
+    name: item?.fullname,
+    userImg: item?.image,
+    email: item?.email,
+    contact: item?.phoneNumber || 'Not Provided',
+    earnings: item?.totalEarning || 0,
     status: item?.userId?.status,
     address: item?.userId?.address || 'Not Provided',
     todayEarnings: item?.todayEarnings || 0,
+    _id: item?._id,
   }));
 
   // ================== Table Columns ================
@@ -130,6 +136,13 @@ export default function DriverDetailsTable() {
         columns={columns}
         dataSource={data}
         scroll={{ x: '100%' }}
+        pagination={{
+          pageSize: 5,
+          current: currentPage,
+          onChange: (page) => setCurrentPage(page),
+          total: data?.data?.total,
+          showTotal: (total) => `Total ${total} items`,
+        }}
         loading={isLoading}
       ></Table>
 

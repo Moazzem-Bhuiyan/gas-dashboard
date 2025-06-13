@@ -25,7 +25,7 @@ export default function AccDetailsTable() {
 
   // User data with query parameterss
   const { data, isLoading } = useGetAllusersQuery({
-    limit: 5,
+    limit: 10,
     page: currentPage,
     searchText,
     role,

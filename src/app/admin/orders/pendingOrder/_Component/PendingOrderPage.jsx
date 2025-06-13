@@ -1,5 +1,6 @@
 'use client';
 
+import { useGetAllValidDriversQuery } from '@/redux/api/driversApi';
 import { useGetSingleOrdersQuery } from '@/redux/api/orderApi';
 import { Button, Form, Select } from 'antd';
 import moment from 'moment';
@@ -13,6 +14,14 @@ export default function PendingOrder() {
   // get single order info
 
   const { data, isLoading } = useGetSingleOrdersQuery({ id });
+
+  // get drivers from api
+
+  const { data: driverData, isLoading: isDriverLoading } = useGetAllValidDriversQuery({
+    limit: 10,
+  });
+
+  console.log('Driver Data:', driverData);
 
   const order = data?.data;
   const coustomer = data?.data?.userId;

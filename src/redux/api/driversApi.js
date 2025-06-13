@@ -8,7 +8,22 @@ const driversApi = baseApi.injectEndpoints({
         method: 'GET',
       }),
     }),
+    // Get single driver data
+    GetSingleDriverData: builder.query({
+      query: ({ id }) => ({
+        url: `/driverearnings/driver-erning/${id}`,
+        method: 'GET',
+      }),
+    }),
+    // Get all valid drivers data
+    GetAllValidDrivers: builder.query({
+      query: () => ({
+        url: `/users?role=driver&status=active`,
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
-export const { useGetDriverDataQuery } = driversApi;
+export const { useGetDriverDataQuery, useGetSingleDriverDataQuery, useGetAllValidDriversQuery } =
+  driversApi;
