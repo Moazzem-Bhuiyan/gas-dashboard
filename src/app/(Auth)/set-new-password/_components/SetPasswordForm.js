@@ -16,7 +16,6 @@ export default function SetPasswordForm() {
   const router = useRouter();
 
   // reset api endpoint
-
   const [resetPassword, { isLoading }] = useResetPasswordMutation();
 
   const onSubmit = async (data) => {

@@ -20,10 +20,6 @@ export default function BettaryOrderTable({ orderType }) {
     orderType,
   });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   // map the orders to the table data
   const tableData = orders?.data?.data?.map((order, inx) => ({
     order_id: order?._id,
@@ -150,6 +146,7 @@ export default function BettaryOrderTable({ orderType }) {
           colorInfo: '#1B70A6',
         },
       }}
+      componentSize="large"
     >
       <div className="flex mb-4 ml-auto w-1/2 gap-x-5">
         <Input
@@ -160,14 +157,15 @@ export default function BettaryOrderTable({ orderType }) {
         />
       </div>
       <div>
-        <p className="text-sm text-gray-500 mb-4">Total Orders: {orders.length}</p>
+        <p className="text-sm text-gray-500 mb-4">Total Orders: {orders?.length}</p>
       </div>
 
       <Table
         style={{ overflowX: 'auto' }}
         columns={columns}
         dataSource={tableData}
-        scroll={{ x: '100%' }}
+        scroll={{ x: '100%', y: '100%' }}
+        loading={isLoading}
         className="rounded-lg shadow-sm"
         rowClassName="hover:bg-gray-50"
         pagination={{

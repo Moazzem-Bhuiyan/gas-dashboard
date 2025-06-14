@@ -1,24 +1,33 @@
 'use client';
 import { ConfigProvider, Input, Table, Tooltip } from 'antd';
-import { Edit, Eye, Search } from 'lucide-react';
+import { Eye, Search } from 'lucide-react';
 import Image from 'next/image';
 import React, { useState } from 'react';
-import userImage from '@/assets/images/user-avatar-lg.png';
 import CheckDetailsModal from './CheckDetailModal';
-import AddCheckListQuestionModal from './AddCheckListQuestionModal';
+import { useGetCheckListHistoryQuery } from '@/redux/api/checkListApi';
 
-const data = Array.from({ length: 20 }).map((_, inx) => ({
-  orderId: inx + 1,
-  driverName: 'David Smith',
-  driverImg: userImage,
-  question: 'How to use the app?',
-  comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-  time: '11 oct 24, 11.10PM',
-}));
 const CheckListTable = () => {
   const [searchText, setSearchText] = useState('');
   const [profileModalOpen, setProfileModalOpen] = useState(false);
-  const [addquestionOpen, setAddquestionOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [checkListData, setCheckListData] = useState(null);
+
+  // get checklist history data
+  const { data: checkListHistoryData, isLoading } = useGetCheckListHistoryQuery({
+    limit: 10,
+    page: currentPage,
+    searchText,
+  });
+
+  // map the data to the format required by the table
+  const data = checkListHistoryData?.checklists?.data?.map((item) => ({
+    orderId: item?._id,
+    driverName: item?.userId?.fullname,
+    driverImg: item?.userId?.image,
+    comment: item?.comment,
+    time: new Date(item?.createdAt).toLocaleString(),
+  }));
+
   const columns = [
     { title: 'Delivery ID', dataIndex: 'orderId', render: (value) => `#${value}` },
     {
@@ -37,8 +46,7 @@ const CheckListTable = () => {
         </div>
       ),
     },
-    { title: 'Question', dataIndex: 'question' },
-    { title: 'Comment', dataIndex: 'comment' },
+
     { title: 'Time', dataIndex: 'time' },
     {
       title: 'Action',
@@ -46,7 +54,12 @@ const CheckListTable = () => {
       render: (value, record) => (
         <div className="flex-center-start gap-x-2">
           <Tooltip title="Show Details">
-            <button onClick={() => setProfileModalOpen(true)}>
+            <button
+              onClick={() => {
+                setProfileModalOpen(true);
+                setCheckListData(record);
+              }}
+            >
               <Eye color="#1B70A6" size={22} />
             </button>
           </Tooltip>
@@ -54,28 +67,19 @@ const CheckListTable = () => {
       ),
     },
   ];
+
   return (
     <div>
       <ConfigProvider theme={{ token: { colorPrimary: '#5dd3a6', colorInfo: '#5dd3a6' } }}>
         <div className="mb-5 flex justify-between items-center">
-          <h2 className="text-2xl font-semibold">CheckList</h2>
-          <div className=" flex w-1/2 ml-auto gap-x-5 mb-3">
+          <h2 className="text-2xl font-semibold">CheckList History</h2>
+          <div className="flex w-1/2 ml-auto gap-x-5 mb-3">
             <Input
               placeholder="Search by name or email"
               prefix={<Search className="mr-2 text-black" size={20} />}
               className="h-11 !border !rounded-lg !text-base"
               onChange={(e) => setSearchText(e.target.value)}
             />
-            <div>
-              <button
-                onClick={() => {
-                  setAddquestionOpen(true);
-                }}
-                className="bg-[#48af99] text-white font-semibold  p-1 text-sm rounded-lg w-40 h-10 flex-center-center gap-x-2 "
-              >
-                Create Question
-              </button>
-            </div>
           </div>
         </div>
         <Table
@@ -83,11 +87,19 @@ const CheckListTable = () => {
           columns={columns}
           dataSource={data}
           scroll={{ x: '100%' }}
+          loading={isLoading}
         ></Table>
 
-        <CheckDetailsModal open={profileModalOpen} setOpen={setProfileModalOpen} />
-
-        <AddCheckListQuestionModal open={addquestionOpen} setOpen={setAddquestionOpen} />
+        <CheckDetailsModal
+          open={profileModalOpen}
+          setOpen={setProfileModalOpen}
+          checkListData={checkListData}
+          questions={
+            checkListHistoryData?.checklists?.data?.find(
+              (item) => item._id === checkListData?.orderId
+            )?.questions
+          }
+        />
       </ConfigProvider>
     </div>
   );

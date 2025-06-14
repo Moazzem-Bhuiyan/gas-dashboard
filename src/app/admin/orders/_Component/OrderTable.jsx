@@ -20,10 +20,6 @@ export default function FuelOrderTable({ orderType }) {
     orderType,
   });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   // map the orders to the table data
   const tableData = orders?.data?.data?.map((order, inx) => ({
     order_id: order?._id,
@@ -170,13 +166,14 @@ export default function FuelOrderTable({ orderType }) {
         />
       </div>
       <div>
-        <p className="text-sm text-gray-500 mb-4">Total Orders: {orders.length}</p>
+        <p className="text-sm text-gray-500 mb-4">Total Orders: {orders?.length}</p>
       </div>
 
       <Table
         style={{ overflowX: 'auto' }}
         columns={columns}
         dataSource={tableData}
+        loading={isLoading}
         scroll={{ x: '100%' }}
         className="rounded-lg shadow-sm"
         rowClassName="hover:bg-gray-50"

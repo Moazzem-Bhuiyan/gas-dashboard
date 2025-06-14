@@ -8,7 +8,7 @@ export const metadata = {
 };
 const page = () => {
   return (
-    <div className="min-h-screen my-10">
+    <div className="space-y-5  my-20">
       <Tabs>
         <Tabs.TabPane tab="Fuel Order" key="1">
           <OrderTable orderType="Fuel" />

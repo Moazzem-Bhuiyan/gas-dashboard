@@ -13,7 +13,7 @@ export default function DashboardContainer() {
 
   const { data: userData, isLoading } = useGetDashboardUserDataQuery();
 
-  const { data: driverData } = useGetDashboardDriverDataQuery();
+  const { data: driverData, isLoading: isDriverLoading } = useGetDashboardDriverDataQuery();
 
   // Dummy Data
   const userStats = [
@@ -158,10 +158,20 @@ export default function DashboardContainer() {
                 <p className="font-dmSans text-lg font-medium">{stat.title}</p>
                 <h5 className="text-3xl font-semibold text-black mt-0.5">
                   {stat.key !== 'earning' ? (
-                    <CustomCountUp end={stat.count} />
+                    <>
+                      {isLoading ? (
+                        <div className="w-10 h-10 border-4 border-t-transparent rounded-full animate-spin border-primary-blue"></div>
+                      ) : (
+                        <CustomCountUp end={stat.count} decimals={2} />
+                      )}
+                    </>
                   ) : (
                     <span>
-                      $<CustomCountUp end={stat.count} />
+                      {isLoading ? (
+                        <div className="w-10 h-10 border-4 border-t-transparent rounded-full animate-spin border-primary-blue"></div>
+                      ) : (
+                        <CustomCountUp end={stat.count} prefix="$" decimals={2} />
+                      )}
                     </span>
                   )}
                 </h5>
@@ -173,8 +183,8 @@ export default function DashboardContainer() {
 
       {/* Charts */}
       <section className="flex-center-between xl:flex-row flex-col gap-10">
-        <CustomerOverview userData={userData} />
-        <DriverOverview driverData={driverData} />
+        <CustomerOverview isLoading={isLoading} userData={userData} />
+        <DriverOverview isLoading={isDriverLoading} driverData={driverData} />
       </section>
 
       {/* Recent Users Table */}

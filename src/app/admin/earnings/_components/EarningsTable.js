@@ -24,8 +24,7 @@ export default function EarningsTable() {
     key: inx + 1,
     transactionId: item?.tranId,
     name: item?.user?.fullname,
-    amount: item?.amount,
-    // accNumber: '1234567890',
+    amount: Number(item?.amount).toFixed(2),
     date: moment(item?.createdAt).format('YYYY-MM-DD'),
   }));
 
@@ -69,12 +68,12 @@ export default function EarningsTable() {
   return (
     <ConfigProvider theme={{ token: { colorPrimary: '#1B70A6', colorInfo: '#1B70A6' } }}>
       <div className="w-1/3 ml-auto gap-x-5 mb-3">
-        <Input
+        {/* <Input
           placeholder="Search "
           prefix={<Search className="mr-2 text-black" size={20} />}
           className="h-11 !border !rounded-lg !text-base"
-          // onChange={(e) => setSearchText(e.target.value)}
-        />
+          onChange={(e) => setSearchText(e.target.value)}
+        /> */}
       </div>
 
       {/* Earning table */}
@@ -84,7 +83,15 @@ export default function EarningsTable() {
           columns={columns}
           dataSource={data}
           scroll={{ x: '100%' }}
-          pagination
+          loading={isLoading}
+          className="rounded-lg shadow-sm"
+          rowClassName="hover:bg-gray-50"
+          pagination={{
+            pageSize: 10,
+            showSizeChanger: false,
+            total: earningData?.data?.length || 0,
+            showTotal: (total) => `Total ${total} transactions`,
+          }}
         ></Table>
       </section>
 
