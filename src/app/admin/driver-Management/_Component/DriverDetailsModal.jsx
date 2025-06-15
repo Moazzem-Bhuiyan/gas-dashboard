@@ -5,58 +5,43 @@ import { Modal } from 'antd';
 import clsx from 'clsx';
 
 export default function DriverDetailsModal({ open, setOpen, selectedDriver }) {
-  if (!selectedDriver) return null;
-  // Earnings data to be displayed in the modal
-
+  const userId = selectedDriver?._id || 'N/A';
   const { data, isLoading } = useGetSingleDriverDataQuery({
     id: userId,
     skip: !open && !selectedDriver,
   });
 
-  const userId = selectedDriver?._id || 'N/A';
-  if (!userId) return null;
-
-  // get earnings data from selectedDriver api
-
-  console.log('Selected Driver Data:', data);
-
   const earnings = [
     { title: 'Total Earnings', amount: data?.data?.totalEarnings || 0 },
     { title: 'Today Earnings', amount: data?.data?.todayEarnings || 0 },
   ];
+
+  if (!userId || !selectedDriver) return null;
+
   return (
     <Modal
       centered
       open={open}
-      setOpen={setOpen}
+      onCancel={() => setOpen(false)}
       footer={null}
-      onCancel={() => {
-        setOpen(false);
-      }}
       width={800}
       className="!w-[90%] md:!w-[800px]"
     >
       <div>
         <h1 className="text-center items-center text-xl font-bold">Driver Details</h1>
-
         <div>
           <h1>Earning Details</h1>
-
-          {/* =============Earnings============ */}
-
           {isLoading ? (
-            <>
-              <div className="flex justify-center items-center h-32">
-                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500"></div>
-              </div>
-            </>
+            <div className="flex justify-center items-center h-32">
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500"></div>
+            </div>
           ) : (
-            <div className="grid grid-cols-1 gap-7 px-12 py-8 md:grid-cols-2 ">
+            <div className="grid grid-cols-1 gap-7 px-12 py-8 md:grid-cols-2">
               {earnings.map((earning, index) => (
                 <div
                   key={index}
                   className={clsx(
-                    'border-2 p-8 rounded-lg bg-[#00AEEF] text-white ',
+                    'border-2 p-8 rounded-lg bg-[#00AEEF] text-white',
                     earning.title === 'Total Earnings' ? 'bg-[#00AEEF]' : 'bg-[#409E7A]'
                   )}
                 >
@@ -66,12 +51,7 @@ export default function DriverDetailsModal({ open, setOpen, selectedDriver }) {
               ))}
             </div>
           )}
-
-          {/*=============== basic info================ */}
           <h1 className="items-center text-xl font-bold mt-10">Basic Info</h1>
-          {/* <p className="text-lg mt-3">
-            <span className="font-bold">Driver Id :</span> 1234567890
-          </p> */}
           <p className="text-lg mt-3">
             <span className="font-bold">Driver Name :</span> {selectedDriver?.name}
           </p>
@@ -84,17 +64,6 @@ export default function DriverDetailsModal({ open, setOpen, selectedDriver }) {
           <p className="text-lg mt-3">
             <span className="font-bold">Address :</span> {selectedDriver?.address || 'Not Provided'}
           </p>
-          {/* <h1 className="items-center text-xl font-bold mt-10">Performance</h1> */}
-          {/* <p className="text-lg mt-3">
-            <span className="font-bold">Deliveries Completed :</span> 100
-          </p> */}
-          <p className="text-lg mt-3">
-            {/* <span className="font-bold">Active Orders :</span> 5 Currently */}
-          </p>
-          {/* <h2 className="items-center text-xl font-bold mt-10">Payment Information</h2>
-          <p className="text-lg mt-3">
-            <span className="font-bold">Bank Acc :</span> 1234567890
-          </p> */}
         </div>
       </div>
     </Modal>
