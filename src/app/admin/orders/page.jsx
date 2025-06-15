@@ -1,6 +1,7 @@
 import { Tabs } from 'antd';
 import OrderTable from './_Component/OrderTable';
 import BettaryOrderTable from './_Component/BettaryOrderTable';
+import EmargencyOrder from './_Component/EmargencyOrder';
 
 export const metadata = {
   title: 'Orders',
@@ -14,7 +15,7 @@ const page = () => {
           <OrderTable orderType="Fuel" />
         </Tabs.TabPane>
         <Tabs.TabPane tab="Emercency Fuel Order" key="2">
-          <OrderTable />
+          <EmargencyOrder orderType="Fuel" />
         </Tabs.TabPane>
         <Tabs.TabPane tab="Jump Start Car Battery" key="3">
           <BettaryOrderTable orderType="Battery" />

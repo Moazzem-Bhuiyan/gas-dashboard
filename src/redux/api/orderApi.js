@@ -7,6 +7,14 @@ const OrderApi = baseApi.injectEndpoints({
         url: `/orders?limit=${limit}&page=${page}&searchTerm=${searchText}&orderType=${orderType}`,
         method: 'GET',
       }),
+      providesTags: ['Order'],
+    }),
+    getAllEmargencyOrders: builder.query({
+      query: ({ limit, page, searchText, orderType }) => ({
+        url: `/orders?limit=${limit}&page=${page}&searchTerm=${searchText}&orderType=${orderType}&emergency=true`,
+        method: 'GET',
+      }),
+      providesTags: ['Order'],
     }),
     // get single order
 
@@ -15,6 +23,7 @@ const OrderApi = baseApi.injectEndpoints({
         url: `/orders/${id}`,
         method: 'GET',
       }),
+      providesTags: ['Order'],
     }),
 
     updateOrderStatus: builder.mutation({
@@ -26,9 +35,14 @@ const OrderApi = baseApi.injectEndpoints({
           driverId: driverid,
         },
       }),
+      invalidatesTags: ['Order'],
     }),
   }),
 });
 
-export const { useGetAllOrdersQuery, useUpdateOrderStatusMutation, useGetSingleOrdersQuery } =
-  OrderApi;
+export const {
+  useGetAllOrdersQuery,
+  useGetAllEmargencyOrdersQuery,
+  useUpdateOrderStatusMutation,
+  useGetSingleOrdersQuery,
+} = OrderApi;
