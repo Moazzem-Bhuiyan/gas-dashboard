@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import React from 'react';
-
+import authImage from '@/assets/images/authimage.png';
 export default function AuthLayout({ children }) {
   return (
     <main
@@ -28,7 +28,7 @@ export default function AuthLayout({ children }) {
         <div className=" flex gap-10 justify-center items-center">
           <div className="bg-white w-full">{children}</div>
           <div>
-            <Image className="" src="/logo.png" alt="background" width={1200} height={1200} />
+            <Image className="" src={authImage} alt="background" width={1200} height={1200} />
           </div>
         </div>
       </div>
