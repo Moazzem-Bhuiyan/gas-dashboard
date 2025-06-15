@@ -1,4 +1,3 @@
-import { LogoSvg } from '@/assets/logos/LogoSvg';
 import Image from 'next/image';
 import React from 'react';
 
@@ -33,13 +32,13 @@ export default function AuthLayout({ children }) {
           </div>
         </div>
       </div>
-      <Image
+      {/* <Image
         className=" absolute bottom-0 right-0 w-[600px]"
         src="/bcorner.png"
         alt="background"
         width={1200}
         height={1200}
-      ></Image>
+      ></Image> */}
     </main>
   );
 }
