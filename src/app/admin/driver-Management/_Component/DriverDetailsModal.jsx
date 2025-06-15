@@ -8,15 +8,15 @@ export default function DriverDetailsModal({ open, setOpen, selectedDriver }) {
   if (!selectedDriver) return null;
   // Earnings data to be displayed in the modal
 
-  const userId = selectedDriver?._id || 'N/A';
-  if (!userId) return null;
-
-  // get earnings data from selectedDriver api
-
   const { data, isLoading } = useGetSingleDriverDataQuery({
     id: userId,
     skip: !open && !selectedDriver,
   });
+
+  const userId = selectedDriver?._id || 'N/A';
+  if (!userId) return null;
+
+  // get earnings data from selectedDriver api
 
   console.log('Selected Driver Data:', data);
 

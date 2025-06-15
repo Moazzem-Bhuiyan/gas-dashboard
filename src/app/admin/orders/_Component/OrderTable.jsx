@@ -28,7 +28,6 @@ export default function FuelOrderTable({ orderType }) {
     quantity: order.amount,
     price: order.price,
     customer_name: order?.userId?.fullname,
-    driver: order.driverId?.fullname,
     fuel: order.fuelType,
     driver: order?.driverId?.fullname || 'Unassigned',
   }));

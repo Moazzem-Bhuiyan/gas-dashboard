@@ -1,4 +1,4 @@
-const { baseApi } = require('./baseApi');
+import { baseApi } from './baseApi';
 
 const EmailsendApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
