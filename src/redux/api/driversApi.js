@@ -17,8 +17,8 @@ const driversApi = baseApi.injectEndpoints({
     }),
     // Get all valid drivers data
     GetAllValidDrivers: builder.query({
-      query: () => ({
-        url: `/users?role=driver&status=active`,
+      query: (searchText) => ({
+        url: `/users?role=driver&status=active?searchTerm=${searchText}`,
         method: 'GET',
       }),
     }),

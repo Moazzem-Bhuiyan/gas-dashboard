@@ -5,12 +5,14 @@ import { useGetSingleOrdersQuery, useUpdateOrderStatusMutation } from '@/redux/a
 import { Button, Form, Select } from 'antd';
 import moment from 'moment';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 export default function PendingOrder() {
   const [form] = Form.useForm();
   const searchParams = useSearchParams();
   const id = searchParams.get('order_id');
+  const [searchText, setSearchText] = useState('');
 
   const router = useRouter();
 
@@ -23,7 +25,7 @@ export default function PendingOrder() {
 
   // get drivers from api
 
-  const { data: driverData, isLoading: isDriverLoading } = useGetAllValidDriversQuery();
+  const { data: driverData, isLoading: isDriverLoading } = useGetAllValidDriversQuery(searchText);
 
   const order = data?.data;
   const coustomer = data?.data?.userId;
@@ -50,6 +52,10 @@ export default function PendingOrder() {
     } catch (error) {
       toast.error(error?.data?.message);
     }
+  };
+
+  const handleSearch = (value) => {
+    setSearchText(value); // Update search text when the user types
   };
   return (
     <div className="p-6 max-w-full mx-auto bg-white rounded-lg shadow">
@@ -99,6 +105,7 @@ export default function PendingOrder() {
                       style={{ width: '100%' }}
                       placeholder="Search to Select"
                       optionFilterProp="label"
+                      onSearch={handleSearch}
                       filterOption={false}
                       options={driverData?.data?.data?.map((therapist) => ({
                         value: therapist._id,
