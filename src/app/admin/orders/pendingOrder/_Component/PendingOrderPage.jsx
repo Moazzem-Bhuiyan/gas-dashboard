@@ -30,7 +30,14 @@ export default function PendingOrder() {
   const order = data?.data;
   const coustomer = data?.data?.userId;
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <div>
+        <div className="flex justify-center items-center h-screen">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-gray-900"></div>
+        </div>
+      </div>
+    );
 
   const handleSubmit = async (values) => {
     if (!values?.driverId) {
@@ -126,7 +133,10 @@ export default function PendingOrder() {
                   >
                     Assign
                   </Button>
-                  <button className=" text-white w-full px-10  rounded-lg bg-[#e03f3f] h-11">
+                  <button
+                    onClick={() => router.back()}
+                    className=" text-white w-full px-10  rounded-lg bg-[#e03f3f] h-11"
+                  >
                     Cancle
                   </button>
                 </div>

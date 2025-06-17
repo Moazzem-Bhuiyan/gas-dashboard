@@ -16,8 +16,14 @@ export default function CompletedOrder() {
   const coustomer = data?.data?.userId;
 
   console.log('order=====================', data);
-
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <div>
+        <div className="flex justify-center items-center h-screen">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-gray-900"></div>
+        </div>
+      </div>
+    );
   return (
     <div className="p-6 max-w-full mx-auto bg-white rounded-lg shadow">
       <div className="flex justify-between items-center mb-4">
