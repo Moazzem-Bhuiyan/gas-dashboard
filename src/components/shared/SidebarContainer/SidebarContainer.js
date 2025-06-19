@@ -105,6 +105,11 @@ const SidebarContainer = ({ collapsed }) => {
       label: <Link href={'/admin/orders'}>Order Management </Link>,
     },
     {
+      key: 'withdraw-request',
+      icon: <ShoppingCart size={21} strokeWidth={2} />,
+      label: <Link href={'/admin/withdraw-request'}>Withdraw Request </Link>,
+    },
+    {
       key: 'earnings',
       icon: <CircleDollarSign size={21} strokeWidth={2} />,
       label: <Link href={'/admin/earnings'}>Transactions</Link>,
