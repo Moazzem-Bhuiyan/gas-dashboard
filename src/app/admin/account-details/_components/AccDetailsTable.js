@@ -152,29 +152,31 @@ export default function AccDetailsTable() {
 
   return (
     <ConfigProvider theme={{ token: { colorPrimary: '#5dd3a6', colorInfo: '#5dd3a6' } }}>
-      <div className="w-1/3 ml-auto gap-x-5 mb-3">
-        <Input
-          placeholder="Search by name or email"
-          prefix={<Search className="mr-2 text-black" size={20} />}
-          className="h-11 !border !rounded-lg !text-base"
-          onChange={(e) => setSearchText(e.target.value)}
-        />
-      </div>
+      <div className="mb-20">
+        <div className="w-1/3 ml-auto gap-x-5 mb-3">
+          <Input
+            placeholder="Search by name or email"
+            prefix={<Search className="mr-2 text-black" size={20} />}
+            className="h-11 !border !rounded-lg !text-base"
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+        </div>
 
-      <Table
-        style={{ overflowX: 'auto' }}
-        columns={columns}
-        dataSource={tabledata}
-        scroll={{ x: '100%' }}
-        loading={isLoading}
-        pagination={{
-          pageSize: 10,
-          current: currentPage,
-          total: data?.data?.total,
-          onChange: (page) => setCurrentPage(page),
-          showTotal: (total) => `Total ${total} items`,
-        }}
-      ></Table>
+        <Table
+          style={{ overflowX: 'auto' }}
+          columns={columns}
+          dataSource={tabledata}
+          scroll={{ x: '100%' }}
+          loading={isLoading}
+          pagination={{
+            pageSize: 10,
+            current: currentPage,
+            total: data?.data?.total,
+            onChange: (page) => setCurrentPage(page),
+            showTotal: (total) => `Total ${total} items`,
+          }}
+        ></Table>
+      </div>
 
       <ProfileModal userData={userData} open={profileModalOpen} setOpen={setProfileModalOpen} />
     </ConfigProvider>

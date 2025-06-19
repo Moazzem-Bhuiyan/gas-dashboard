@@ -2,7 +2,6 @@
 import { Divider, Spin } from 'antd';
 import EditDeliveryFeeAndMendetoryTripModal from './EditDeliveryFeeAndMendetoryTripModal';
 import { useState } from 'react';
-import AddNewFuelPriceModal from './AddnewpriceModal';
 import { useGetDeliveryAndMendetoryTripQuery } from '@/redux/api/priceAdjustmentApi';
 import moment from 'moment';
 import AddNewDeliveryTripPriceModal from './AddNewDeliveryTripPriceModal';
@@ -50,7 +49,7 @@ const DeliveryFeeAndMendetoryTrip = () => {
         {fuelData.map((fuel, index) => (
           <div key={index} className="border border-gray-200 rounded-lg p-4  bg-gray-50 shadow-sm">
             <h3 className="text-lg font-semibold mb-2">{fuel.type}</h3>
-            <p className="text-sm font-medium mb-1">Current: ${fuel.price.toFixed(2)}/gal</p>
+            <p className="text-sm font-medium mb-1">Current: ${fuel.price.toFixed(2)}</p>
             <p>
               <span className="font-semibold">Zip Code:</span> {fuel.zipCode}
             </p>

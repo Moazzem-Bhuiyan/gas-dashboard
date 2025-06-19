@@ -119,7 +119,7 @@ const EditFuelPriceModal = ({ open, setOpen, editId }) => {
           </Form.Item>
           <Form.Item>
             <Button
-              // loading={isLoading}
+              loading={isLoading}
               type="primary"
               htmlType="submit"
               style={{ width: '100%', height: '40px' }}

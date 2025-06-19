@@ -3,16 +3,23 @@ import { Divider, Spin } from 'antd';
 import { useState } from 'react';
 import EditFuelPriceModal from './EditFuelPriceModal';
 import AddNewFuelPriceModal from './AddnewpriceModal';
-import { useGetFuelPriceListQuery } from '@/redux/api/priceAdjustmentApi';
+import {
+  useDeleteDeliveryAndMendetoryTripMutation,
+  useGetFuelPriceListQuery,
+} from '@/redux/api/priceAdjustmentApi';
 import moment from 'moment';
+import CustomConfirm from '@/components/CustomConfirm/CustomConfirm';
+import { toast } from 'sonner';
 
 const FuelPrice = () => {
   const [open, setOpen] = useState(false);
   const [openPrice, setOpenprice] = useState(false);
   const [editId, setEditId] = useState(null);
   // get all fuel price from api
-
   const { data, isLoading } = useGetFuelPriceListQuery();
+
+  // delete fuel price handler
+  const [deleteFuelPrice] = useDeleteDeliveryAndMendetoryTripMutation();
 
   const fuelData = data?.data?.map((item, index) => ({
     key: index + 1,
@@ -32,6 +39,17 @@ const FuelPrice = () => {
       </div>
     );
   }
+
+  const handleDelte = async (id) => {
+    try {
+      const res = await deleteFuelPrice(id).unwrap();
+      if (res?.success) {
+        toast.success('Fuel price deleted successfully');
+      }
+    } catch (error) {
+      toast.error(error?.data?.message || 'Failed to delete fuel price');
+    }
+  };
 
   return (
     <div>
@@ -55,15 +73,28 @@ const FuelPrice = () => {
             </p>
             <Divider />
             <p className="text-sm mb-3">Last Updated: {fuel.lastUpdated}</p>
-            <button
-              onClick={() => {
-                setOpen(true);
-                setEditId(fuel);
-              }}
-              className="bg-[#5dd3a6] text-white px-3 py-1 rounded-md flex items-center gap-1transition w-full text-center  justify-center"
-            >
-              Edit Price
-            </button>
+            <div className="flex  gap-2">
+              <button
+                onClick={() => {
+                  setOpen(true);
+                  setEditId(fuel);
+                }}
+                className="bg-[#5dd3a6] text-white px-3 py-1 rounded-md flex items-center gap-1transition w-full text-center  justify-center"
+              >
+                Edit Price
+              </button>
+
+              <div className="bg-[#ff0000] text-white px-3 py-1 rounded-md flex items-center gap-1transition w-full text-center  justify-center">
+                <CustomConfirm
+                  title="Are you sure you want to delete this price?"
+                  description="This action cannot be undone."
+                  onConfirm={() => handleDelte(fuel.id)}
+                >
+                  {' '}
+                  <button>Delete Price</button>
+                </CustomConfirm>
+              </div>
+            </div>
           </div>
         ))}
         <EditFuelPriceModal editId={editId} open={open} setOpen={setOpen} />

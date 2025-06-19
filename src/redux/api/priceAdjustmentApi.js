@@ -55,6 +55,13 @@ const PriceAdjustmentApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['priceAdjustment'],
     }),
+    deleteDeliveryAndMendetoryTrip: builder.mutation({
+      query: (id) => ({
+        url: `/deleveryAndtips/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['priceAdjustment'],
+    }),
   }),
 });
 
@@ -65,4 +72,5 @@ export const {
   useUpdateFuelPriceMutation,
   useCreateDeliveryAndMendetoryTripMutation,
   useUpdateDeliveryAndMendetoryTripMutation,
+  useDeleteDeliveryAndMendetoryTripMutation,
 } = PriceAdjustmentApi;

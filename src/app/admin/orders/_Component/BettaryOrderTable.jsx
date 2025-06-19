@@ -10,12 +10,13 @@ import { useGetAllOrdersQuery } from '@/redux/api/orderApi';
 
 export default function BettaryOrderTable({ orderType }) {
   const [searchText, setSearchText] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
 
   // get all orders from the API
   const { data: orders, isLoading } = useGetAllOrdersQuery({
     limit: 10,
-    page: 1,
+    page: currentPage,
     searchText: searchText,
     orderType,
   });
@@ -168,9 +169,13 @@ export default function BettaryOrderTable({ orderType }) {
         className="rounded-lg shadow-sm"
         rowClassName="hover:bg-gray-50"
         pagination={{
+          current: currentPage,
+          onChange: (page) => {
+            setCurrentPage(page);
+          },
           pageSize: 10,
           showSizeChanger: false,
-          total: orders?.data?.total || 0,
+          total: orders?.data?.meta?.total || 0,
           showTotal: (total) => `Total ${total} orders`,
         }}
       />

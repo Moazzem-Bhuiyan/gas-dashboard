@@ -3,24 +3,26 @@
 import { Input, Table, Tag } from 'antd';
 import { Tooltip } from 'antd';
 import { ConfigProvider } from 'antd';
-import { Search, Eye, Trash2 } from 'lucide-react';
+import { Search, Eye } from 'lucide-react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useGetAllOrdersQuery } from '@/redux/api/orderApi';
 
 export default function FuelOrderTable({ orderType }) {
   const [searchText, setSearchText] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
   const router = useRouter();
 
-  // get all orders from the API
+  // Get all orders from the API with pagination
   const { data: orders, isLoading } = useGetAllOrdersQuery({
-    limit: 10,
-    page: 1,
+    limit: pageSize,
+    page: currentPage,
     searchText: searchText,
     orderType,
   });
 
-  // map the orders to the table data
+  // Map the orders to the table data
   const tableData = orders?.data?.data?.map((order, inx) => ({
     order_id: order?._id,
     status: order.orderStatus,
@@ -54,6 +56,12 @@ export default function FuelOrderTable({ orderType }) {
         break;
     }
   };
+
+  // Handle page change
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   // Table columns
   const columns = [
     {
@@ -123,11 +131,6 @@ export default function FuelOrderTable({ orderType }) {
         </span>
       ),
     },
-    // {
-    //   title: 'Scheduled Time',
-    //   dataIndex: 'scheduled_time',
-    //   render: (value) => <span className="text-gray-700">{value || 'N/A'}</span>,
-    // },
     {
       title: 'Action',
       render: (_, record) => (
@@ -137,11 +140,6 @@ export default function FuelOrderTable({ orderType }) {
               <Eye color="#1B70A6" size={20} />
             </button>
           </Tooltip>
-          {/* <Tooltip title="Delete">
-            <button>
-              <Trash2 color="#FF4D4F" size={20} />
-            </button>
-          </Tooltip> */}
         </div>
       ),
     },
@@ -161,11 +159,14 @@ export default function FuelOrderTable({ orderType }) {
           placeholder="Search by name or order ID"
           prefix={<Search className="mr-2 text-gray-500" size={20} />}
           className="h-11 rounded-lg border text-base"
-          onChange={(e) => setSearchText(e.target.value)}
+          onChange={(e) => {
+            setSearchText(e.target.value);
+            setCurrentPage(1); // Reset to page 1 on new search
+          }}
         />
       </div>
       <div>
-        <p className="text-sm text-gray-500 mb-4">Total Orders: {orders?.length}</p>
+        <p className="text-sm text-gray-500 mb-4">Total Orders: {orders?.data?.meta?.total || 0}</p>
       </div>
 
       <Table
@@ -177,10 +178,12 @@ export default function FuelOrderTable({ orderType }) {
         className="rounded-lg shadow-sm"
         rowClassName="hover:bg-gray-50"
         pagination={{
-          pageSize: 10,
+          current: currentPage, // Set current page
+          pageSize: pageSize,
           showSizeChanger: false,
-          total: orders?.data?.total || 0,
+          total: orders?.data?.meta?.total || 0,
           showTotal: (total) => `Total ${total} orders`,
+          onChange: handlePageChange, // Handle page change
         }}
       />
     </ConfigProvider>

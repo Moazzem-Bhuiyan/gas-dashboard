@@ -1,5 +1,4 @@
 'use client';
-
 import { Input, Table } from 'antd';
 import { Tooltip } from 'antd';
 import { ConfigProvider } from 'antd';
@@ -179,29 +178,31 @@ export default function DriverAccDetailsTable() {
         },
       }}
     >
-      <div className="w-1/3 ml-auto gap-x-5 mb-3">
-        <Input
-          placeholder="Search by name or email"
-          prefix={<Search className="mr-2 text-black" size={20} />}
-          className="h-11 !border !rounded-lg !text-base"
-          onChange={(e) => setSearchText(e.target.value)}
-        />
-      </div>
+      <div div className="w-full mb-20">
+        <div className="w-1/3 ml-auto gap-x-5 mb-3">
+          <Input
+            placeholder="Search by name or email"
+            prefix={<Search className="mr-2 text-black" size={20} />}
+            className="h-11 !border !rounded-lg !text-base"
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+        </div>
 
-      <Table
-        style={{ overflowX: 'auto' }}
-        columns={columns}
-        dataSource={tabledata}
-        scroll={{ x: '100%' }}
-        pagination={{
-          pageSize: 5,
-          current: currentPage,
-          onChange: (page) => setCurrentPage(page),
-          total: data?.data?.total,
-          showTotal: (total) => `Total ${total} items`,
-        }}
-        loading={isLoading}
-      ></Table>
+        <Table
+          style={{ overflowX: 'auto' }}
+          columns={columns}
+          dataSource={tabledata}
+          scroll={{ x: '100%' }}
+          pagination={{
+            pageSize: 10,
+            current: currentPage,
+            onChange: (page) => setCurrentPage(page),
+            total: data?.data?.total,
+            showTotal: (total) => `Total ${total} items`,
+          }}
+          loading={isLoading}
+        ></Table>
+      </div>
 
       <ProfileModal open={profileModalOpen} setOpen={setProfileModalOpen} userData={userData} />
     </ConfigProvider>
