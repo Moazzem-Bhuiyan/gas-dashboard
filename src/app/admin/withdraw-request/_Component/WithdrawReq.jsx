@@ -2,7 +2,7 @@
 
 import { ConfigProvider, Input, Table } from 'antd';
 import { Tooltip } from 'antd';
-import { Check, Search, Trash2 } from 'lucide-react';
+import { Check, Cross, Search, TicketX, Trash2 } from 'lucide-react';
 
 import { Tag } from 'antd';
 
@@ -39,7 +39,7 @@ export default function WithdrawReqTable() {
     );
 
   // Map table data with image and status
-  const data = earningData?.data?.map((item, inx) => ({
+  const data = earningData?.data?.data?.map((item, inx) => ({
     key: inx + 1,
     requestId: item?._id,
     driverName: item?.userId?.fullname,
@@ -119,7 +119,7 @@ export default function WithdrawReqTable() {
                   handleDelete(record.requestId);
                 }}
               >
-                <Trash2 color="#FF4D4F" size={20} />
+                <TicketX color="#FF4D4F" size={20} />
               </CustomConfirm>
             </Tooltip>
           ) : null}
@@ -174,7 +174,7 @@ export default function WithdrawReqTable() {
           pagination={{
             current: currentPage,
             pageSize: 10,
-            total: earningData?.totalCount || 0,
+            total: earningData?.data?.meta?.total || 0,
             onChange: (page) => setCurrentPage(page),
           }}
         />

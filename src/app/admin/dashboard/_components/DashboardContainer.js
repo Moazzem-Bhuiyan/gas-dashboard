@@ -13,8 +13,6 @@ export default function DashboardContainer() {
 
   const { data: userData, isLoading } = useGetDashboardUserDataQuery();
 
-  const { data: driverData, isLoading: isDriverLoading } = useGetDashboardDriverDataQuery();
-
   // Dummy Data
   const userStats = [
     {
@@ -79,7 +77,7 @@ export default function DashboardContainer() {
           </g>
         </svg>
       ),
-      count: userData?.data?.totalMember,
+      count: userData?.data?.totalDriver,
     },
     {
       key: 'service-providers',
@@ -111,7 +109,7 @@ export default function DashboardContainer() {
           </g>
         </svg>
       ),
-      count: userData?.data?.totalAdministrator,
+      count: userData?.data?.totalCustomers,
     },
     {
       key: 'earning',
@@ -144,6 +142,70 @@ export default function DashboardContainer() {
         </svg>
       ),
       count: userData?.data?.totalIncome,
+    },
+    {
+      key: 'earning',
+      title: 'Today Earning',
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="58"
+          height="58"
+          fill="none"
+          viewBox="0 0 58 58"
+        >
+          <mask
+            id="mask0_92_3013"
+            width="58"
+            height="58"
+            x="0"
+            y="0"
+            maskUnits="userSpaceOnUse"
+            style={{ maskType: 'alpha' }}
+          >
+            <path fill="#D9D9D9" d="M0 0h58v58H0z"></path>
+          </mask>
+          <g mask="url(#mask0_92_3013)">
+            <path
+              fill="#fff"
+              d="M26.825 45.917h4.23v-3.021q3.02-.544 5.195-2.356 2.175-1.813 2.175-5.377a8.05 8.05 0 0 0-1.45-4.652q-1.45-2.115-5.8-3.686-3.625-1.208-5.015-2.114-1.39-.907-1.39-2.478 0-1.57 1.119-2.477 1.117-.906 3.232-.906 1.934 0 3.02.936a5.3 5.3 0 0 1 1.572 2.326l3.866-1.57q-.664-2.115-2.447-3.686t-3.957-1.752v-3.02h-4.23v3.02q-3.02.665-4.712 2.659t-1.691 4.47q0 2.84 1.661 4.592t5.226 3.02q3.807 1.39 5.287 2.478t1.48 2.84q0 1.993-1.42 2.93-1.42.936-3.414.936a5.48 5.48 0 0 1-3.534-1.238q-1.54-1.24-2.265-3.716l-3.988 1.57q.846 2.901 2.628 4.683t4.622 2.447zM29 53.167q-5.015 0-9.425-1.903t-7.673-5.166-5.166-7.673T4.833 29t1.903-9.425 5.166-7.673 7.673-5.165T29 4.833t9.425 1.904q4.41 1.902 7.673 5.165t5.166 7.673T53.167 29t-1.904 9.425q-1.902 4.41-5.165 7.673t-7.673 5.166T29 53.167"
+            ></path>
+          </g>
+        </svg>
+      ),
+      count: userData?.data?.toDayIncome,
+    },
+    {
+      key: 'payouts',
+      title: 'Driver Payouts',
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="58"
+          height="58"
+          fill="none"
+          viewBox="0 0 58 58"
+        >
+          <mask
+            id="mask0_92_3013"
+            width="58"
+            height="58"
+            x="0"
+            y="0"
+            maskUnits="userSpaceOnUse"
+            style={{ maskType: 'alpha' }}
+          >
+            <path fill="#D9D9D9" d="M0 0h58v58H0z"></path>
+          </mask>
+          <g mask="url(#mask0_92_3013)">
+            <path
+              fill="#fff"
+              d="M26.825 45.917h4.23v-3.021q3.02-.544 5.195-2.356 2.175-1.813 2.175-5.377a8.05 8.05 0 0 0-1.45-4.652q-1.45-2.115-5.8-3.686-3.625-1.208-5.015-2.114-1.39-.907-1.39-2.478 0-1.57 1.119-2.477 1.117-.906 3.232-.906 1.934 0 3.02.936a5.3 5.3 0 0 1 1.572 2.326l3.866-1.57q-.664-2.115-2.447-3.686t-3.957-1.752v-3.02h-4.23v3.02q-3.02.665-4.712 2.659t-1.691 4.47q0 2.84 1.661 4.592t5.226 3.02q3.807 1.39 5.287 2.478t1.48 2.84q0 1.993-1.42 2.93-1.42.936-3.414.936a5.48 5.48 0 0 1-3.534-1.238q-1.54-1.24-2.265-3.716l-3.988 1.57q.846 2.901 2.628 4.683t4.622 2.447zM29 53.167q-5.015 0-9.425-1.903t-7.673-5.166-5.166-7.673T4.833 29t1.903-9.425 5.166-7.673 7.673-5.165T29 4.833t9.425 1.904q4.41 1.902 7.673 5.165t5.166 7.673T53.167 29t-1.904 9.425q-1.902 4.41-5.165 7.673t-7.673 5.166T29 53.167"
+            ></path>
+          </g>
+        </svg>
+      ),
+      count: userData?.data?.totalPayout,
     },
   ];
 
@@ -183,8 +245,8 @@ export default function DashboardContainer() {
 
       {/* Charts */}
       <section className="flex-center-between xl:flex-row flex-col gap-10">
-        <CustomerOverview isLoading={isLoading} userData={userData} />
-        <DriverOverview isLoading={isDriverLoading} driverData={driverData} />
+        <CustomerOverview />
+        <DriverOverview />
       </section>
 
       {/* Recent Users Table */}

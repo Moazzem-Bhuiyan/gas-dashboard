@@ -8,7 +8,14 @@ const transactionApi = baseApi.injectEndpoints({
         method: 'GET',
       }),
     }),
+    // refund transection
+    refundTransection: builder.mutation({
+      query: (id) => ({
+        url: `payments/refund/${id}`,
+        method: 'POST',
+      }),
+    }),
   }),
 });
 
-export const { useGetTransectionDataQuery } = transactionApi;
+export const { useGetTransectionDataQuery, useRefundTransectionMutation } = transactionApi;

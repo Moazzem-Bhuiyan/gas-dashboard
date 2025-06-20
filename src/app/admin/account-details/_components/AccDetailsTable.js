@@ -42,7 +42,7 @@ export default function AccDetailsTable() {
       name: item?.fullname || 'Not provided',
       userImg: item?.image,
       email: item?.email,
-      contact: item?.phoneNumber || 'Not provided',
+      contact: item?.phoneNumber || 'N/A',
       date: moment(item?.createdAt).format('DD-MM-YYYY'),
       status: item?.status,
       address: item?.address || 'Not provided',

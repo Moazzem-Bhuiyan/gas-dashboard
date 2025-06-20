@@ -1,4 +1,7 @@
 'use client';
+import { useGetDashboardDriverDataQuery } from '@/redux/api/dashboardApi';
+import { DatePicker } from 'antd';
+import moment from 'moment';
 import { useState } from 'react';
 import {
   AreaChart,
@@ -10,27 +13,37 @@ import {
   CartesianGrid,
 } from 'recharts';
 
-const UserOverView = ({ driverData, isLoading }) => {
+const UserOverView = () => {
   const [selectedYear, setSelectedYear] = useState(null);
+  const query = {};
+  if (selectedYear) {
+    query['incomeYear'] = selectedYear;
+  }
+  const { data: driverData, isLoading } = useGetDashboardDriverDataQuery(query);
 
-  const dummyEarningsData = driverData?.data?.monthlyUsers?.map((item) => ({
+  const dummyEarningsData = driverData?.data?.monthlyIncome?.map((item) => ({
     month: item.month,
-    earning: item.total,
+    earning: item.income,
   }));
 
   const handleChange = (date, dateString) => {
-    setSelectedYear(dateString); // DatePicker returns the year in 'YYYY' format
+    setSelectedYear(dateString);
   };
-
-  // Get chart data based on selected year or default to 2025 (current year)
-  // const chartData = selectedYear
-  //   ? dummyEarningsData[selectedYear] || dummyEarningsData['2025']
-  //   : dummyEarningsData['2025'];
 
   return (
     <div className="w-full rounded-xl bg-[#ffffff] p-6 xl:w-full">
       <div className="text-black mb-10 flex items-center justify-between">
         <h1 className="text-xl font-medium">Driver Overview</h1>
+        <div className="space-x-3">
+          {/* Year Picker */}
+          <DatePicker
+            value={selectedYear ? moment(selectedYear, 'YYYY') : null}
+            onChange={handleChange}
+            picker="year"
+            placeholder="Select Year"
+            style={{ width: 120 }}
+          />
+        </div>
       </div>
       {isLoading ? (
         <div className="flex justify-center items-center h-64">
@@ -53,7 +66,7 @@ const UserOverView = ({ driverData, isLoading }) => {
             <CartesianGrid opacity={0.1} stroke="#080E0E" strokeDasharray="3 3" />
 
             <Tooltip
-              formatter={(value) => [`Monthly Driver Growth: ${value}`]}
+              formatter={(value) => [`Monthly Income: ${value}`, `Monthly `]}
               contentStyle={{
                 color: 'var(--primary-green)',
                 fontWeight: '500',

@@ -1,24 +1,62 @@
 'use client';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useState } from 'react';
+import { DatePicker, Select } from 'antd';
+import moment from 'moment';
+import { useGetDashboardUserDataQuery } from '@/redux/api/dashboardApi';
 
-const CustomerOverview = ({ userData, isLoading }) => {
-  const [selectedYear, setSelectedYear] = useState('2024');
+const { Option } = Select;
 
-  // map data for chart
+const CustomerOverview = () => {
+  const [selectedYear, setSelectedYear] = useState(null);
+  const [selectedRole, setSelectedRole] = useState(null);
+  const query = {};
+  if (selectedRole) {
+    query['role'] = selectedRole;
+  }
+  if (selectedYear) {
+    query['joinYear'] = selectedYear;
+  }
+  const { data: userData, isLoading } = useGetDashboardUserDataQuery(query);
+  // Map data for chart
   const data = userData?.data?.monthlyUsers?.map((item) => ({
     month: item.month,
     user: item.total,
   }));
 
-  const handleChange = (value) => {
-    setSelectedYear(value);
+  const handleYearChange = (value) => {
+    setSelectedYear(value ? moment(value).format('YYYY') : null);
+  };
+
+  const handleRoleChange = (value) => {
+    setSelectedRole(value);
   };
 
   return (
     <div className="rounded-xl p-6 w-full xl:w-full bg-white shadow-md">
       <div className="flex lg:flex-wrap xl:flex-nowrap justify-between items-center mb-10 gap-2">
-        <h1 className="text-xl font-medium">Customer Overview</h1>
+        <h1 className="text-xl font-medium">User Overview</h1>
+        <div className="flex gap-3 items-center">
+          {/* Role Dropdown */}
+          <Select
+            value={selectedRole}
+            onChange={handleRoleChange}
+            placeholder="Select Role"
+            style={{ width: 120 }}
+            allowClear
+          >
+            <Option value="user">User</Option>
+            <Option value="driver">Driver</Option>
+          </Select>
+          {/* Year Picker */}
+          <DatePicker
+            value={selectedYear ? moment(selectedYear, 'YYYY') : null}
+            onChange={handleYearChange}
+            picker="year"
+            placeholder="Select Year"
+            style={{ width: 120 }}
+          />
+        </div>
       </div>
 
       {isLoading ? (
