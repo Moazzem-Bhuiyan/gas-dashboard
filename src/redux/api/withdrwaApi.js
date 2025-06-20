@@ -9,14 +9,14 @@ const withdrawApi = baseApi.injectEndpoints({
       }),
       providesTags: ['withdraw'],
     }),
-    withdrawRequest: builder.mutation({
-      query: (data) => ({
-        url: '/withdraw/request',
-        method: 'POST',
+    updateWithdrawRequest: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/withdrawal/update/${id}`,
+        method: 'PATCH',
         body: data,
       }),
       invalidatesTags: ['withdraw'],
     }),
   }),
 });
-export const { useGetWithdrawRequestQuery, useWithdrawRequestMutation } = withdrawApi;
+export const { useGetWithdrawRequestQuery, useUpdateWithdrawRequestMutation } = withdrawApi;

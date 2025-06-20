@@ -3,18 +3,33 @@
 import { ConfigProvider, Input, Table } from 'antd';
 import { Tooltip } from 'antd';
 import { Check, Search, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+
 import { Tag } from 'antd';
 
 import moment from 'moment';
-import { useGetWithdrawRequestQuery } from '@/redux/api/withdrwaApi';
+import {
+  useGetWithdrawRequestQuery,
+  useUpdateWithdrawRequestMutation,
+} from '@/redux/api/withdrwaApi';
 import CustomConfirm from '@/components/CustomConfirm/CustomConfirm';
+import { toast } from 'sonner';
 
 export default function WithdrawReqTable() {
   // Get earning data from API
   const { data: earningData, isLoading } = useGetWithdrawRequestQuery();
 
-  if (isLoading) return <div>Loading...</div>;
+  // update withdraw request mutation
+  const [updateWithdrawRequest, { isLoading: isUpdating }] = useUpdateWithdrawRequestMutation();
+
+  if (isLoading)
+    return (
+      <div>
+        {' '}
+        <div className="flex justify-center items-center h-screen">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-gray-900"></div>
+        </div>
+      </div>
+    );
 
   // Map table data with image and status
   const data = earningData?.data?.map((item, inx) => ({
@@ -23,7 +38,7 @@ export default function WithdrawReqTable() {
     driverName: item?.userId?.fullname,
     amount: Number(item?.withdrawAmount).toFixed(2),
     requestDate: moment(item?.createdAt).format('MMM DD, YYYY, hh:mm A'),
-    status: item?.status || 'Pending', // Assuming status exists, fallback to 'Pending'
+    status: item?.status || 'Pending',
   }));
 
   // ================== Table Columns ================
@@ -89,20 +104,44 @@ export default function WithdrawReqTable() {
               </CustomConfirm>
             </Tooltip>
           ) : null}
-          <Tooltip title="Delete Request">
-            <CustomConfirm
-              title="Are you sure you want to delete this request?"
-              onConfirm={() => {
-                handleDelete(record.requestId);
-              }}
-            >
-              <Trash2 color="#FF4D4F" size={20} />
-            </CustomConfirm>
-          </Tooltip>
+          {record.status === 'Pending' ? (
+            <Tooltip title="Delete Request">
+              <CustomConfirm
+                title="Are you sure you want to delete this request?"
+                onConfirm={() => {
+                  handleDelete(record.requestId);
+                }}
+              >
+                <Trash2 color="#FF4D4F" size={20} />
+              </CustomConfirm>
+            </Tooltip>
+          ) : null}
         </div>
       ),
     },
   ];
+
+  // handle confirm action
+  const handleConfirm = (requestId) => {
+    try {
+      const response = updateWithdrawRequest({ id: requestId, data: { status: 'Approved' } });
+      if (response?.success) {
+        toast.success('Request approved successfully');
+      }
+    } catch (error) {
+      toast.error(error?.data?.message || 'Failed to approve request');
+    }
+  };
+  const handleDelete = (requestId) => {
+    try {
+      const response = updateWithdrawRequest({ id: requestId, data: { status: 'Rejected' } });
+      if (response?.success) {
+        toast.success('Request Rejected successfully');
+      }
+    } catch (error) {
+      toast.error(error?.data?.message || 'Failed to reject request');
+    }
+  };
 
   return (
     <ConfigProvider theme={{ token: { colorPrimary: '#1B70A6', colorInfo: '#1B70A6' } }}>
@@ -111,7 +150,7 @@ export default function WithdrawReqTable() {
           placeholder="Search"
           prefix={<Search className="mr-2 text-black" size={20} />}
           className="h-11 !border !rounded-lg !text-base"
-          // onChange={(e) => setSearchText(e.target.value)} // Uncomment and add setSearchText state if needed
+          onChange={(e) => setSearchText(e.target.value)} // Uncomment and add setSearchText state if needed
         />
       </div>
 
