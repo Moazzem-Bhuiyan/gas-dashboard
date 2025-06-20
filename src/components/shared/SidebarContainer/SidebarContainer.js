@@ -7,6 +7,7 @@ import Sider from 'antd/es/layout/Sider';
 import {
   Car,
   CheckCheck,
+  CircleArrowOutUpLeft,
   CircleDollarSign,
   Cog,
   DollarSign,
@@ -106,7 +107,7 @@ const SidebarContainer = ({ collapsed }) => {
     },
     {
       key: 'withdraw-request',
-      icon: <ShoppingCart size={21} strokeWidth={2} />,
+      icon: <CircleArrowOutUpLeft size={21} strokeWidth={2} />,
       label: <Link href={'/admin/withdraw-request'}>Withdraw Request </Link>,
     },
     {

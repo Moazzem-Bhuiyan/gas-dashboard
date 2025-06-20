@@ -35,13 +35,6 @@ const CheckListTable = () => {
       dataIndex: 'driverName',
       render: (value, record) => (
         <div className="flex-center-start gap-x-2">
-          <Image
-            src={record.driverImg}
-            alt="User avatar"
-            width={1200}
-            height={1200}
-            className="rounded-full w-10 h-auto aspect-square"
-          />
           <p className="font-medium">{value}</p>
         </div>
       ),
@@ -71,24 +64,32 @@ const CheckListTable = () => {
   return (
     <div>
       <ConfigProvider theme={{ token: { colorPrimary: '#5dd3a6', colorInfo: '#5dd3a6' } }}>
-        <div className="mb-5 flex justify-between items-center">
-          <h2 className="text-2xl font-semibold">CheckList History</h2>
-          <div className="flex w-1/2 ml-auto gap-x-5 mb-3">
-            <Input
-              placeholder="Search by name or email"
-              prefix={<Search className="mr-2 text-black" size={20} />}
-              className="h-11 !border !rounded-lg !text-base"
-              onChange={(e) => setSearchText(e.target.value)}
-            />
+        <div className="mb-20">
+          <div className="mb-5 flex justify-between items-center">
+            <h2 className="text-2xl font-semibold">CheckList History</h2>
+            <div className="flex w-1/2 ml-auto gap-x-5 mb-3">
+              <Input
+                placeholder="Search by name or email"
+                prefix={<Search className="mr-2 text-black" size={20} />}
+                className="h-11 !border !rounded-lg !text-base"
+                onChange={(e) => setSearchText(e.target.value)}
+              />
+            </div>
           </div>
+          <Table
+            style={{ overflowX: 'auto' }}
+            columns={columns}
+            dataSource={data}
+            scroll={{ x: '100%' }}
+            loading={isLoading}
+            pagination={{
+              total: checkListHistoryData?.checklists?.meta?.total,
+              current: currentPage,
+              pageSize: 10,
+              onChange: (page) => setCurrentPage(page),
+            }}
+          ></Table>
         </div>
-        <Table
-          style={{ overflowX: 'auto' }}
-          columns={columns}
-          dataSource={data}
-          scroll={{ x: '100%' }}
-          loading={isLoading}
-        ></Table>
 
         <CheckDetailsModal
           open={profileModalOpen}

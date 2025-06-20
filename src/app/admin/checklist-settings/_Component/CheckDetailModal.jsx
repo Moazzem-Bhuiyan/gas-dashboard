@@ -2,15 +2,8 @@
 
 import { Modal } from 'antd';
 
-export default function CheckDetailsModal({ open, setOpen, checkListData, questions }) {
-  const isValidUrl = (url) => {
-    if (!url) return false;
-    return url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/');
-  };
-
-  // Determine the image source
-  const imageSrc = isValidUrl(checkListData?.driverImg);
-
+export default function CheckDetailsModal({ open, setOpen, questions }) {
+  console.log(questions);
   return (
     <Modal centered open={open} footer={null} onCancel={() => setOpen(false)} width={800}>
       <div className="grid grid-cols-1 gap-7 px-12 py-8">
@@ -24,7 +17,8 @@ export default function CheckDetailsModal({ open, setOpen, checkListData, questi
                     <strong>Question:</strong> {q.question}
                   </p>
                   <p>
-                    <strong>Answer:</strong> {q.answer}
+                    <strong>Answer:</strong>{' '}
+                    {q.answer === 'true' ? 'Yes' : q.answer === 'false' ? 'No' : q.answer}
                   </p>
                   {q.explanation && (
                     <p>

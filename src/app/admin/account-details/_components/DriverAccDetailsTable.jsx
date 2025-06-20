@@ -38,7 +38,7 @@ export default function DriverAccDetailsTable() {
   const tabledata =
     data?.data?.data?.map((item, inx) => ({
       key: inx + 1 + (currentPage - 1) * 10,
-      name: item?.fullname,
+      name: item?.fullname || 'Not provided',
       userImg: item?.image,
       email: item?.email,
       contact: item?.phoneNumber || 'Not provided',
@@ -82,10 +82,10 @@ export default function DriverAccDetailsTable() {
         };
 
         // Get the first letter of the name (uppercase)
-        const firstLetter = value ? value.charAt(0).toUpperCase() : '';
+        const firstLetter = record?.email ? record?.email.charAt(0).toUpperCase() : '';
 
         // Determine if the image is valid
-        const hasValidImage = isValidUrl(record?.userImg);
+        const hasValidImage = isValidUrl(record?.userImg && record?.userImg == null);
 
         return (
           <div className="flex-center-start gap-x-2">
@@ -197,7 +197,7 @@ export default function DriverAccDetailsTable() {
             pageSize: 10,
             current: currentPage,
             onChange: (page) => setCurrentPage(page),
-            total: data?.data?.total,
+            total: data?.data?.meta?.total,
             showTotal: (total) => `Total ${total} items`,
           }}
           loading={isLoading}

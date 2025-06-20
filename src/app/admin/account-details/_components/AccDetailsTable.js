@@ -79,10 +79,10 @@ export default function AccDetailsTable() {
         };
 
         // Get the first letter of the name (uppercase)
-        const firstLetter = value ? value.charAt(0).toUpperCase() : '';
+        const firstLetter = record?.email ? record?.email.charAt(0).toUpperCase() : '';
 
         // Determine if the image is valid
-        const hasValidImage = isValidUrl(record?.userImg);
+        const hasValidImage = isValidUrl(record?.userImg && record?.userImg == null);
 
         return (
           <div className="flex-center-start gap-x-2">

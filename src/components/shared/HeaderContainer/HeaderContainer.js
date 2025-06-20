@@ -1,22 +1,78 @@
 'use client';
 
-import { Button } from 'antd';
+import { Badge, Button } from 'antd';
 import { Bell } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import userAvatar from '@/assets/images/user-avatar-lg.png';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Layout } from 'antd';
 import { AlignJustify } from 'lucide-react';
 import { useGetAdminProfileQuery } from '@/redux/api/adminProfileApi';
+import { useGetMyNotificationQuery } from '@/redux/api/notificationApi';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { selectToken } from '@/redux/features/authSlice';
+import { toast } from 'sonner';
+import { socket } from '@/soket';
+import { jwtDecode } from 'jwt-decode';
+
 const { Header } = Layout;
 
 export default function HeaderContainer({ collapsed, setCollapsed }) {
   const pathname = usePathname();
+  const router = useRouter();
   const navbarTitle = pathname.split('/admin')[1];
   const { data } = useGetAdminProfileQuery();
 
   const user = data?.data;
+  // notification-------------------
+  const { data: notificationData, refetch } = useGetMyNotificationQuery({
+    read: false,
+  });
+  const token = useSelector(selectToken);
+
+  let userId = null;
+
+  if (token) {
+    try {
+      const decodedToken = jwtDecode(token);
+      userId = decodedToken?.userId;
+    } catch (error) {
+      console.error('Error decoding token:', error);
+    }
+  }
+
+  const notification = useSelector((state) => state.notification?.notification);
+  useEffect(() => {
+    if (notification?.message) {
+      toast.info(notification?.message);
+    }
+  }, [notification]);
+
+  //socket
+  useEffect(() => {
+    socket.auth = { token };
+    socket.connect();
+    const handleNotificationEvent = (data) => {
+      if (data) {
+        refetch();
+        data = null;
+      }
+    };
+
+    socket.on('notification::' + userId, handleNotificationEvent);
+
+    return () => {
+      // Clean up the event listener when the component is unmounted
+      socket.off(userId, handleNotificationEvent);
+      socket.disconnect();
+    };
+  }, [userId, refetch, token]);
+
+  if (!userId) {
+    router.push('/login');
+  }
 
   return (
     <Header
@@ -52,8 +108,8 @@ export default function HeaderContainer({ collapsed, setCollapsed }) {
 
         <Link href="/admin/notification" className="!leading-none relative">
           {/* Notification dot indicator */}
-          <div className="bg-[#000000] absolute -top-1.5 -right-1 size-3 rounded-full" />
-
+          <div />
+          <Badge count={notificationData?.data?.length || 0} overflowCount={10}></Badge>
           <Bell fill="#1C1B1F" stroke="#1C1B1F" size={22} />
         </Link>
 

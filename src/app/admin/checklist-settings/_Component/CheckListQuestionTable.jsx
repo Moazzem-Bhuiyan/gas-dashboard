@@ -13,7 +13,7 @@ const CheckListQuestionTable = () => {
   const [addquestionOpen, setAddquestionOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [currentpage, setCurrentPage] = useState(1);
-  const [deletingId, setDeletingId] = useState(null); // Track which item is being deleted
+  const [deletingId, setDeletingId] = useState(null);
 
   const { data: checkListData, isLoading } = useGetAllCheckListdataQuery({
     limit: 10,
@@ -39,7 +39,7 @@ const CheckListQuestionTable = () => {
     } catch (error) {
       toast.error('Something went wrong');
     } finally {
-      setDeletingId(null); // Reset after deletion attempt
+      setDeletingId(null);
     }
   };
 
