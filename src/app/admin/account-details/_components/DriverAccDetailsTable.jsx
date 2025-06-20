@@ -178,7 +178,7 @@ export default function DriverAccDetailsTable() {
         },
       }}
     >
-      <div div className="w-full mb-20">
+      <div className="w-full mb-20">
         <div className="w-1/3 ml-auto gap-x-5 mb-3">
           <Input
             placeholder="Search by name or email"

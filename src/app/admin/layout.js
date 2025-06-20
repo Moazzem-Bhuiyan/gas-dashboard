@@ -3,6 +3,7 @@
 import HeaderContainer from '@/components/shared/HeaderContainer/HeaderContainer';
 import SidebarContainer from '@/components/shared/SidebarContainer/SidebarContainer';
 import { selectToken } from '@/redux/features/authSlice';
+import { setNotification } from '@/redux/features/notificationSlice';
 import { socket } from '@/soket';
 import { useMediaQuery } from '@react-hook/media-query';
 import { Layout } from 'antd';

@@ -1,10 +1,10 @@
-const { baseApi } = require('./baseApi');
+import { baseApi } from './baseApi';
 
 const withdrawApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getWithdrawRequest: builder.query({
-      query: () => ({
-        url: '/withdrawal',
+      query: ({ search, page, limit }) => ({
+        url: `/withdrawal?searchTerm=${search}&page=${page}&limit=${limit}`,
         method: 'GET',
       }),
       providesTags: ['withdraw'],

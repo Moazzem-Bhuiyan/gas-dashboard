@@ -13,10 +13,17 @@ import {
 } from '@/redux/api/withdrwaApi';
 import CustomConfirm from '@/components/CustomConfirm/CustomConfirm';
 import { toast } from 'sonner';
+import { useState } from 'react';
 
 export default function WithdrawReqTable() {
+  const [searchText, setSearchText] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   // Get earning data from API
-  const { data: earningData, isLoading } = useGetWithdrawRequestQuery();
+  const { data: earningData, isLoading } = useGetWithdrawRequestQuery({
+    search: searchText,
+    page: currentPage,
+    limit: 10,
+  });
 
   // update withdraw request mutation
   const [updateWithdrawRequest, { isLoading: isUpdating }] = useUpdateWithdrawRequestMutation();
@@ -165,19 +172,10 @@ export default function WithdrawReqTable() {
           className="rounded-lg shadow-sm"
           rowClassName="hover:bg-gray-50"
           pagination={{
+            current: currentPage,
             pageSize: 10,
-            showSizeChanger: false,
-            total: earningData?.data?.length || 0,
-            showTotal: (total) => `Total ${total} transactions`,
-            itemRender: (page, type, originalElement) => {
-              if (type === 'prev') {
-                return <a className="text-gray-600">⟨</a>;
-              }
-              if (type === 'next') {
-                return <a className="text-gray-600">⟩</a>;
-              }
-              return originalElement;
-            },
+            total: earningData?.totalCount || 0,
+            onChange: (page) => setCurrentPage(page),
           }}
         />
       </section>
