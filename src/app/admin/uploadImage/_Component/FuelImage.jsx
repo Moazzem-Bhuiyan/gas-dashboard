@@ -5,7 +5,7 @@ import { useGetImagesQuery, useUpdateImageMutation } from '@/redux/api/uploadIma
 import { ImagePlus } from 'lucide-react';
 import Image from 'next/image';
 import { toast } from 'sonner';
-import { Button } from 'antd';
+import { Button, Spin } from 'antd';
 
 const FuelImage = () => {
   const emergencyFileInputRef = useRef(null);
