@@ -67,6 +67,7 @@ export const baseApi = createApi({
     'notification',
     'checkListQuestion',
     'withdraw',
+    'image',
   ],
   baseQuery: baseQueryWithRefreshToken,
   endpoints: () => ({}),
