@@ -29,13 +29,13 @@ const CouponCodeContainer = () => {
       </div>
     );
   }
-  if (!data?.data || data.data.length === 0) {
-    return (
-      <div className="flex justify-center p-5">
-        <p className="text-gray-600">No coupons data available.</p>
-      </div>
-    );
-  }
+  // if (!data?.data || data.data.length === 0) {
+  //   return (
+  //     <div className="flex justify-center p-5">
+  //       <p className="text-gray-600">No coupons data available.</p>
+  //     </div>
+  //   );
+  // }
 
   const coupons = data?.data?.map((item) => ({
     id: item?._id,
