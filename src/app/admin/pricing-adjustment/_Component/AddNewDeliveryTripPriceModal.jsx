@@ -78,7 +78,7 @@ const AddNewDeliveryTripPriceModal = ({ open, setOpen }) => {
                     return Promise.resolve();
                   }
                   return Promise.reject(
-                    new Error('Please enter valid 5-digit zip codes (e.g., 90001,90002,90003)')
+                    new Error('Please enter valid minimum 4-digit zip codes (e.g., 9001,9002,9003)')
                   );
                 },
               },
@@ -87,7 +87,7 @@ const AddNewDeliveryTripPriceModal = ({ open, setOpen }) => {
             normalize={(value) => (Array.isArray(value) ? value.join(',') : value)}
           >
             <Input
-              placeholder="Enter Covered Zip Codes (e.g., 90001,90002,90003,90004)"
+              placeholder="Enter Covered Zip Codes (e.g., 9001,9000,9003,0004)"
               className="w-full p-2 border rounded h-10"
             />
           </Form.Item>

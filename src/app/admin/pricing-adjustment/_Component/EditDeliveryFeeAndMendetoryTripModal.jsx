@@ -95,12 +95,12 @@ const EditDeliveryFeeAndMendetoryTripModal = ({ open, setOpen, editId }) => {
                   const zipCodes = Array.isArray(value)
                     ? value
                     : value.split(',').map((zip) => zip.trim());
-                  const isValid = zipCodes.every((zip) => /^\d{5}$/.test(zip));
+                  const isValid = zipCodes.every((zip) => /^\d{4}$/.test(zip));
                   if (isValid) {
                     return Promise.resolve();
                   }
                   return Promise.reject(
-                    new Error('Please enter valid 5-digit zip codes (e.g., 90001,90002,90003)')
+                    new Error('Please enter valid minimum 4-digit zip codes (e.g., 9001,9002,9003)')
                   );
                 },
               },
@@ -109,7 +109,7 @@ const EditDeliveryFeeAndMendetoryTripModal = ({ open, setOpen, editId }) => {
             normalize={(value) => (Array.isArray(value) ? value.join(',') : value)}
           >
             <Input
-              placeholder="Enter Covered Zip Codes (e.g., 90001,90002,90003,90004)"
+              placeholder="Enter Covered Zip Codes (e.g., 9001,9002,9003,9004)"
               className="w-full p-2 border rounded h-10"
             />
           </Form.Item>
