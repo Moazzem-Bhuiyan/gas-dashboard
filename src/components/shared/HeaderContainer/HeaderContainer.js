@@ -123,7 +123,7 @@ export default function HeaderContainer({ collapsed, setCollapsed }) {
             alt="Admin avatar"
             width={52}
             height={52}
-            className="rounded-full border-2 p-0.5 border-primary-green group-hover:border"
+            className="rounded-full aspect-square border-2 p-0.5 border-primary-green group-hover:border"
           />
           <h4 className="text-lg font-semibold">{user?.fullname} </h4>
         </Link>

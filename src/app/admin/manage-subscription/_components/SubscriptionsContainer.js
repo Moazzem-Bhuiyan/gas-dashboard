@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from 'antd';
+import { Button, Empty } from 'antd';
 import { Edit } from 'lucide-react';
 import SubscriptionPlanCard from './SubscriptionPlanCard';
 import CreateSubscriptionPlanModal from './CreateSubscriptionPlanModal';
@@ -30,11 +30,17 @@ export default function SubscriptionsContainer() {
         Create Subscription Plan
       </Button>
 
-      <section className="my-10 grid grid-cols-1 gap-10 md:grid-cols-2 xl:grid-cols-3">
-        {subscriptionPlanss?.map((data, idx) => (
-          <SubscriptionPlanCard key={idx} data={data} />
-        ))}
-      </section>
+      {subscriptionPlanss?.length > 0 ? (
+        <section className="my-10 grid grid-cols-1 gap-10 md:grid-cols-2 xl:grid-cols-3">
+          {subscriptionPlanss?.map((data, idx) => (
+            <SubscriptionPlanCard key={idx} data={data} />
+          ))}
+        </section>
+      ) : (
+        <div className="flex justify-center items-center h-screen">
+          <Empty />
+        </div>
+      )}
 
       {/* Create Subscription Plan Modal */}
       <CreateSubscriptionPlanModal open={showCreatePlanModal} setOpen={setShowCreatePlanModal} />

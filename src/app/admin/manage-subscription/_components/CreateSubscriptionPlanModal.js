@@ -15,7 +15,7 @@ export default function CreateSubscriptionPlanModal({ open, setOpen }) {
   const [create, { isLoading }] = useCreateSubCriptionMutation();
 
   const onFinish = async (values) => {
-    const value = { ...values, shortDescription: 'hello' };
+    const value = { ...values, shortDescription: 'hello', durationType: 'monthly' };
     try {
       const res = await create(value).unwrap();
       if (res.success) {
@@ -61,22 +61,22 @@ export default function CreateSubscriptionPlanModal({ open, setOpen }) {
         </Form.Item>
 
         {/* Monthly Price */}
-        <Form.Item label="Monthly Price" name="monthlyPrice">
+        <Form.Item label="Price" name="monthlyPrice">
           <InputNumber min={0} style={{ width: '100%' }} />
         </Form.Item>
 
         {/* Monthly Price */}
-        <Form.Item label="Yearly Price" name="yearlyPrice">
+        {/* <Form.Item label="Yearly Price" name="yearlyPrice">
           <InputNumber min={0} style={{ width: '100%' }} />
-        </Form.Item>
+        </Form.Item> */}
 
         {/* duration type */}
-        <Form.Item label="Duration Type" name="durationType">
+        {/* <Form.Item label="Duration Type" name="durationType">
           <Select>
             <Option value="monthly">Monthly</Option>
             <Option value="yearly">Yearly</Option>
           </Select>
-        </Form.Item>
+        </Form.Item> */}
         {/* Free Delivery Limit */}
         <Form.Item label="Free Delivery Limit" name="freeDeliverylimit">
           <InputNumber min={0} style={{ width: '100%' }} />
