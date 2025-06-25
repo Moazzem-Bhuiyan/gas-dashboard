@@ -1,6 +1,6 @@
 'use client';
 
-import { ConfigProvider, Input, Spin, Table } from 'antd';
+import { Button, ConfigProvider, Input, Spin, Table } from 'antd';
 import { Tooltip } from 'antd';
 import { Eye, Filter, HandCoins, Search } from 'lucide-react';
 import { useState } from 'react';
@@ -15,16 +15,23 @@ import CustomConfirm from '@/components/CustomConfirm/CustomConfirm';
 import { toast } from 'sonner';
 import Image from 'next/image';
 import refund from '@/assets/images/refund.png';
+import { Download } from 'lucide-react'; // Import Download icon
 
 export default function EarningsTable() {
   const [showEarningModal, setShowEarningModal] = useState(false);
+  const [loadingStates, setLoadingStates] = useState({});
+  const [searchText, setSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
   // get earning data from api
-
-  const { data: earningData, isLoading } = useGetTransectionDataQuery();
+  const { data: earningData, isLoading } = useGetTransectionDataQuery({
+    limit: 10,
+    page: currentPage,
+    searchText,
+  });
 
   // refund transaction
-  const [refundTransection, { isLoading: isRefundLoading }] = useRefundTransectionMutation();
+  const [refundTransection] = useRefundTransectionMutation();
 
   if (isLoading)
     return (
@@ -48,6 +55,7 @@ export default function EarningsTable() {
   }));
 
   const handleRefund = async (id) => {
+    setLoadingStates((prev) => ({ ...prev, [id]: true })); // Set loading for specific transaction
     try {
       const res = await refundTransection(id).unwrap();
       if (res?.success) {
@@ -55,7 +63,41 @@ export default function EarningsTable() {
       }
     } catch (error) {
       toast.error(error?.data?.message);
+    } finally {
+      setLoadingStates((prev) => ({ ...prev, [id]: false })); // Reset loading state
     }
+  };
+
+  // Function to convert data to CSV
+  const downloadCSV = () => {
+    const headers = [
+      'Transaction ID',
+      'Name',
+      'Transaction Type',
+      'Amount',
+      'Transaction Date',
+      'Status',
+    ];
+    const rows = data.map((item) => [
+      item.transactionId,
+      item.name,
+      item.type,
+      `$${item.amount}`,
+      item.date,
+      item.status,
+    ]);
+
+    const csvContent = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'earnings_transactions.csv';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
   };
 
   // ================== Table Columns ================
@@ -101,11 +143,6 @@ export default function EarningsTable() {
       title: 'Action',
       render: (_, record) => (
         <div className="flex items-center gap-x-3">
-          {/* <Tooltip title="Show Details">
-            <button onClick={() => setShowEarningModal(true)}>
-              <Eye color="#1B70A6" size={22} />
-            </button>
-          </Tooltip> */}
           {record?.type === 'order' && record?.status !== 'refunded' ? (
             <CustomConfirm
               title="Refund Transaction"
@@ -113,10 +150,14 @@ export default function EarningsTable() {
               onConfirm={() => {
                 handleRefund(record?.id);
               }}
-              loading={isRefundLoading}
+              loading={loadingStates[record?.id] || false} // Use specific loading state
             >
               <button>
-                <Image src={refund} width={28} height={28} alt="refund" />
+                {loadingStates[record?.id] ? (
+                  <Spin size="small" />
+                ) : (
+                  <Image src={refund} width={28} height={28} alt="refund" />
+                )}
               </button>
             </CustomConfirm>
           ) : null}
@@ -132,13 +173,21 @@ export default function EarningsTable() {
 
   return (
     <ConfigProvider theme={{ token: { colorPrimary: '#1B70A6', colorInfo: '#1B70A6' } }}>
-      <div className="w-1/3 ml-auto gap-x-5 mb-3">
-        {/* <Input
+      <div className="w-full flex justify-between items-center gap-x-5 mb-3">
+        <Input
           placeholder="Search "
           prefix={<Search className="mr-2 text-black" size={20} />}
-          className="h-11 !border !rounded-lg !text-base"
-          onChange={(e) => setSearchText(e.target.value)}
-        /> */}
+          className="h-11 !border !rounded-lg !text-base w-1/3"
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <Button
+          type="primary"
+          icon={<Download size={18} />}
+          onClick={downloadCSV}
+          style={{ backgroundColor: '#1B70A6', color: 'white' }}
+        >
+          Download CSV
+        </Button>
       </div>
 
       {/* Earning table */}
@@ -154,7 +203,9 @@ export default function EarningsTable() {
           pagination={{
             pageSize: 10,
             showSizeChanger: false,
-            total: earningData?.data?.length || 0,
+            current: currentPage,
+            onChange: (page) => setCurrentPage(page),
+            total: earningData?.meta?.total || 0, // Use total from meta if available
             showTotal: (total) => `Total ${total} transactions`,
           }}
         ></Table>

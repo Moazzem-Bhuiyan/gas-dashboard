@@ -68,6 +68,7 @@ export const baseApi = createApi({
     'checkListQuestion',
     'withdraw',
     'image',
+    'transection',
   ],
   baseQuery: baseQueryWithRefreshToken,
   endpoints: () => ({}),

@@ -10,8 +10,12 @@ import { Button, Spin } from 'antd';
 const FuelImage = () => {
   const emergencyFileInputRef = useRef(null);
   const discountFileInputRef = useRef(null);
+  const fuelTypeFileInputRef = useRef(null);
+  const orderHistoryFileInputRef = useRef(null);
   const [selectedEmergencyImage, setSelectedEmergencyImage] = useState(null);
   const [selectedDiscountImage, setSelectedDiscountImage] = useState(null);
+  const [selectedFuelTypeImage, setSelectedFuelTypeImage] = useState(null);
+  const [selectedOrderHistoryImage, setSelectedOrderHistoryImage] = useState(null);
 
   // get images from api
   const { data, isLoading } = useGetImagesQuery();
@@ -47,12 +51,34 @@ const FuelImage = () => {
     }
   };
 
+  const handleFuelTypeImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFuelTypeImage(file);
+    }
+  };
+
+  const handleOrderHistoryImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedOrderHistoryImage(file);
+    }
+  };
+
   const triggerEmergencyFileInput = () => {
     emergencyFileInputRef.current?.click();
   };
 
   const triggerDiscountFileInput = () => {
     discountFileInputRef.current?.click();
+  };
+
+  const triggerFuelTypeFileInput = () => {
+    fuelTypeFileInputRef.current?.click();
+  };
+
+  const triggerOrderHistoryFileInput = () => {
+    orderHistoryFileInputRef.current?.click();
   };
 
   const handleFormSubmit = async (event) => {
@@ -65,6 +91,12 @@ const FuelImage = () => {
       if (selectedDiscountImage) {
         formData.append('discountBanner', selectedDiscountImage);
       }
+      if (selectedFuelTypeImage) {
+        formData.append('fuelTypeBanner', selectedFuelTypeImage);
+      }
+      if (selectedOrderHistoryImage) {
+        formData.append('orderHistoryBanner', selectedOrderHistoryImage);
+      }
       const res = await updateImage(formData).unwrap();
       if (res?.success) {
         toast.success('Image uploaded successfully');
@@ -75,7 +107,7 @@ const FuelImage = () => {
   };
 
   return (
-    <form onSubmit={handleFormSubmit} className="flex flex-col gap-5">
+    <form onSubmit={handleFormSubmit} className="flex  gap-5">
       {images?.emergencyFuelBanner && (
         <div className="relative w-[500px]">
           <h1 className="text-xl font-semibold mb-3">Emergency Fuel Banner</h1>
@@ -90,7 +122,6 @@ const FuelImage = () => {
             height={400}
             style={{ objectFit: 'cover' }}
           />
-          {/* Hidden file input for emergency banner */}
           <input
             type="file"
             accept="image/*"
@@ -98,11 +129,10 @@ const FuelImage = () => {
             onChange={handleEmergencyImageUpload}
             className="hidden"
           />
-          {/* Edit button for emergency banner */}
           <button
             type="button"
             onClick={triggerEmergencyFileInput}
-            className="bg-[#e6ce67] p-2 aspect-square rounded-full flex-center text-white/95 absolute bottom याद-0 right-0"
+            className="bg-[#e6ce67] p-2 aspect-square rounded-full flex-center text-white/95 absolute bottom-0 right-0"
           >
             <ImagePlus size={25} />
           </button>
@@ -122,7 +152,6 @@ const FuelImage = () => {
             height={400}
             style={{ objectFit: 'cover' }}
           />
-          {/* Hidden file input for discount banner */}
           <input
             type="file"
             accept="image/*"
@@ -130,7 +159,6 @@ const FuelImage = () => {
             onChange={handleDiscountImageUpload}
             className="hidden"
           />
-          {/* Edit button for discount banner */}
           <button
             type="button"
             onClick={triggerDiscountFileInput}
@@ -140,7 +168,66 @@ const FuelImage = () => {
           </button>
         </div>
       )}
-      {/* Submit button */}
+      {images?.fuelTypeBanner !== null && (
+        <div className="relative w-[500px]">
+          <h1 className="text-xl font-semibold mb-3">Fuel Type Banner</h1>
+          <Image
+            src={
+              selectedFuelTypeImage
+                ? URL.createObjectURL(selectedFuelTypeImage)
+                : images.fuelTypeBanner || ''
+            }
+            alt="Fuel Type Banner"
+            width={400}
+            height={400}
+            style={{ objectFit: 'cover' }}
+          />
+          <input
+            type="file"
+            accept="image/*"
+            ref={fuelTypeFileInputRef}
+            onChange={handleFuelTypeImageUpload}
+            className="hidden"
+          />
+          <button
+            type="button"
+            onClick={triggerFuelTypeFileInput}
+            className="bg-[#e6ce67] p-2 aspect-square rounded-full flex-center text-white/95 absolute bottom-0 right-0"
+          >
+            <ImagePlus size={25} />
+          </button>
+        </div>
+      )}
+      {images?.orderHistoryBanner !== null && (
+        <div className="relative w-[500px]">
+          <h1 className="text-xl font-semibold mb-3">Order History Banner</h1>
+          <Image
+            src={
+              selectedOrderHistoryImage
+                ? URL.createObjectURL(selectedOrderHistoryImage)
+                : images.orderHistoryBanner || ''
+            }
+            alt="Order History Banner"
+            width={400}
+            height={400}
+            style={{ objectFit: 'cover' }}
+          />
+          <input
+            type="file"
+            accept="image/*"
+            ref={orderHistoryFileInputRef}
+            onChange={handleOrderHistoryImageUpload}
+            className="hidden"
+          />
+          <button
+            type="button"
+            onClick={triggerOrderHistoryFileInput}
+            className="bg-[#e6ce67] p-2 aspect-square rounded-full flex-center text-white/95 absolute bottom-0 right-0"
+          >
+            <ImagePlus size={25} />
+          </button>
+        </div>
+      )}
       <Button htmlType="submit" type="primary" loading={updating}>
         Submit
       </Button>

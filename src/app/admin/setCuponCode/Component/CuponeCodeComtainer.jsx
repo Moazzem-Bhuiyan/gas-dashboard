@@ -80,7 +80,7 @@ const CouponCodeContainer = () => {
       </div>
 
       <div className="space-y-4">
-        {coupons.map((coupon) => (
+        {coupons?.map((coupon) => (
           <div
             key={coupon.id}
             className="p-4 border border-gray-200 rounded-lg bg-gray-50 flex justify-between items-center"
@@ -112,7 +112,8 @@ const CouponCodeContainer = () => {
               >
                 <button className="px-3 py-1 bg-red-200 text-red-700 rounded hover:bg-red-300 transition-colors flex items-center gap-5 ">
                   <Trash size={16} strokeWidth={2} />
-                  Remove
+
+                  {isDeleting ? 'Deleting...' : 'Remove'}
                 </button>
               </CustomConfirm>
             </div>
