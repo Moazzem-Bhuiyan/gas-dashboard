@@ -10,8 +10,7 @@ const { Option } = Select;
 const AddNewFuelPriceModal = ({ open, setOpen }) => {
   const [form] = Form.useForm();
 
-  // add new fuel price api handler
-
+  // Add new fuel price API handler
   const [add, { isLoading }] = useCreateFuelPriceMutation();
 
   const handleSubmit = async (values) => {
@@ -41,7 +40,7 @@ const AddNewFuelPriceModal = ({ open, setOpen }) => {
       style={{ minWidth: '900px', position: 'relative' }}
     >
       <div
-        className="absolute right-0 top-0 h-12 w-12 cursor-pointer rounded-bl-3xl "
+        className="absolute right-0 top-0 h-12 w-12 cursor-pointer rounded-bl-3xl"
         onClick={() => setOpen(false)}
       >
         <RiCloseLargeLine size={18} color="black" className="absolute left-1/3 top-1/3" />
@@ -56,7 +55,7 @@ const AddNewFuelPriceModal = ({ open, setOpen }) => {
           style={{ maxWidth: '800px', margin: '0 auto', padding: '0 16px' }}
         >
           <Form.Item
-            label=" Name"
+            label="Name"
             name="fuelName"
             rules={[{ required: true, message: 'Please enter a name' }]}
           >
@@ -73,12 +72,15 @@ const AddNewFuelPriceModal = ({ open, setOpen }) => {
                   const zipCodes = Array.isArray(value)
                     ? value
                     : value.split(',').map((zip) => zip.trim());
-                  const isValid = zipCodes.every((zip) => /^\d{4}$/.test(zip));
-                  if (isValid) {
+                  const isValidLength = zipCodes.every((zip) => {
+                    const num = zip.replace(/[^0-9]/g, '');
+                    return num.length >= 4 && num.length <= 5 && /^\d+$/.test(num);
+                  });
+                  if (isValidLength) {
                     return Promise.resolve();
                   }
                   return Promise.reject(
-                    new Error('Please enter valid minimum 4-digit zip codes (e.g., 9001,9002,9003)')
+                    new Error('Each zip code must be 4 to 5 digits long (e.g., 4444, 12345)')
                   );
                 },
               },
@@ -87,12 +89,12 @@ const AddNewFuelPriceModal = ({ open, setOpen }) => {
             normalize={(value) => (Array.isArray(value) ? value.join(',') : value)}
           >
             <Input
-              placeholder="Enter Covered Zip Codes (e.g., 9001,9002,9003,9004)"
+              placeholder="Enter Covered Zip Codes (e.g., 4444,12345,44444)"
               className="w-full p-2 border rounded h-10"
             />
           </Form.Item>
           <Form.Item
-            label=" Price"
+            label="Price"
             name="fuelPrice"
             rules={[{ required: true, message: 'Please enter price' }]}
           >

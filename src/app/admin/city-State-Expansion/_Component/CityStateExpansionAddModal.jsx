@@ -81,12 +81,15 @@ export default function CityStateExpansionAddModalForm({ open, setOpen }) {
                   const zipCodes = Array.isArray(value)
                     ? value
                     : value.split(',').map((zip) => zip.trim());
-                  const isValid = zipCodes.every((zip) => /^\d{4}$/.test(zip));
-                  if (isValid) {
+                  const isValidLength = zipCodes.every((zip) => {
+                    const num = zip.replace(/[^0-9]/g, '');
+                    return num.length >= 4 && num.length <= 5 && /^\d+$/.test(num);
+                  });
+                  if (isValidLength) {
                     return Promise.resolve();
                   }
                   return Promise.reject(
-                    new Error('Please enter valid minimum 4-digit zip codes (e.g., 9010,9000,9003)')
+                    new Error('Each zip code must be 4 to 5 digits long (e.g., 4444, 12345)')
                   );
                 },
               },

@@ -7,7 +7,7 @@ const ContentApi = baseApi.injectEndpoints({
       providesTags: ['content'],
     }),
     updateContent: builder.mutation({
-      query: (data) => ({ url: `/settings`, method: 'PUT', body: data }),
+      query: (data) => ({ url: `/settings`, method: 'PATCH', body: data }),
       invalidatesTags: ['content'],
     }),
   }),
