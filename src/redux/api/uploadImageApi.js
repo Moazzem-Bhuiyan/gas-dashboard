@@ -7,7 +7,7 @@ const uploadImageApi = baseApi.injectEndpoints({
       providesTags: ['image'],
     }),
     updateImage: builder.mutation({
-      query: (data) => ({ url: `/settings`, method: 'PUT', body: data }),
+      query: (data) => ({ url: `/settings`, method: 'PATCH', body: data }),
       invalidatesTags: ['image'],
     }),
   }),
